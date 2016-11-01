@@ -1,21 +1,21 @@
 package config
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"encoding/json"
 )
 
 type JsonConfig struct {
 	Config
-	DbUser string `json:"db_user"`
+	DbUser     string `json:"db_user"`
 	DbPassword string `json:"db_password"`
 }
 
 func NewJsonConfig(filename string) *Config {
 	dat, err := ioutil.ReadFile(filename)
 
-	if (err != nil) {
+	if err != nil {
 		fmt.Printf("Failed reading JSON config %v\n", filename)
 		panic(err)
 	}
@@ -31,4 +31,3 @@ func decode(b []byte, cfg JsonConfig) {
 		panic(err)
 	}
 }
-

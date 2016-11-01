@@ -2,11 +2,11 @@ package sirius
 
 import (
 	"fmt"
-	"log"
-	"os"
-	"github.com/nlopes/slack"
 	"github.com/kayex/sirius/core"
 	"github.com/kayex/sirius/plugins"
+	"github.com/nlopes/slack"
+	"log"
+	"os"
 )
 
 func Route() {
@@ -17,7 +17,7 @@ func Route() {
 	rtm := api.NewRTM()
 	go rtm.ManageConnection()
 
-	Loop:
+Loop:
 	for {
 		select {
 		case msg := <-rtm.IncomingEvents:
@@ -42,8 +42,8 @@ func Route() {
 
 			default:
 
-			// Ignore other events..
-			// fmt.Printf("Unexpected: %v\n", msg.Data)
+				// Ignore other events..
+				// fmt.Printf("Unexpected: %v\n", msg.Data)
 			}
 		}
 	}

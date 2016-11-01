@@ -5,7 +5,7 @@ import (
 )
 
 type User struct {
-	Id int
+	Id        int
 	CreatedAt time.Time
-	Plugins []Plugin `pg:",many2many:user_plugins"`
+	Plugins   []Plugin `pg:",many2many:user_plugins"`
 }

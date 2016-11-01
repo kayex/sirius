@@ -1,8 +1,8 @@
 package db
 
 import (
-	"gopkg.in/pg.v5"
 	"github.com/kayex/sirius/model"
+	"gopkg.in/pg.v5"
 )
 
 type Db struct {
@@ -11,7 +11,7 @@ type Db struct {
 
 func Connect(user string, password string) Db {
 	db := pg.Connect(&pg.Options{
-		User: user,
+		User:     user,
 		Password: password,
 	})
 
@@ -37,7 +37,7 @@ func (db *Db) GetPlugins(u *model.User) *[]model.Plugin {
 }
 
 func exec(err error) {
-	if (err != nil) {
+	if err != nil {
 		panic(err)
 	}
 }

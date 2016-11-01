@@ -1,8 +1,8 @@
 package plugins
 
 import (
-	"strings"
 	"github.com/kayex/sirius/core"
+	"strings"
 )
 
 type uppercase_plugin struct {

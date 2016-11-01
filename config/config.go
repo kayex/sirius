@@ -1,7 +1,7 @@
 package config
 
 type Db struct {
-	DbUser string
+	DbUser     string
 	DbPassword string
 }
 
