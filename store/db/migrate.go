@@ -1,6 +1,24 @@
 package db
 
+import "fmt"
+
 func (db *Db) CreateSchema() {
+	queries := []string{
+		createUsersTable(),
+	}
+
+	db.execMany(queries)
+}
+
+func (db *Db) execMany(queries []string) {
+	for _, q := range queries {
+		_, err := db.conn.Exec(q)
+
+		if err != nil {
+			fmt.Printf("Executing migration query failed: %v\n", q)
+			panic(err)
+		}
+	}
 }
 
 func createUsersTable() string {
