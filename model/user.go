@@ -5,7 +5,14 @@ import (
 )
 
 type User struct {
-	Id        int
-	CreatedAt time.Time
-	Plugins   []Plugin `pg:",many2many:user_plugins"`
+	Id             string
+	Token          string
+	CreatedAt      time.Time
+	Configurations []*Configuration
+}
+
+func NewUser(token string) User {
+	return User{
+		Token: token,
+	}
 }
