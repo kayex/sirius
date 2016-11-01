@@ -2,7 +2,7 @@ package db
 
 import (
 	"gopkg.in/pg.v5"
-	"github.com/Epoch2/slack-sirius/model"
+	"github.com/kayex/sirius/model"
 )
 
 type Db struct {

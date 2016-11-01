@@ -1,8 +1,8 @@
 package sirius
 
 import (
-	"github.com/Epoch2/slack-sirius/store"
-	"github.com/Epoch2/slack-sirius/config"
+	"github.com/kayex/sirius/store"
+	"github.com/kayex/sirius/config"
 )
 
 type Sirius struct {

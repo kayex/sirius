@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/Epoch2/slack-sirius/store/db"
+	"github.com/kayex/sirius/store/db"
 )
 
 func main() {

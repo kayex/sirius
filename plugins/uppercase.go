@@ -2,7 +2,7 @@ package plugins
 
 import (
 	"strings"
-	"github.com/Epoch2/slack-sirius/core"
+	"github.com/kayex/sirius/core"
 )
 
 type uppercase_plugin struct {

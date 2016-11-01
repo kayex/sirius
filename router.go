@@ -5,8 +5,8 @@ import (
 	"log"
 	"os"
 	"github.com/nlopes/slack"
-	"github.com/Epoch2/slack-sirius/core"
-	"github.com/Epoch2/slack-sirius/plugins"
+	"github.com/kayex/sirius/core"
+	"github.com/kayex/sirius/plugins"
 )
 
 func Route() {

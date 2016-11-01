@@ -1,7 +1,7 @@
 package plugins
 
 import (
-	"github.com/Epoch2/slack-sirius/core"
+	"github.com/kayex/sirius/core"
 )
 
 type plugin interface {
