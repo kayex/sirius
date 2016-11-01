@@ -1,10 +1,9 @@
 package config
 
-type Db struct {
+type Config struct {
+	DbHost     string
+	DbPort     string
+	DbDatabase string
 	DbUser     string
 	DbPassword string
-}
-
-type Config struct {
-	Db
 }

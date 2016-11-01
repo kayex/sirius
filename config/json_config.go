@@ -12,7 +12,7 @@ type JsonConfig struct {
 	DbPassword string `json:"db_password"`
 }
 
-func NewJsonConfig(filename string) *Config {
+func NewJsonConfig(filename string) JsonConfig {
 	dat, err := ioutil.ReadFile(filename)
 
 	if err != nil {
@@ -20,14 +20,15 @@ func NewJsonConfig(filename string) *Config {
 		panic(err)
 	}
 
-	var cfg JsonConfig = new(JsonConfig)
+	var cfg *JsonConfig = new(JsonConfig)
+
 	decode(dat, cfg)
 
-	return &cfg
+	return *cfg
 }
 
-func decode(b []byte, cfg JsonConfig) {
-	if err := json.Unmarshal(b, &cfg); err != nil {
+func decode(b []byte, cfg *JsonConfig) {
+	if err := json.Unmarshal(b, cfg); err != nil {
 		panic(err)
 	}
 }
