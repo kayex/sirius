@@ -1,30 +1,18 @@
 package main
 
 import (
-	"reflect"
-	"fmt"
 	"github.com/kayex/sirius/config"
+	"github.com/kayex/sirius/core"
 	"github.com/kayex/sirius/store/db"
 )
 
 func main() {
 	config := initConfig()
 	store := initDbStore(&config)
-
 	user := store.GetUser("d915025d-406f-49ac-8b74-0a9497fee4e7")
-	cfg := store.GetConfiguration(user, "my-plugin")
-	fmt.Println(reflect.TypeOf(cfg.Config))
 
-	//cfg.SetConfig(map[string]interface{}{
-	//	"setting-1": "value",
-	//})
-
-	store.UpdateConfiguration(cfg)
-
-	fmt.Println(cfg.User)
-
-	//cfg := model.NewConfiguration(user, "my-plugin")
-	//store.SaveConfiguration(&cfg)
+	cl := core.NewClient(user)
+	cl.Start()
 
 }
 
@@ -41,3 +29,4 @@ func initDbStore(cfg *config.Config) db.Db {
 
 	return db.Connect(host, port, dbName, user, pwd)
 }
+

@@ -5,5 +5,5 @@ import (
 )
 
 type plugin interface {
-	Run(core.Message) string
+	Run(*core.Message, map[string]interface{}) string
 }

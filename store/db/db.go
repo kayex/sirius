@@ -41,11 +41,10 @@ func (db *Db) SaveConfiguration(cfg *model.Configuration) {
 func (db *Db) UpdateConfiguration(cfg *model.Configuration) {
 	_, err := db.conn.Model(cfg).Column("config").Update()
 
-	if (err != nil) {
+	if err != nil {
 		panic(err)
 	}
 }
-
 
 func (db *Db) GetUsers() *[]model.User {
 	var users []model.User
@@ -73,7 +72,7 @@ func (db *Db) GetConfiguration(usr *model.User, pid string) *model.Configuration
 	db.conn.Model(cfg).
 		Where("plugin_guid = ?", pid)
 
-	return cfg;
+	return cfg
 }
 
 func exec(err error) {

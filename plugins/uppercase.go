@@ -1,6 +1,7 @@
 package plugins
 
 import (
+	"github.com/kayex/sirius/config"
 	"github.com/kayex/sirius/core"
 	"strings"
 )
@@ -8,7 +9,7 @@ import (
 type uppercase_plugin struct {
 }
 
-func (u *uppercase_plugin) Run(msg core.Message) string {
+func (u *uppercase_plugin) Run(msg *core.Message, cfg *config.Config) string {
 	return strings.ToUpper(msg.Text)
 }
 

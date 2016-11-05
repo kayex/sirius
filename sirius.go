@@ -10,13 +10,12 @@ type Sirius struct {
 	store *store.Store
 }
 
-func New(cfg *config.Config, store *store.Store) {
+func Init(cfg *config.Config, store *store.Store) {
 	return Sirius{
 		cfg:   cfg,
 		store: store,
 	}
 }
 
-func Boot(s *Sirius) {
-
+func (s *Sirius) Boot() {
 }

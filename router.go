@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/kayex/sirius/core"
 	"github.com/kayex/sirius/plugins"
+	"github.com/kayex/sirius/store"
 	"github.com/nlopes/slack"
 	"log"
 	"os"
@@ -26,11 +27,6 @@ Loop:
 				fmt.Println("Connected: %v\n", ev)
 
 			case *slack.MessageEvent:
-				fmt.Printf("Message: %v\n", ev)
-				plugin := plugins.NewUppercasePlugin()
-				msg := core.NewMessage(ev.Text)
-				newMsg := core.NewMessage(plugin.Run(msg))
-
 				rtm.SendMessage(rtm.NewOutgoingMessage(newMsg.Text, "D0EJXP1C4"))
 
 			case *slack.RTMError:
