@@ -1,9 +1,9 @@
 package plugins
 
 import (
-	"github.com/kayex/sirius/core"
+	"github.com/kayex/sirius/model"
 )
 
-type plugin interface {
-	Run(*core.Message, map[string]interface{}) string
+type Plugin interface {
+	Run(model.Message) []Transformation
 }

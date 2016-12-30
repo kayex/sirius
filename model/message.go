@@ -1,13 +1,18 @@
 package model
 
 type Message struct {
-	Text string
-	Channel string
+	Text      string
+	Modified  bool
+	UserID    string
+	Channel   string
+	Timestamp string
 }
 
-func NewMessage(text string, channel string) Message {
+func NewMessage(text string, user string, channel string, timestamp string) Message {
 	return Message{
-		Text: text,
-		Channel: channel,
+		Text:      text,
+		UserID:    user,
+		Channel:   channel,
+		Timestamp: timestamp,
 	}
 }
