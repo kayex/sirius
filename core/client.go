@@ -46,7 +46,6 @@ func (c *Client) handleMessage(msg *model.Message) {
 	}
 
 	c.runUserPlugins(msg)
-	c.sendUpdate(msg)
 }
 
 func (c *Client) runUserPlugins(msg *model.Message) {
