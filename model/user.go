@@ -16,3 +16,7 @@ func NewUser(token string) User {
 		Token: token,
 	}
 }
+
+func (u *User) AddConfiguration(cfg *Configuration) {
+	u.Configurations = append(u.Configurations, cfg)
+}

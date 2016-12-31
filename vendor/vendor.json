@@ -59,61 +59,61 @@
 			"revision": ""
 		},
 		{
-			"checksumSHA1": "aUOdLwQ5WHTQknuYP9ThnDcbK14=",
+			"checksumSHA1": "ZtoqVjpOE8VF9n6Ebqyu4vTUYas=",
 			"path": "github.com/jinzhu/inflection",
 			"revision": "74387dc39a75e970e7a3ae6a3386b5bd2e5c5cff",
 			"revisionTime": "2016-08-17T01:46:01Z"
 		},
 		{
-			"checksumSHA1": "uL+bNrZcEI6yIAET5iWRSZPoltI=",
+			"checksumSHA1": "f054Etdk4fUv8Xuw4jKNBHMfT2Y=",
 			"path": "github.com/kayex/sirius",
 			"revision": "5f7c932d4de32b1d3cb761fa839f31cdc672190d",
 			"revisionTime": "2016-11-01T00:58:54Z"
 		},
 		{
-			"checksumSHA1": "mtccVG2NEDsCv6Tt0d7OBAnXlGk=",
+			"checksumSHA1": "e18aVbFA+CG4p8Jbu98ASprqliY=",
 			"path": "github.com/kayex/sirius/config",
 			"revision": "5f7c932d4de32b1d3cb761fa839f31cdc672190d",
 			"revisionTime": "2016-11-01T00:58:54Z"
 		},
 		{
-			"checksumSHA1": "9V/Fqv3VrFhcar5SLOmm5x8RAFA=",
+			"checksumSHA1": "FYRUlGqiQZ73d+RARruxhOc1s+8=",
 			"path": "github.com/kayex/sirius/core",
 			"revision": "5f7c932d4de32b1d3cb761fa839f31cdc672190d",
 			"revisionTime": "2016-11-01T00:58:54Z"
 		},
 		{
-			"checksumSHA1": "KlnaTqsDCi1HxrrqvW5cf3LU0vE=",
+			"checksumSHA1": "473/B51jWW771cZnWgPS4JaN8nw=",
 			"path": "github.com/kayex/sirius/main",
 			"revision": "5f7c932d4de32b1d3cb761fa839f31cdc672190d",
 			"revisionTime": "2016-11-01T00:58:54Z"
 		},
 		{
-			"checksumSHA1": "hrKOwQTwIHZsbI/NH+/9UZSPDZs=",
+			"checksumSHA1": "cql6xBtlCQ8OjZ+1gqVmDpK0jkM=",
 			"path": "github.com/kayex/sirius/model",
 			"revision": "5f7c932d4de32b1d3cb761fa839f31cdc672190d",
 			"revisionTime": "2016-11-01T00:58:54Z"
 		},
 		{
-			"checksumSHA1": "Cb3R9+oIHbDbinuDj27QeZwsOIA=",
+			"checksumSHA1": "YmJ4X9l0WkkwXPFEN9TUYiIQ0Nw=",
 			"path": "github.com/kayex/sirius/plugins",
 			"revision": "5f7c932d4de32b1d3cb761fa839f31cdc672190d",
 			"revisionTime": "2016-11-01T00:58:54Z"
 		},
 		{
-			"checksumSHA1": "8GrBbV+Z721IDoRpkqpSG/Qu2YM=",
+			"checksumSHA1": "qNRIp/V6zYjRILt2MCBvS2jPa+4=",
 			"path": "github.com/kayex/sirius/store",
 			"revision": "5f7c932d4de32b1d3cb761fa839f31cdc672190d",
 			"revisionTime": "2016-11-01T00:58:54Z"
 		},
 		{
-			"checksumSHA1": "SClCaSEkO+kdtU9aj3/G9DVvFZ8=",
+			"checksumSHA1": "i91yAt0j2Q5wUFMt1obtIezTeOc=",
 			"path": "github.com/kayex/sirius/store/db",
 			"revision": "5f7c932d4de32b1d3cb761fa839f31cdc672190d",
 			"revisionTime": "2016-11-01T00:58:54Z"
 		},
 		{
-			"checksumSHA1": "PjYVlPaHYI72t45hiTz40xnriBw=",
+			"checksumSHA1": "Tv59jlJDdTKNL5jrQhxt47AAAAE=",
 			"path": "github.com/nlopes/slack",
 			"revision": "e595e9d8590a04ff76407e4e7d1791d25b095c66",
 			"revisionTime": "2016-10-30T18:15:39Z"
@@ -125,37 +125,37 @@
 			"revisionTime": "2016-10-31T06:24:04Z"
 		},
 		{
-			"checksumSHA1": "tKCdqSaTl+mET+JXJX+BuKwdkVU=",
+			"checksumSHA1": "mbuuWLBBULDMIaPFWB9BEoy6zOM=",
 			"path": "gopkg.in/pg.v5",
 			"revision": "013e3a7eb08c73f64df8f14854f7488ed7e64dca",
 			"revisionTime": "2016-10-31T09:38:34Z"
 		},
 		{
-			"checksumSHA1": "TSOfTcP+9ArSIWDinx2QSY9SKXg=",
+			"checksumSHA1": "kCFrC/fKFrrCCMp3vJJBtII7VW4=",
 			"path": "gopkg.in/pg.v5/internal",
 			"revision": "013e3a7eb08c73f64df8f14854f7488ed7e64dca",
 			"revisionTime": "2016-10-31T09:38:34Z"
 		},
 		{
-			"checksumSHA1": "W99+dc1YEgWjVhcjOWNsDyfQObg=",
+			"checksumSHA1": "g6++cRsSL1459wmeAcPTNU8I4ZU=",
 			"path": "gopkg.in/pg.v5/internal/parser",
 			"revision": "013e3a7eb08c73f64df8f14854f7488ed7e64dca",
 			"revisionTime": "2016-10-31T09:38:34Z"
 		},
 		{
-			"checksumSHA1": "MjW3vWtKP6up/lNiv+vTznAuPUU=",
+			"checksumSHA1": "1OFRwv5OwsMfGVKE2MobQ4FxtdE=",
 			"path": "gopkg.in/pg.v5/internal/pool",
 			"revision": "013e3a7eb08c73f64df8f14854f7488ed7e64dca",
 			"revisionTime": "2016-10-31T09:38:34Z"
 		},
 		{
-			"checksumSHA1": "rDUWLeqF68ll1tG+XPTYHtmlHqc=",
+			"checksumSHA1": "VteC3QtM28UeY7zTl/8fv4BzSBI=",
 			"path": "gopkg.in/pg.v5/orm",
 			"revision": "013e3a7eb08c73f64df8f14854f7488ed7e64dca",
 			"revisionTime": "2016-10-31T09:38:34Z"
 		},
 		{
-			"checksumSHA1": "KjJ86XKGm9qMJ6Uln3aDHh6nj2Q=",
+			"checksumSHA1": "UybFKSXlgXMS+fbsTZx52Mcvf+8=",
 			"path": "gopkg.in/pg.v5/types",
 			"revision": "013e3a7eb08c73f64df8f14854f7488ed7e64dca",
 			"revisionTime": "2016-10-31T09:38:34Z"
