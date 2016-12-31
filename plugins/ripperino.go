@@ -4,7 +4,10 @@ import (
 	"github.com/kayex/sirius/model"
 	"math/rand"
 	"strings"
+	"fmt"
 )
+
+const base string = "ripperino"
 
 var endings = []string{
 	"casino",
@@ -16,7 +19,7 @@ var endings = []string{
 type Ripperino struct{}
 
 func (r *Ripperino) Run(m model.Message) []Transformation {
-	if !strings.HasPrefix(m.Text, "ripperino") {
+	if !strings.HasPrefix(m.Text, base) {
 		return NoTransformation()
 	}
 
@@ -29,7 +32,7 @@ func (r *Ripperino) Run(m model.Message) []Transformation {
 }
 
 func rapperGrino() Transformation {
-	return Substitute("ripperino", "~ripperino~ RAPPER GRINO")
+	return Substitute(base, fmt.Sprintf("~%s~ RAPPER GRINO", base))
 }
 
 func getRandomEnding() string {
