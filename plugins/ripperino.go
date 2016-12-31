@@ -25,7 +25,7 @@ func (r *Ripperino) Run(m model.Message) []Transformation {
 		return []Transformation{rapperGrino()}
 	}
 
-	return []Transformation{Append(getRandomEnding())}
+	return []Transformation{Append(" " + getRandomEnding())}
 }
 
 func rapperGrino() Transformation {
