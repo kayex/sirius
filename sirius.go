@@ -1,18 +1,16 @@
 package main
 
 import (
-	"github.com/kayex/sirius/config"
+	"encoding/json"
+	"fmt"
 	"github.com/kayex/sirius/core"
 	"github.com/kayex/sirius/model"
-	"github.com/kayex/sirius/store/db"
+	"io/ioutil"
+	"os"
 )
 
 func main() {
-	tokens := map[string]string{
-		"johan": "xoxp-14643781812-14649325041-100316954898-6bfd950500977c5b25ffa6636b818811",
-		"ash":   "xoxp-14643781812-14671711527-104875993958-fa382e478a906f535ca80f2864e6b90f",
-	}
-
+	tokens := getTokensFromJson()
 	users := []model.User{}
 
 	for _, token := range tokens {
@@ -20,9 +18,11 @@ func main() {
 
 		tu := model.NewConfiguration(&user, "thumbs_up")
 		rip := model.NewConfiguration(&user, "ripperino")
+		rpl := model.NewConfiguration(&user, "replacer")
 
 		user.AddConfiguration(&tu)
 		user.AddConfiguration(&rip)
+		user.AddConfiguration(&rpl)
 
 		users = append(users, user)
 	}
@@ -35,16 +35,16 @@ func main() {
 	select {}
 }
 
-func initConfig() config.Config {
-	return config.FromEnv()
+func getTokensFromJson() []string {
+	file, err := ioutil.ReadFile("./users.json")
+	if err != nil {
+		fmt.Println(err.Error())
+		os.Exit(1)
+	}
+
+	var users []string
+
+	json.Unmarshal(file, &users)
+	return users
 }
 
-func initDbStore(cfg *config.Config) db.Db {
-	host := cfg.DbHost
-	port := cfg.DbPort
-	dbName := cfg.DbDatabase
-	user := cfg.DbUser
-	pwd := cfg.DbPassword
-
-	return db.Connect(host, port, dbName, user, pwd)
-}
