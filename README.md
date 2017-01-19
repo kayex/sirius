@@ -1,5 +1,5 @@
 # sirius
-Sirius is a standalone Slack extension runner written in Go. It enables you to write and run simple extensions that analyzes and alter your outgoing messages in realtime.
+Sirius is a standalone Slack extension runner written in Go. It enables you to write and run simple extensions that analyze and alter your outgoing messages in realtime.
 
 ## What does it do?
 Sirius aims to improve the basic Slack messaging experience with a series of extensions that add powerful editing capabilities. Extensions examine every message you send, and can perform inline substitutions or add data.
