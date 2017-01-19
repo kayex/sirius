@@ -29,12 +29,12 @@ Converts `(y)` to the `:+1:` (thumbs up) emojii in all outgoing messages.
 
 Before
 ```
-Awesome (y)
+kayex: Awesome (y)
 ```
 
 After
 ```
-Awesome :+1:
+kayex: Awesome :+1: (edited)
 ```
 
 ### ripperino
@@ -42,10 +42,10 @@ Adds a random extension to any outgoing messages consisting of the phrase *rippe
 
 Before
 ```
-ripperino
+kayex: ripperino
 ```
 
 After
 ```
-ripperino casino
+kayex: ripperino casino (edited)
 ```
