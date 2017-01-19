@@ -2,11 +2,8 @@
 
 Sirius is a standalone Slack extensions runner written in Go.
 
-## Examples
-
 ## How does it work?
-
-Sirius connects to the Slack RTM API using the tokens you provide it. Once logged in, it actively monitors your outgoing messages for triggers, i.e. words or syntaxes that trigger the execution of an extension. An extension may optionally modify the message that triggered it, which will push a message edit via the RTM API.
+Sirius connects to the Slack RTM API using your Slack OAuth token. Once logged in, it actively monitors your outgoing messages for triggers, i.e. words or syntaxes that trigger the execution of an extension. An extension may optionally modify the message that triggered it, which will push a message edit via the RTM API.
 
 ## Extensions
 
