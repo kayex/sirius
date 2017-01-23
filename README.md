@@ -24,6 +24,8 @@ type Plugin interface {
 
 Every plugin invokation must return a slice of zero or more `Transformation`s. The transformations will be applied to the message `Text` property, which will then be broadcasted as a message update via the RTM API.
 
+## Bundled plugins
+
 ### thumbs_up
 Converts `(y)` to the `:+1:` (thumbs up) emojii in all outgoing messages.
 
