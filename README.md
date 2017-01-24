@@ -40,7 +40,7 @@ kayex: Awesome :+1: (edited)
 ```
 
 ### ripperino
-Adds a random extension to any outgoing messages consisting of the phrase *ripperino*
+Adds a random ending to any outgoing messages that contain the phrase *ripperino* and nothing else.
 
 Before
 ```
