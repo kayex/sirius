@@ -4,14 +4,14 @@ type Configuration struct {
 	Id         string
 	Name       string
 	User       *User
-	ExtensionGUID string
+	EID        EID
 	Config     map[string]interface{}
 }
 
-func NewConfiguration(usr *User, pid string) Configuration {
+func NewConfiguration(usr *User, eid EID) Configuration {
 	return Configuration{
-		User:       usr,
-		ExtensionGUID: pid,
+		User:	usr,
+		EID: 	eid,
 	}
 }
 
