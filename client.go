@@ -112,13 +112,3 @@ func execute(ext Extension, msg *Message, act chan<- MessageAction) {
 		act <- a
 	}()
 }
-
-
-/*
-Client should
-
-* Keep track of exactly 1 API client for a given user
-* Asynchronously execute plugins for a user
-* Dynamically accept a new user config
-* Terminate as early as possible when Context ends
- */
