@@ -11,12 +11,12 @@ var words = map[string]string{
 	"overwatch": "abovelook",
 }
 
-func (r *Replacer) Run(m model.Message) []Transformation {
+func (r *Replacer) Run(m model.Message) (error, []Transformation) {
 	trans := []Transformation{}
 
 	for s, r := range words {
 		trans = append(trans, Substitute(strings.ToLower(s), r))
 	}
 
-	return trans
+	return nil, trans
 }

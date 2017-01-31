@@ -53,7 +53,14 @@ func (c *Client) runUserExtensions(msg *model.Message) {
 
 	for _, cfg := range c.user.Configurations {
 		ext := getExtensionForEID(cfg.ExtensionGUID)
-		trans = append(trans, ext.Run(*msg)...)
+
+		err, res := ext.Run(*msg)
+
+		if err != nil {
+			panic(err)
+		}
+
+		trans = append(trans, res...)
 	}
 
 	text := msg.Text

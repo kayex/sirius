@@ -5,5 +5,5 @@ import (
 )
 
 type Extension interface {
-	Run(model.Message) []Transformation
+	Run(model.Message) (error, []Transformation)
 }

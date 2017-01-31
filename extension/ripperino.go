@@ -18,17 +18,17 @@ var endings = []string{
 
 type Ripperino struct{}
 
-func (r *Ripperino) Run(m model.Message) []Transformation {
+func (r *Ripperino) Run(m model.Message) (error, []Transformation) {
 	if !strings.HasPrefix(m.Text, base) {
-		return NoTransformation()
+		return nil, NoTransformation()
 	}
 
 	// 1 in 10 times, go full Grino
 	if rand.Int()%10 == 1 {
-		return []Transformation{rapperGrino()}
+		return nil, []Transformation{rapperGrino()}
 	}
 
-	return []Transformation{Append(" " + getRandomEnding())}
+	return nil, []Transformation{Append(" " + getRandomEnding())}
 }
 
 func rapperGrino() Transformation {
