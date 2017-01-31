@@ -1,24 +1,24 @@
 package main
 
 import (
+	"github.com/kayex/sirius"
+	"golang.org/x/net/context"
 	"encoding/json"
-	"fmt"
-	"github.com/kayex/sirius/core"
-	"github.com/kayex/sirius/model"
 	"io/ioutil"
 	"os"
+	"fmt"
 )
 
 func main() {
 	tokens := getTokensFromJson()
-	users := []model.User{}
+	users := []sirius.User{}
 
 	for _, token := range tokens {
-		user := model.NewUser(token)
+		user := sirius.NewUser(token)
 
-		tu := model.NewConfiguration(&user, "thumbs_up")
-		rip := model.NewConfiguration(&user, "ripperino")
-		rpl := model.NewConfiguration(&user, "replacer")
+		tu := sirius.NewConfiguration(&user, "thumbs_up")
+		rip := sirius.NewConfiguration(&user, "ripperino")
+		rpl := sirius.NewConfiguration(&user, "replacer")
 
 		user.AddConfiguration(&tu)
 		user.AddConfiguration(&rip)
@@ -28,8 +28,8 @@ func main() {
 	}
 
 	for _, user := range users {
-		cl := core.NewClient(&user)
-		go cl.Start()
+		cl := sirius.NewClient(&user)
+		go cl.Start(context.TODO())
 	}
 
 	select {}
@@ -47,4 +47,3 @@ func getTokensFromJson() []string {
 	json.Unmarshal(file, &users)
 	return users
 }
-
