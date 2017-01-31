@@ -96,7 +96,7 @@ func getExtensionForEID(eid string) extension.Extension {
 		return &extension.Replacer{}
 	}
 
-	panic("Invalid pid: " + eid)
+	panic("Invalid eid: " + eid)
 }
 
 func createLogger() *log.Logger {
