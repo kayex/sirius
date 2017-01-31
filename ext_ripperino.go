@@ -1,8 +1,7 @@
-package extension
+package sirius
 
 import (
 	"fmt"
-	"github.com/kayex/sirius/model"
 	"math/rand"
 	"strings"
 )
@@ -18,21 +17,21 @@ var endings = []string{
 
 type Ripperino struct{}
 
-func (r *Ripperino) Run(m model.Message) []Transformation {
+func (r *Ripperino) Run(m Message) (error, MessageAction) {
 	if !strings.HasPrefix(m.Text, base) {
-		return NoTransformation()
+		return nil, NoAction()
 	}
+
+	edit := TextEdit()
 
 	// 1 in 10 times, go full Grino
 	if rand.Int()%10 == 1 {
-		return []Transformation{rapperGrino()}
+		edit.Substitute(base, fmt.Sprintf("~%s~ RAPPER GRINO", base))
+	} else {
+		edit.Append(" " + getRandomEnding())
 	}
 
-	return []Transformation{Append(" " + getRandomEnding())}
-}
-
-func rapperGrino() Transformation {
-	return Substitute(base, fmt.Sprintf("~%s~ RAPPER GRINO", base))
+	return nil, edit
 }
 
 func getRandomEnding() string {
