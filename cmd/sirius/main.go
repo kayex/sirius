@@ -1,12 +1,12 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/kayex/sirius"
 	"golang.org/x/net/context"
-	"encoding/json"
 	"io/ioutil"
 	"os"
-	"fmt"
 )
 
 func main() {

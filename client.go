@@ -2,20 +2,20 @@ package sirius
 
 import (
 	"golang.org/x/net/context"
-	"time"
 	"strings"
+	"time"
 )
 
 type Client struct {
 	user *User
-	conn  *Connection
+	conn *Connection
 }
 
 func NewClient(user *User) *Client {
 	conn := NewConnection(user.Token)
 
 	return &Client{
-		conn:  &conn,
+		conn: &conn,
 		user: user,
 	}
 }
@@ -59,7 +59,7 @@ func (c *Client) runExtensions(msg *Message) []MessageAction {
 
 	var actions []MessageAction
 
-	ActionReceive:
+ActionReceive:
 	for range cfgs {
 		select {
 		case a := <-act:
@@ -100,7 +100,7 @@ func trimEscape(text string) string {
 
 /*
 Executes ext(msg) and passes the results onto act
- */
+*/
 func execute(ext Extension, msg *Message, act chan<- MessageAction) {
 	go func() {
 		err, a := ext.Run(*msg)

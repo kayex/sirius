@@ -1,17 +1,17 @@
 package sirius
 
 type Configuration struct {
-	Id         string
-	Name       string
-	User       *User
-	EID        EID
-	Config     map[string]interface{}
+	Id     string
+	Name   string
+	User   *User
+	EID    EID
+	Config map[string]interface{}
 }
 
 func NewConfiguration(usr *User, eid EID) Configuration {
 	return Configuration{
-		User:	usr,
-		EID: 	eid,
+		User: usr,
+		EID:  eid,
 	}
 }
 

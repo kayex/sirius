@@ -18,8 +18,8 @@ func TextEdit() *TextEditAction {
 
 func (edit *TextEditAction) Substitute(search string, sub string) *TextEditAction {
 	edit.add(&SubTransform{
-		Search:       search,
-		Sub: sub,
+		Search: search,
+		Sub:    sub,
 	})
 
 	return edit
@@ -47,7 +47,7 @@ func (edit *TextEditAction) add(t TextTransform) {
 
 /*
 TextTransform represents an alteration of the message Text property.
- */
+*/
 type TextTransform interface {
 	Apply(text string) string
 }
@@ -57,8 +57,8 @@ func NoTransform() []TextTransform {
 }
 
 type SubTransform struct {
-	Search       string
-	Sub          string
+	Search string
+	Sub    string
 }
 
 type AppendTransform struct {
@@ -76,4 +76,3 @@ func (at *AppendTransform) Apply(text string) string {
 
 	return text + at.Appendix
 }
-
