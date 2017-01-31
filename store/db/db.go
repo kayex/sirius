@@ -54,14 +54,14 @@ func (db *Db) GetUsers() *[]model.User {
 	return &users
 }
 
-func (db *Db) GetPlugins(usr *model.User) *[]model.Configuration {
-	var plugins []model.Configuration
+func (db *Db) GetExtensions(usr *model.User) *[]model.Configuration {
+	var exts []model.Configuration
 
-	exec(db.conn.Model(&plugins).
+	exec(db.conn.Model(&exts).
 		Where("user_id = ?", usr.Id).
 		Select())
 
-	return &plugins
+	return &exts
 }
 
 func (db *Db) GetConfiguration(usr *model.User, pid string) *model.Configuration {
@@ -70,7 +70,7 @@ func (db *Db) GetConfiguration(usr *model.User, pid string) *model.Configuration
 	}
 
 	db.conn.Model(cfg).
-		Where("plugin_guid = ?", pid)
+		Where("ext_guid = ?", pid)
 
 	return cfg
 }

@@ -3,7 +3,7 @@ package core
 import (
 	"github.com/kayex/sirius/api"
 	"github.com/kayex/sirius/model"
-	"github.com/kayex/sirius/plugins"
+	"github.com/kayex/sirius/extension"
 	"log"
 	"os"
 	"strings"
@@ -45,15 +45,15 @@ func (c *Client) handleMessage(msg *model.Message) {
 		return
 	}
 
-	c.runUserPlugins(msg)
+	c.runUserExtensions(msg)
 }
 
-func (c *Client) runUserPlugins(msg *model.Message) {
-	trans := []plugins.Transformation{}
+func (c *Client) runUserExtensions(msg *model.Message) {
+	trans := []extension.Transformation{}
 
 	for _, cfg := range c.user.Configurations {
-		pg := getPluginForPid(cfg.PluginGuid)
-		trans = append(trans, pg.Run(*msg)...)
+		ext := getExtensionForEID(cfg.ExtensionGUID)
+		trans = append(trans, ext.Run(*msg)...)
 	}
 
 	text := msg.Text
@@ -86,17 +86,17 @@ func (c *Client) isSender(msg *model.Message) bool {
 	return c.api.UserId == msg.UserID
 }
 
-func getPluginForPid(pid string) plugins.Plugin {
-	switch pid {
+func getExtensionForEID(eid string) extension.Extension {
+	switch eid {
 	case "thumbs_up":
-		return &plugins.ThumbsUp{}
+		return &extension.ThumbsUp{}
 	case "ripperino":
-		return &plugins.Ripperino{}
+		return &extension.Ripperino{}
 	case "replacer":
-		return &plugins.Replacer{}
+		return &extension.Replacer{}
 	}
 
-	panic("Invalid pid: " + pid)
+	panic("Invalid pid: " + eid)
 }
 
 func createLogger() *log.Logger {
