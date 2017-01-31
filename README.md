@@ -29,25 +29,13 @@ Every extension invokation must return a slice of zero or more `Transformation`s
 ### thumbs_up
 Converts `(y)` to the `:+1:` (thumbs up) emojii in all outgoing messages.
 
-Before
-```
-kayex: Awesome (y)
-```
+**kayex** Awesome (y)
 
-After
-```
-kayex: Awesome :+1: (edited)
-```
+**kayex** Awesome 👍 (edited)
 
 ### ripperino
 Adds a random ending to any outgoing messages that contain the phrase *ripperino* and nothing else.
 
-Before
-```
-kayex: ripperino
-```
+**kayex** ripperino
 
-After
-```
-kayex: ripperino casino (edited)
-```
+**kayex** ripperino casino (edited)
