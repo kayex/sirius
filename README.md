@@ -16,7 +16,7 @@ Yes. Any message sent or received by your Slack account while Sirius is running 
 Creating a new extension is only a matter of implementing the `Extension` interface:
 ```go
 type Extension interface {
-	Run(model.Message) (error, []Transformation)
+	Run(Message) (error, []Transformation)
 }
 ```
 
