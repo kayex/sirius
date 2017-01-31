@@ -92,6 +92,8 @@ func getPluginForPid(pid string) plugins.Plugin {
 		return &plugins.ThumbsUp{}
 	case "ripperino":
 		return &plugins.Ripperino{}
+	case "replacer":
+		return &plugins.Replacer{}
 	}
 
 	panic("Invalid pid: " + pid)
