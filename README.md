@@ -13,16 +13,16 @@ Sirius connects to the Slack RTM API using your Slack OAuth token. Once logged i
 Yes. Any message sent or received by your Slack account while Sirius is running will be intercepted via the RTM API and processed by the enabled extensions. However, Sirius does not store any messages or message metadata, and does not collect any logs. Messages are only kept in memory for the duration of the extensions' execution.
 
 ## Creating a new extension
-Creating a new extension is only a matter of implementing the `Plugin` interface:
+Creating a new extension is only a matter of implementing the `Extension` interface:
 ```go
-type Plugin interface {
+type Extension interface {
 	Run(model.Message) []Transformation
 }
 ```
 
 Each extension is run concurrently and has a generous execution time limit. In addition to this, extensions may perform any type of I/O, including network requests. Message updates are batched on a fixed time interval, which allows quick executing extensions to send their message modifications even though there are slower extensions that haven't yet completed.
 
-Every plugin invokation must return a slice of zero or more `Transformation`s, which will be applied to the message `Text` property. The updated message will then be broadcasted via the RTM API as a regular message edit.
+Every extension invokation must return a slice of zero or more `Transformation`s, which will be applied to the message `Text` property. The updated message will then be broadcasted via the RTM API as a regular message edit.
 
 ## Bundled plugins
 
