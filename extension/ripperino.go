@@ -1,10 +1,10 @@
-package plugins
+package extension
 
 import (
+	"fmt"
 	"github.com/kayex/sirius/model"
 	"math/rand"
 	"strings"
-	"fmt"
 )
 
 const base string = "ripperino"
@@ -24,7 +24,7 @@ func (r *Ripperino) Run(m model.Message) []Transformation {
 	}
 
 	// 1 in 10 times, go full Grino
-	if rand.Int() % 10 == 1 {
+	if rand.Int()%10 == 1 {
 		return []Transformation{rapperGrino()}
 	}
 

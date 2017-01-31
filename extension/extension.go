@@ -1,9 +1,9 @@
-package plugins
+package extension
 
 import (
 	"github.com/kayex/sirius/model"
 )
 
-type Plugin interface {
+type Extension interface {
 	Run(model.Message) []Transformation
 }

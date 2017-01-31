@@ -1,4 +1,4 @@
-package plugins
+package extension
 
 import (
 	"github.com/kayex/sirius/model"

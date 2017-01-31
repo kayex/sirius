@@ -36,10 +36,10 @@ func createConfigurationsTable() []string {
 		`CREATE TABLE configurations (
 			id UUID PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 			user_id UUID NOT NULL,
-			plugin_guid VARCHAR(255) NOT NULL,
+			ext_guid VARCHAR(255) NOT NULL,
 			config JSON
 		)`,
-		`CREATE UNIQUE INDEX uniq_user_plugin ON configurations USING btree (user_id, plugin_guid)`,
+		`CREATE UNIQUE INDEX uniq_user_ext ON configurations USING btree (user_id, ext_guid)`,
 		`ALTER TABLE configurations ADD CONSTRAINT FK_CONFIGURATION_USER FOREIGN KEY (user_id) REFERENCES users (id) NOT DEFERRABLE INITIALLY IMMEDIATE;`,
 	}
 }

@@ -4,14 +4,14 @@ type Configuration struct {
 	Id         string
 	Name       string
 	User       *User
-	PluginGuid string
+	ExtensionGUID string
 	Config     map[string]interface{}
 }
 
 func NewConfiguration(usr *User, pid string) Configuration {
 	return Configuration{
 		User:       usr,
-		PluginGuid: pid,
+		ExtensionGUID: pid,
 	}
 }
 
