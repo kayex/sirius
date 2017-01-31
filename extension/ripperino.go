@@ -2,7 +2,7 @@ package extension
 
 import (
 	"fmt"
-	"github.com/kayex/sirius/model"
+	"github.com/kayex/sirius"
 	"math/rand"
 	"strings"
 )
@@ -18,7 +18,7 @@ var endings = []string{
 
 type Ripperino struct{}
 
-func (r *Ripperino) Run(m model.Message) (error, []Transformation) {
+func (r *Ripperino) Run(m sirius.Message) (error, []Transformation) {
 	if !strings.HasPrefix(m.Text, base) {
 		return nil, NoTransformation()
 	}

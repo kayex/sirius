@@ -1,4 +1,4 @@
-package model
+package sirius
 
 type Configuration struct {
 	Id         string

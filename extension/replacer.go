@@ -1,8 +1,8 @@
 package extension
 
 import (
-	"github.com/kayex/sirius/model"
 	"strings"
+	"github.com/kayex/sirius"
 )
 
 type Replacer struct{}
@@ -11,7 +11,7 @@ var words = map[string]string{
 	"overwatch": "abovelook",
 }
 
-func (r *Replacer) Run(m model.Message) (error, []Transformation) {
+func (r *Replacer) Run(m sirius.Message) (error, []Transformation) {
 	trans := []Transformation{}
 
 	for s, r := range words {

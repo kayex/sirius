@@ -1,9 +1,9 @@
 package extension
 
 import (
-	"github.com/kayex/sirius/model"
+	"github.com/kayex/sirius"
 )
 
 type Extension interface {
-	Run(model.Message) (error, []Transformation)
+	Run(sirius.Message) (error, []Transformation)
 }

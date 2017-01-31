@@ -1,4 +1,4 @@
-package model
+package sirius
 
 import "time"
 
