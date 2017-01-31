@@ -16,11 +16,14 @@ Yes. Any message sent or received by your Slack account while Sirius is running 
 Creating a new extension is only a matter of implementing the `Extension` interface:
 ```go
 type Extension interface {
-	Run(Message) (error, []Transformation)
+	Run(Message) (error, MessageAction)
 }
 ```
 
-Every extension invokation must return a slice of zero or more `Transformation`s, which will be applied to the message `Text` property. The updated message will then be broadcasted via the RTM API as a regular message edit.
+Every extension invokation must return a `MessageAction`, which will be applied to the message. If any modifications are made to the message text property, the updated message is broadcasted via the RTM API. Extensions that do not want to act upon the message in any way can simply return the `EmptyAction`:
+```go
+return NoAction()
+```
 
 Each extension is run concurrently and has a generous execution time limit. In addition to this, extensions may perform any type of I/O, including network requests. Message updates are batched on a fixed time interval, which allows quick executing extensions to send their message modifications even though there are slower extensions that haven't yet completed.
 
