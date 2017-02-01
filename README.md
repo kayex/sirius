@@ -4,7 +4,7 @@ Sirius is a standalone Slack extension runner written in Go. It enables you to w
 For example, the `thumbs_up` extension automatically swaps all ocurrences of `(y)` in your messages to `👍` (thumbs up emojii).
 
 ## How does it work?
-Sirius connects to the [Slack Real Time Messaging API](https://api.slack.com/rtm) using your Slack OAuth token. Once logged in, it monitors your active conversations, making intelligent edits to your messages based on their contents. The functionality is divided over a number of *extensions*, which are small, stateless functions that are executed with every message you send. Extensions can be enabled and disabled individually, and several (>100) extensions can be enabled at a time.
+Sirius connects to the [Slack Real Time Messaging API](https://api.slack.com/rtm) using your Slack OAuth token. Once logged in, it monitors your active conversations, making intelligent edits to your messages based on their contents. The functionality is divided over a number of *extensions*, which are small, stateless functions that are executed with every message you send. Extensions can be enabled and disabled individually, and several (>1000) extensions can be enabled at a time.
 
 Sirius is run as a standalone service, and does *not* have to be run on the same, or on the same local network as the device that you are messaging from. Multiple Slack accounts are supported within the same running instance. *A cloud version of sirius is coming soon!*
 
