@@ -27,7 +27,7 @@ $ ./sirius
 ```
 
 ### Users with multiple Slack accounts
-Sirius has multi-account support, which means that you can use Sirius on any number of Slack accounts without having to run multiple instances of the service. Simply add one OAuth token per account that you wish to use with Sirius to the `users.json` file.
+Sirius has multi-account support, which means that you can use Sirius with any number of Slack accounts without having to run multiple service instances. Simply add one OAuth token per account that you wish to use with Sirius to the `users.json` file.
 
 ## Default extensions
 
