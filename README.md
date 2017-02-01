@@ -4,7 +4,7 @@ Sirius is a standalone Slack extension runner written in Go. It enables you to w
 For example, the `thumbs_up` extension automatically swaps all ocurrences of `(y)` in your messages to `👍` (thumbs up emojii).
 
 ## How does it work?
-Sirius connects to the [Slack Real Time Messaging API](https://api.slack.com/rtm) using your Slack OAuth token. Once logged in, it monitors your active conversations, making intelligent edits to your messages based on their contents. The functionality is divided over a number of *extensions*, which are small, stateless functions that are executed with every message you send. Extensions can be enabled and disabled individually, and several (>100) extensions can be enabled at a time.
+Sirius connects to the [Slack Real Time Messaging API](https://api.slack.com/rtm) using your Slack OAuth token. Once logged in, it monitors your active conversations, making intelligent edits to your messages based on their contents. The functionality is divided over a number of *extensions*, which are small, stateless functions that are executed with every message you send. Extensions can be enabled and disabled individually, and several (>1000) extensions can be enabled at a time.
 
 Sirius is run as a standalone service, and does *not* have to be run on the same, or on the same local network as the device that you are messaging from. Multiple Slack accounts are supported within the same running instance. *A cloud version of sirius is coming soon!*
 
@@ -16,8 +16,28 @@ Yes. Any message sent or received by your Slack account while Sirius is running 
 ### thumbs_up
 Converts `(y)` to `👍` (thumbs up emojii) in all outgoing messages.
 
+*before*
+
 >**kayex** Awesome (y)  
->**kayex** Awesome 👍 (edited)
+
+*after*
+
+>**kayex** Awesome 👍 (edited)  
+
+### quotes
+Avoids breaking blockquotes when the quote contains newlines.
+
+*before*
+
+>**kayex** >This is  
+           a multi-paragraph  
+	   quote.  
+	     
+*after*
+
+>**kayex** >This is  
+           >a multi-paragraph  
+	   >quote. (edited)
 
 ## Can I request a new extension?
 Of course! Just [submit a new issue](https://github.com/kayex/sirius/issues/new) and make sure to tag it with the `extension` label. You can also submit your own extension for inclusion in the set of default extensions, by submitting it as a pull request.
