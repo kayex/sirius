@@ -12,7 +12,7 @@ Yes. Any message sent or received by your Slack account while Sirius is running 
 ## Setup and run
 Sirius is run as a standalone service, which means it does *not* have to be run on the same device that you are messaging from. *A cloud version of Sirius is coming soon.*
 
-Before starting the service, you need to create a `users.json` file in the same directory as the executable. The file should consist of a single JSON array containing OAuth tokens for the Slack accounts you wish to enable Sirius for.
+Before starting the service, you need to create a `users.json` file in the same directory as the executable. The file should consist of a single JSON array containing OAuth tokens for the Slack accounts you wish to enable Sirius for:
 
 **users.json**
 ```json
