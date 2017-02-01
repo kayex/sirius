@@ -31,13 +31,6 @@ Converts `(y)` to `👍` (thumbs up emojii) in all outgoing messages.
 **kayex** Awesome (y)  
 **kayex** Awesome 👍 (edited)
 
-### ripperino
-Adds a random ending to any outgoing messages that contain the phrase *ripperino* and nothing else.
-
-**kayex** ripperino  
-**kayex** ripperino casino (edited)
-
-
 ## Can I request a new extension?
 Of course! Just [submit a new issue](https://github.com/kayex/sirius/issues/new) and make sure to tag it with the `extension` label. You can also submit your own extension for inclusion in the set of default extensions, by submitting it as a pull request.
 
