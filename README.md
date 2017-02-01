@@ -52,24 +52,6 @@ Before starting the service, you need to create a `users.json` file in the same 
 ]
 ```
 
-## Bundled extensions
-
-### thumbs_up
-Converts `(y)` to `👍` (thumbs up emojii) in all outgoing messages.
-
-**kayex** Awesome (y)  
-**kayex** Awesome 👍 (edited)
-
-### ripperino
-Adds a random ending to any outgoing messages that contain the phrase *ripperino* and nothing else.
-
-**kayex** ripperino  
-**kayex** ripperino casino (edited)
-
-
-## Can I request a new extension?
-Of course! Just [submit a new issue](https://github.com/kayex/sirius/issues/new) and make sure to tag it with the `extension` label. You can also submit your own extension for inclusion in the set of default extensions by submitting it as a pull request.
-
 ## Creating a new extension
 Creating a new extension is only a matter of implementing the `Extension` interface:
 ```go
