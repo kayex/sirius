@@ -44,6 +44,8 @@ Of course! Just [submit a new issue](https://github.com/kayex/sirius/issues/new)
 ## Creating a new extension
 Creating a new extension is only a matter of implementing the `Extension` interface:
 ```go
+package sirius
+
 type Extension interface {
 	Run(Message) (error, MessageAction)
 }
