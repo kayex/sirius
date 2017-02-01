@@ -8,6 +8,7 @@ type Replacer struct{}
 
 var words = map[string]string{
 	"overwatch": "abovelook",
+	"cancer": "Does this dress make me look fat?",
 }
 
 func (r *Replacer) Run(m Message) (error, MessageAction) {
