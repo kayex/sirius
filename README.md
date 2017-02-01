@@ -10,7 +10,7 @@ Sirius connects to the [Slack Real Time Messaging API](https://api.slack.com/rtm
 Yes. Any message sent or received by your Slack account while Sirius is running will be intercepted via the RTM API and processed by the enabled extensions. However, Sirius does not store any messages or message metadata, and does not collect any message content in its logs. Messages are only kept in memory while the extensions are actively executing.
 
 ## Setup and run
-Sirius is run as a standalone service, which means it does *not* have to be run on the same device that you are messaging from. In addition to this, Sirius has multi-account support. This means that you can use Sirius on any number of Slack accounts without having to run multiple instances of the service.
+Sirius is run as a standalone service, which means it does *not* have to be run on the same device that you are messaging from. *A cloud version of Sirius is coming soon.*
 
 Before starting the service, you need to create a `users.json` file in the same directory as the executable. The file should consist of a single JSON array containing OAuth tokens for the Slack accounts you wish to enable Sirius for.
 
@@ -21,12 +21,13 @@ Before starting the service, you need to create a `users.json` file in the same 
 ]
 ```
 
-Running:
+You can then start the main service by simply running the `sirius` executable:
 ```
 $ ./sirius
 ```
 
-*A cloud version of sirius is coming soon!*
+### Users with multiple Slack accounts
+Sirius has multi-account support, which means that you can use Sirius on any number of Slack accounts without having to run multiple instances of the service. Simply add one OAuth token per account that you wish to use with Sirius to the `users.json` file.
 
 ## Default extensions
 
