@@ -8,6 +8,7 @@ import (
 
 type Connection struct {
 	UserId   string
+	TeamId   string
 	Rtm      *slack.RTM
 	Incoming chan Message
 	client   *slack.Client
@@ -57,6 +58,7 @@ func (conn *Connection) handleIncomingEvent(ev slack.RTMEvent) {
 	switch msg := ev.Data.(type) {
 	case *slack.ConnectedEvent:
 		conn.UserId = msg.Info.User.ID
+		conn.TeamId = msg.Info.Team.ID
 
 	case *slack.MessageEvent:
 		conn.handleIncomingMessage(msg)
@@ -72,6 +74,6 @@ func (conn *Connection) handleIncomingEvent(ev slack.RTMEvent) {
 }
 
 func (conn *Connection) handleIncomingMessage(ev *slack.MessageEvent) {
-	msg := NewMessage(ev.Text, ev.User, ev.Channel, ev.Timestamp)
+	msg := NewMessage(ev.Text, ev.User, ev.Team, ev.Channel, ev.Timestamp)
 	conn.Incoming <- msg
 }

@@ -7,16 +7,16 @@ import (
 )
 
 type Client struct {
-	user *User
-	conn *Connection
+	user       *User
+	conn       *Connection
 }
 
 func NewClient(user *User) *Client {
 	conn := NewConnection(user.Token)
 
 	return &Client{
-		conn: &conn,
-		user: user,
+		conn:       &conn,
+		user:       user,
 	}
 }
 
@@ -32,9 +32,7 @@ func (c *Client) Start(ctx context.Context) {
 }
 
 func (c *Client) handleMessage(msg *Message) {
-	isSender := c.conn.UserId == msg.UserID
-
-	if !isSender {
+	if c.isSender(msg) {
 		return
 	}
 
@@ -88,6 +86,18 @@ func (c *Client) applyActions(act []MessageAction, msg *Message) {
 	if msg.Text != oldText {
 		c.conn.Update(msg)
 	}
+}
+
+/*
+Notice that user IDs are not guaranteed to be globally unique across all Slack users.
+The combination of user ID and team ID, on the other hand, is guaranteed to be globally unique.
+
+- Slack API documentation
+*/
+func (c *Client) isSender(msg *Message) bool {
+	return c.conn.UserId == msg.UserID &&
+		c.conn.TeamId == msg.TeamID
+
 }
 
 func (m *Message) escaped() bool {
