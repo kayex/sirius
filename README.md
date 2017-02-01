@@ -4,10 +4,28 @@ Sirius is a standalone Slack extension runner written in Go. It enables you to w
 For example, the `thumbs_up` extension automatically swaps all ocurrences of `(y)` in your messages to `👍` (thumbs up emojii).
 
 ## How does it work?
-Sirius connects to the Slack RTM API using your Slack OAuth token. Once logged in, it parses your messages and feeds them to the extensions you have enabled. Extensions modify the contents of your messages by broadcasting message edits via the RTM API.
+Sirius connects to the [Slack Real Time Messaging API](https://api.slack.com/rtm) using your Slack OAuth token. Once logged in, it captures your outgoing messages and feeds them to a series of extensions that read and modify your messages in various ways. The message modifications are broadcasted automatically via the RTM API.
 
 ## Wait, does this mean that Sirius can read all my messages?
 Yes. Any message sent or received by your Slack account while Sirius is running will be intercepted via the RTM API and processed by the enabled extensions. However, Sirius does not store any messages or message metadata, and does not collect any message content in its logs. Messages are only kept in memory while the extensions are actively executing.
+
+## Bundled extensions
+
+### thumbs_up
+Converts `(y)` to `👍` (thumbs up emojii) in all outgoing messages.
+
+**kayex** Awesome (y)  
+**kayex** Awesome 👍 (edited)
+
+### ripperino
+Adds a random ending to any outgoing messages that contain the phrase *ripperino* and nothing else.
+
+**kayex** ripperino  
+**kayex** ripperino casino (edited)
+
+
+## Can I request a new extension?
+Of course! Just [submit a new issue](https://github.com/kayex/sirius/issues/new) and make sure to tag it with the `extension` label. You can also submit your own extension for inclusion in the set of default extensions by submitting it as a pull request.
 
 ## Creating a new extension
 Creating a new extension is only a matter of implementing the `Extension` interface:
@@ -37,17 +55,3 @@ func (tu *HelloWorld) Run(m Message) (error, MessageAction) {
 	return nil, edit
 }
 ```
-
-## Bundled plugins
-
-### thumbs_up
-Converts `(y)` to `👍` (thumbs up emojii) in all outgoing messages.
-
-**kayex** Awesome (y)  
-**kayex** Awesome 👍 (edited)
-
-### ripperino
-Adds a random ending to any outgoing messages that contain the phrase *ripperino* and nothing else.
-
-**kayex** ripperino  
-**kayex** ripperino casino (edited)
