@@ -6,12 +6,21 @@ For example, the `thumbs_up` extension automatically swaps all ocurrences of `(y
 ## How does it work?
 Sirius connects to the [Slack Real Time Messaging API](https://api.slack.com/rtm) using your Slack OAuth token. Once logged in, it monitors your active conversations, making intelligent edits to your messages based on their contents. The functionality is divided over a number of *extensions*, which are small, stateless functions that are executed with every message you send. Extensions can be enabled and disabled individually, and several (>100) extensions can be enabled at a time.
 
-Sirius is run as a standalone service, and does *not* have to be run on the same, or on the same local network as the device that you are messaging from. Multiple Slack accounts are supported within the same running instance.
-
-For beta access to the cloud version, please contact the author of this repository.
+Sirius is run as a standalone service, and does *not* have to be run on the same, or on the same local network as the device that you are messaging from. Multiple Slack accounts are supported within the same running instance. *A cloud version of sirius is coming soon!*
 
 ## Wait, does this mean that Sirius can read all my messages?
 Yes. Any message sent or received by your Slack account while Sirius is running will be intercepted via the RTM API and processed by the enabled extensions. However, Sirius does not store any messages or message metadata, and does not collect any message content in its logs. Messages are only kept in memory while the extensions are actively executing.
+
+## Bundled extensions
+
+### thumbs_up
+Converts `(y)` to `👍` (thumbs up emojii) in all outgoing messages.
+
+>**kayex** Awesome (y)  
+>**kayex** Awesome 👍 (edited)
+
+## Can I request a new extension?
+Of course! Just [submit a new issue](https://github.com/kayex/sirius/issues/new) and make sure to tag it with the `extension` label. You can also submit your own extension for inclusion in the set of default extensions, by submitting it as a pull request.
 
 ## Setup
 Before starting the service, you need to create a `users.json` file in the same directory as the executable. The file should consist of a single JSON array containing the OAuth tokens for the Slack accounts you wish to enable sirius for.
@@ -44,6 +53,8 @@ Of course! Just [submit a new issue](https://github.com/kayex/sirius/issues/new)
 ## Creating a new extension
 Creating a new extension is only a matter of implementing the `Extension` interface:
 ```go
+package sirius
+
 type Extension interface {
 	Run(Message) (error, MessageAction)
 }
@@ -68,7 +79,7 @@ type MessageAction interface {
 #### TextEditAction
 Modifications to the message text are easily described using `TextEditAction`.
 ```go
-func (tu *HelloWorld) Run(m Message) (error, MessageAction) {
+func (*ThumbsUp) Run(Message) (error, MessageAction) {
 	edit := TextEdit()
 	
 	edit.Substitute("(y)", ":+1:")
