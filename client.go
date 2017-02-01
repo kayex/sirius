@@ -95,8 +95,8 @@ The combination of user ID and team ID, on the other hand, is guaranteed to be g
 - Slack API documentation
 */
 func (c *Client) isSender(msg *Message) bool {
-	return c.conn.UserId == msg.UserID &&
-		c.conn.TeamId == msg.TeamID
+	return c.conn.UserID == msg.UserID &&
+		c.conn.TeamID == msg.TeamID
 
 }
 
