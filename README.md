@@ -11,7 +11,7 @@ Sirius is run as a standalone service, and does *not* have to be run on the same
 ## Wait, does this mean that Sirius can read all my messages?
 Yes. Any message sent or received by your Slack account while Sirius is running will be intercepted via the RTM API and processed by the enabled extensions. However, Sirius does not store any messages or message metadata, and does not collect any message content in its logs. Messages are only kept in memory while the extensions are actively executing.
 
-## Bundled extensions
+## Default extensions
 
 ### thumbs_up
 Converts `(y)` to `👍` (thumbs up emojii) in all outgoing messages.
