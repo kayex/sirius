@@ -52,8 +52,10 @@ An extension has exactly **200 ms** to finish execution if it wishes to provide 
 
 ### MessageActions
 Modifications to the message text are easily described using `TextEditAction`.
+
+**ext_thumbs_up.go**
 ```go
-func (tu *HelloWorld) Run(m Message) (error, MessageAction) {
+func (tu *ThumbsUp) Run(m Message) (error, MessageAction) {
 	edit := TextEdit()
 	
 	edit.Substitute("(y)", ":+1:")
