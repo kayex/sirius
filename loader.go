@@ -10,6 +10,8 @@ func LoadExtension(eid EID) Extension {
 		return &Ripperino{}
 	case "replacer":
 		return &Replacer{}
+	case "quotes":
+		return &Quotes{}
 	}
 
 	panic("Invalid eid: " + eid)

@@ -19,10 +19,12 @@ func main() {
 		tu := sirius.NewConfiguration(&user, "thumbs_up")
 		rip := sirius.NewConfiguration(&user, "ripperino")
 		rpl := sirius.NewConfiguration(&user, "replacer")
+		qts := sirius.NewConfiguration(&user, "quotes")
 
 		user.AddConfiguration(&tu)
 		user.AddConfiguration(&rip)
 		user.AddConfiguration(&rpl)
+		user.AddConfiguration(&qts)
 
 		users = append(users, user)
 	}
