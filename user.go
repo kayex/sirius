@@ -4,6 +4,22 @@ import (
 	"time"
 )
 
+type SlackID struct {
+	UserID string
+	TeamID string
+}
+
+func NewSlackID(userID, teamID string) SlackID {
+	return SlackID{
+		UserID: userID,
+		TeamID: teamID,
+	}
+}
+
+func (s *SlackID) equals(o *SlackID) bool {
+	return s.UserID == o.UserID && s.TeamID == o.TeamID
+}
+
 type User struct {
 	ID             string
 	Token          string

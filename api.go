@@ -7,10 +7,10 @@ import (
 )
 
 type Connection struct {
-	UserID   string
-	TeamID   string
+	ID       SlackID
 	Rtm      *slack.RTM
 	Incoming chan Message
+	ready    bool
 	client   *slack.Client
 	token    string
 }
@@ -36,6 +36,19 @@ func NewConnection(token string) Connection {
 func (conn *Connection) Listen() {
 	go conn.Rtm.ManageConnection()
 
+	for !conn.ready {
+		select {
+		case ev := <-conn.Rtm.IncomingEvents:
+			switch msg := ev.Data.(type) {
+			case *slack.InvalidAuthEvent:
+				panic(msg)
+			case *slack.ConnectedEvent:
+				conn.authenticate(msg)
+				conn.handleIncomingEvent(ev)
+			}
+		}
+	}
+
 	for {
 		select {
 		case ev := <-conn.Rtm.IncomingEvents:
@@ -54,23 +67,23 @@ func (conn *Connection) Update(msg *Message) error {
 	return err
 }
 
+func (conn *Connection) authenticate(e *slack.ConnectedEvent) bool {
+	info := e.Info
+	conn.ID = NewSlackID(info.User.ID, info.Team.ID)
+	conn.ready = true
+
+	return true
+}
+
 func (conn *Connection) handleIncomingEvent(ev slack.RTMEvent) {
 	switch msg := ev.Data.(type) {
-	case *slack.ConnectedEvent:
-		conn.UserID = msg.Info.User.ID
-		conn.TeamID = msg.Info.Team.ID
-
 	case *slack.MessageEvent:
 		conn.handleIncomingMessage(msg)
 
 	case *slack.RTMError:
 		fmt.Printf("Error: %s\n", msg.Error())
 		panic(msg)
-
-	case *slack.InvalidAuthEvent:
-		panic(msg)
 	}
-
 }
 
 func (conn *Connection) handleIncomingMessage(ev *slack.MessageEvent) {

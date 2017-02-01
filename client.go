@@ -7,16 +7,16 @@ import (
 )
 
 type Client struct {
-	user       *User
-	conn       *Connection
+	user *User
+	conn *Connection
 }
 
 func NewClient(user *User) *Client {
 	conn := NewConnection(user.Token)
 
 	return &Client{
-		conn:       &conn,
-		user:       user,
+		conn: &conn,
+		user: user,
 	}
 }
 
@@ -95,8 +95,8 @@ The combination of user ID and team ID, on the other hand, is guaranteed to be g
 - Slack API documentation
 */
 func (c *Client) isSender(msg *Message) bool {
-	return c.conn.UserID == msg.UserID &&
-		c.conn.TeamID == msg.TeamID
+	return c.conn.ID.UserID == msg.UserID &&
+		c.conn.ID.TeamID == msg.TeamID
 
 }
 
