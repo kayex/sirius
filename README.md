@@ -58,7 +58,7 @@ Extensions that do not need to modify the message in any way can simply `return 
 An extension has exactly **200 ms** to finish execution if it wishes to provide a `MessageAction` other than the `EmptyAction` (as returned by `NoAction()`). Any extensions executing beyond this point will be allowed to finish, but none of the message actions they return will be applied to the message or broadcasted via the API.
 
 ### Standard MessageActions
-These are the default `MessageActions`. New Actions can be created by implementing the `MessageAction` interface:
+These are the default `MessageActions`. New actions can be created by implementing the `MessageAction` interface:
 ```go
 type MessageAction interface {
 	Perform(*Message) error
