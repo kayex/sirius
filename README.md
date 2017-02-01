@@ -27,7 +27,7 @@ Each extension is run concurrently and has a generous execution time limit. In a
 ## Bundled plugins
 
 ### thumbs_up
-Converts `(y)` to the `:+1:` (thumbs up) emojii in all outgoing messages.
+Converts `(y)` to `👍` (thumbs up emojii) in all outgoing messages.
 
 **kayex** Awesome (y)
 
