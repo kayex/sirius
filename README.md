@@ -4,10 +4,24 @@ Sirius is a standalone Slack extension runner written in Go. It enables you to w
 For example, the `thumbs_up` extension automatically swaps all ocurrences of `(y)` in your messages to `👍` (thumbs up emojii).
 
 ## How does it work?
-Sirius connects to the [Slack Real Time Messaging API](https://api.slack.com/rtm) using your Slack OAuth token. Once logged in, it captures your outgoing messages and feeds them to a series of extensions that read and modify your messages in various ways. The message modifications are broadcasted automatically via the RTM API.
+Sirius connects to the [Slack Real Time Messaging API](https://api.slack.com/rtm) using your Slack OAuth token. Once logged in, it monitors your active conversations, making intelligent edits to your messages based on their contents. The gist of the functionality is provided through so-called *extensions*, which are small, stateless functions that are executed with every message you send. Extensions can be enabled and disabled individually.
+
+Sirius is run as a standalone service, and does not have to be run on the same device that you are messaging from. Multiple Slack accounts are supported within the same running instance.
+
+For beta access to the cloud version, please contact the author of this repository.
 
 ## Wait, does this mean that Sirius can read all my messages?
 Yes. Any message sent or received by your Slack account while Sirius is running will be intercepted via the RTM API and processed by the enabled extensions. However, Sirius does not store any messages or message metadata, and does not collect any message content in its logs. Messages are only kept in memory while the extensions are actively executing.
+
+## Setup
+Before starting the service, you need to create a `users.json` file in the same directory as the executable. The file should consist of a single JSON array containing the OAuth tokens for the Slack accounts you wish to enable sirius for.
+
+**users.json**
+```json
+[
+	"xoxp-234234234-23234234-234234324234234-2342343242433"
+]
+```
 
 ## Bundled extensions
 
