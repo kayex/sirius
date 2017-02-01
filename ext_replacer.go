@@ -11,7 +11,7 @@ var phrases = map[string]string{
 	"cancer":    "Does this dress make me look fat?",
 }
 
-func (r *Replacer) Run(m Message) (error, MessageAction) {
+func (*Replacer) Run(Message) (error, MessageAction) {
 	edit := TextEdit()
 
 	for search, replace := range phrases {
