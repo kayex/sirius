@@ -16,8 +16,28 @@ Yes. Any message sent or received by your Slack account while Sirius is running 
 ### thumbs_up
 Converts `(y)` to `👍` (thumbs up emojii) in all outgoing messages.
 
+*before*
+
 >**kayex** Awesome (y)  
->**kayex** Awesome 👍 (edited)
+
+*after*
+
+>**kayex** Awesome 👍 (edited)  
+
+### quotes
+Avoids breaking blockquotes when the quote contains newlines.
+
+*before*
+
+>**kayex** >This is  
+           a multi-paragraph  
+	   quote.  
+	     
+*after*
+
+>**kayex** >This is  
+           >a multi-paragraph  
+	   >quote. (edited)
 
 ## Can I request a new extension?
 Of course! Just [submit a new issue](https://github.com/kayex/sirius/issues/new) and make sure to tag it with the `extension` label. You can also submit your own extension for inclusion in the set of default extensions, by submitting it as a pull request.
