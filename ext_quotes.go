@@ -2,7 +2,7 @@ package sirius
 
 import "strings"
 
-type Quotes struct {}
+type Quotes struct{}
 
 func (*Quotes) Run(m Message) (error, MessageAction) {
 	if strings.HasPrefix(m.Text, ">") {

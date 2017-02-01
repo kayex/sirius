@@ -93,9 +93,9 @@ func (conn *Connection) handleIncomingMessage(ev *slack.MessageEvent) {
 	conn.Incoming <- msg
 }
 
-var escapeCharacters map[string]string = map[string]string {
-	"&lt;": "<",
-	"&gt;": ">",
+var escapeCharacters map[string]string = map[string]string{
+	"&lt;":  "<",
+	"&gt;":  ">",
 	"&amp;": "&",
 }
 
