@@ -6,15 +6,16 @@ import (
 
 type Replacer struct{}
 
-var words = map[string]string{
+var phrases = map[string]string{
 	"overwatch": "abovelook",
+	"cancer":    "Does this dress make me look fat?",
 }
 
 func (r *Replacer) Run(m Message) (error, MessageAction) {
 	edit := TextEdit()
 
-	for s, r := range words {
-		edit.Substitute(strings.ToLower(s), r)
+	for search, replace := range phrases {
+		edit.Substitute(strings.ToLower(search), replace)
 	}
 
 	return nil, edit

@@ -32,9 +32,7 @@ func (c *Client) Start(ctx context.Context) {
 }
 
 func (c *Client) handleMessage(msg *Message) {
-	isSender := c.conn.UserId == msg.UserID
-
-	if !isSender {
+	if !c.isSender(msg) {
 		return
 	}
 
@@ -88,6 +86,18 @@ func (c *Client) applyActions(act []MessageAction, msg *Message) {
 	if msg.Text != oldText {
 		c.conn.Update(msg)
 	}
+}
+
+/*
+Notice that user IDs are not guaranteed to be globally unique across all Slack users.
+The combination of user ID and team ID, on the other hand, is guaranteed to be globally unique.
+
+- Slack API documentation
+*/
+func (c *Client) isSender(msg *Message) bool {
+	return c.conn.ID.UserID == msg.UserID &&
+		c.conn.ID.TeamID == msg.TeamID
+
 }
 
 func (m *Message) escaped() bool {

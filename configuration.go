@@ -1,7 +1,7 @@
 package sirius
 
 type Configuration struct {
-	Id     string
+	ID     string
 	Name   string
 	User   *User
 	EID    EID
