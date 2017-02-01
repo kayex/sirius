@@ -51,9 +51,7 @@ Extensions that do not need to modify the message in any way can simply `return 
 An extension has exactly **200 ms** to finish execution if it wishes to provide a `MessageAction` other than the `EmptyAction` (as returned by `NoAction()`). Any extensions executing beyond this point will be allowed to finish, but none of the message actions they return will be applied or broadcasted.
 
 ### MessageActions
-Modifications to the message text are easily described using `TextEditAction`.
-
-**ext_thumbs_up.go**
+Modifications to the message text are easily described using `TextEditAction`:
 ```go
 func (tu *ThumbsUp) Run(m Message) (error, MessageAction) {
 	edit := TextEdit()
