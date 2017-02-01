@@ -17,7 +17,7 @@ var endings = []string{
 
 type Ripperino struct{}
 
-func (r *Ripperino) Run(m Message) (error, MessageAction) {
+func (*Ripperino) Run(m Message) (error, MessageAction) {
 	if !strings.HasPrefix(m.Text, base) {
 		return nil, NoAction()
 	}

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/nlopes/slack"
 	"log"
+	"strings"
 )
 
 type Connection struct {
@@ -87,6 +88,21 @@ func (conn *Connection) handleIncomingEvent(ev slack.RTMEvent) {
 }
 
 func (conn *Connection) handleIncomingMessage(ev *slack.MessageEvent) {
-	msg := NewMessage(ev.Text, ev.User, ev.Team, ev.Channel, ev.Timestamp)
+	text := removeEscapeCharacters(ev.Text)
+	msg := NewMessage(text, ev.User, ev.Team, ev.Channel, ev.Timestamp)
 	conn.Incoming <- msg
+}
+
+var escapeCharacters map[string]string = map[string]string {
+	"&lt;": "<",
+	"&gt;": ">",
+	"&amp;": "&",
+}
+
+func removeEscapeCharacters(msg string) string {
+	for html, unicode := range escapeCharacters {
+		msg = strings.Replace(msg, html, unicode, -1)
+	}
+
+	return msg
 }
