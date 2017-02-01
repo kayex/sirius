@@ -13,16 +13,6 @@ For beta access to the cloud version, please contact the author of this reposito
 ## Wait, does this mean that Sirius can read all my messages?
 Yes. Any message sent or received by your Slack account while Sirius is running will be intercepted via the RTM API and processed by the enabled extensions. However, Sirius does not store any messages or message metadata, and does not collect any message content in its logs. Messages are only kept in memory while the extensions are actively executing.
 
-## Setup
-Before starting the service, you need to create a `users.json` file in the same directory as the executable. The file should consist of a single JSON array containing the OAuth tokens for the Slack accounts you wish to enable sirius for.
-
-**users.json**
-```json
-[
-	"xoxp-234234234-23234234-234234324234234-2342343242433"
-]
-```
-
 ## Bundled extensions
 
 ### thumbs_up
@@ -33,6 +23,16 @@ Converts `(y)` to `👍` (thumbs up emojii) in all outgoing messages.
 
 ## Can I request a new extension?
 Of course! Just [submit a new issue](https://github.com/kayex/sirius/issues/new) and make sure to tag it with the `extension` label. You can also submit your own extension for inclusion in the set of default extensions, by submitting it as a pull request.
+
+## Setup
+Before starting the service, you need to create a `users.json` file in the same directory as the executable. The file should consist of a single JSON array containing the OAuth tokens for the Slack accounts you wish to enable sirius for.
+
+**users.json**
+```json
+[
+	"xoxp-234234234-23234234-234234324234234-2342343242433"
+]
+```
 
 ## Creating a new extension
 Creating a new extension is only a matter of implementing the `Extension` interface:
