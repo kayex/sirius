@@ -55,7 +55,7 @@ The `Run` function is called with every outgoing message captured via the RTM AP
 
 Extensions that do not need to modify the message in any way can simply `return NoAction()`.
 
-An extension has exactly **200 ms** to finish execution if it wishes to provide a `MessageAction` other than the `EmptyAction` (as returned by `NoAction()`). An extension executing beyond this point will be allowed to finish, but any message actions it returns will never be applied or broadcasted.
+An extension has exactly **200 ms** to finish execution if it wishes to provide a `MessageAction` other than the `EmptyAction` (as returned by `NoAction()`). Any extensions executing beyond this point will be allowed to finish, but none of the message actions they return will be applied or broadcasted.
 
 ### MessageActions
 Modifications to the message text are easily described using `TextEditAction`.
