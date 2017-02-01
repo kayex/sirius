@@ -72,7 +72,7 @@ type Extension interface {
 
 The `Run` function is called with every outgoing message captured via the RTM API, and should return either an `error` or a `MessageAction`.
 
-`MessageAction`s are returned by extensions to describe changes that should be made to the processed message. This includes things such as editing the message text or deleting it entirely. These changes are accumulated by the extension runner and are broadcasted via the RTM API in timed batches.
+`MessageAction`s are returned by extensions to describe changes that should be made to the processed message. This includes things such as editing the message text, or deleting the message entirely. These changes are accumulated by the extension runner and are broadcasted via the RTM API in timed batches.
 
 Extensions that do not need to modify the message in any way can simply `return NoAction()`.
 
