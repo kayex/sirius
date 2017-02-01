@@ -53,7 +53,7 @@ An extension has exactly **200 ms** to finish execution if it wishes to provide 
 ### MessageActions
 Modifications to the message text are easily described using `TextEditAction`:
 ```go
-func (tu *ThumbsUp) Run(m Message) (error, MessageAction) {
+func (*ThumbsUp) Run(m Message) (error, MessageAction) {
 	edit := TextEdit()
 	
 	edit.Substitute("(y)", ":+1:")
