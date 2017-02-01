@@ -1,12 +1,12 @@
 package store
 
-import "github.com/kayex/sirius/model"
+import "github.com/kayex/sirius"
 
 type Store interface {
-	GetExtensions(usr *model.User) *[]model.Configuration
-	GetUsers() *[]model.User
-	GetUser(uid string) *model.User
-	SaveUser(usr *model.User)
-	SaveConfiguration(cfg *model.Configuration)
-	UpdateConfiguration(cfg *model.Configuration)
+	GetExtensions(usr *sirius.User) *[]sirius.Configuration
+	GetUsers() *[]sirius.User
+	GetUser(uid string) *sirius.User
+	SaveUser(usr *sirius.User)
+	SaveConfiguration(cfg *sirius.Configuration)
+	UpdateConfiguration(cfg *sirius.Configuration)
 }

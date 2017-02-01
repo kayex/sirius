@@ -1,7 +1,7 @@
 package db
 
 import (
-	"github.com/kayex/sirius/model"
+	"github.com/kayex/sirius"
 	"gopkg.in/pg.v5"
 )
 
@@ -22,23 +22,23 @@ func Connect(host string, port string, dbName string, user string, password stri
 	}
 }
 
-func (db *Db) GetUser(id string) *model.User {
-	user := model.User{Id: id}
+func (db *Db) GetUser(id string) *sirius.User {
+	user := sirius.User{Id: id}
 
 	exec(db.conn.Select(&user))
 
 	return &user
 }
 
-func (db *Db) SaveUser(usr *model.User) {
+func (db *Db) SaveUser(usr *sirius.User) {
 	exec(db.conn.Insert(usr))
 }
 
-func (db *Db) SaveConfiguration(cfg *model.Configuration) {
+func (db *Db) SaveConfiguration(cfg *sirius.Configuration) {
 	exec(db.conn.Insert(cfg))
 }
 
-func (db *Db) UpdateConfiguration(cfg *model.Configuration) {
+func (db *Db) UpdateConfiguration(cfg *sirius.Configuration) {
 	_, err := db.conn.Model(cfg).Column("config").Update()
 
 	if err != nil {
@@ -46,16 +46,16 @@ func (db *Db) UpdateConfiguration(cfg *model.Configuration) {
 	}
 }
 
-func (db *Db) GetUsers() *[]model.User {
-	var users []model.User
+func (db *Db) GetUsers() *[]sirius.User {
+	var users []sirius.User
 
 	exec(db.conn.Model(&users).Select())
 
 	return &users
 }
 
-func (db *Db) GetExtensions(usr *model.User) *[]model.Configuration {
-	var exts []model.Configuration
+func (db *Db) GetExtensions(usr *sirius.User) *[]sirius.Configuration {
+	var exts []sirius.Configuration
 
 	exec(db.conn.Model(&exts).
 		Where("user_id = ?", usr.Id).
@@ -64,8 +64,8 @@ func (db *Db) GetExtensions(usr *model.User) *[]model.Configuration {
 	return &exts
 }
 
-func (db *Db) GetConfiguration(usr *model.User, pid string) *model.Configuration {
-	cfg := &model.Configuration{
+func (db *Db) GetConfiguration(usr *sirius.User, pid string) *sirius.Configuration {
+	cfg := &sirius.Configuration{
 		User: usr,
 	}
 
