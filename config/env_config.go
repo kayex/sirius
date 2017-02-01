@@ -4,11 +4,11 @@ import "os"
 
 func FromEnv() Config {
 	return Config{
-		DbHost:     env(`DB_HOST`, `127.0.0.1`),
-		DbPort:     env(`DB_PORT`, `5432`),
-		DbDatabase: env(`DB_DATABASE`, ``),
-		DbUser:     env(`DB_USER`, ``),
-		DbPassword: env(`DB_PASSWORD`, ``),
+		DBHost:     env(`DB_HOST`, `127.0.0.1`),
+		DBPort:     env(`DB_PORT`, `5432`),
+		DBDatabase: env(`DB_DATABASE`, ``),
+		DBUser:     env(`DB_USER`, ``),
+		DBPassword: env(`DB_PASSWORD`, ``),
 	}
 }
 

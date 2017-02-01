@@ -5,7 +5,7 @@ import (
 )
 
 type User struct {
-	Id             string
+	ID             string
 	Token          string
 	CreatedAt      time.Time
 	Configurations []*Configuration

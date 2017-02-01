@@ -1,9 +1,9 @@
 package config
 
 type Config struct {
-	DbHost     string
-	DbPort     string
-	DbDatabase string
-	DbUser     string
-	DbPassword string
+	DBHost     string
+	DBPort     string
+	DBDatabase string
+	DBUser     string
+	DBPassword string
 }
