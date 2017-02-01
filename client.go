@@ -32,7 +32,7 @@ func (c *Client) Start(ctx context.Context) {
 }
 
 func (c *Client) handleMessage(msg *Message) {
-	if c.isSender(msg) {
+	if !c.isSender(msg) {
 		return
 	}
 
