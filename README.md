@@ -6,7 +6,7 @@ For example, the `thumbs_up` extension automatically swaps all ocurrences of `(y
 ## How does it work?
 Sirius connects to the [Slack Real Time Messaging API](https://api.slack.com/rtm) using your Slack OAuth token. Once logged in, it monitors your active conversations, making intelligent edits to your messages based on their contents. The gist of the functionality is provided through so-called *extensions*, which are small, stateless functions that are executed with every message you send. Extensions can be enabled and disabled individually.
 
-Sirius is run as a standalone service, and does not have to be run on the same device that you are messaging from. Multiple Slack accounts are supported within the same running instance.
+Sirius is run as a standalone service, and does not have to be run on the same device that you are messaging from. Multiple Slack accounts are supported, even within the same running instance.
 
 For beta access to the cloud version, please contact the author of this repository.
 
