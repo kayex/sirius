@@ -21,7 +21,7 @@ Converts `(y)` to `👍` (thumbs up emojii) in all outgoing messages.
 
 
 ### geocode
-Type `<address` followed by any sort of geographical location, and the `geocode` extension will fetch the exact address for you.
+Type `<address` followed by any sort of geographical location, and the `geocode` extension will fetch the exact address and coordinates for you.
 
 >**kayex**: <address Empire State Building
 
