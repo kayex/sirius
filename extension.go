@@ -1,11 +1,7 @@
 package sirius
 
 type Extension interface {
-	Run(Message) (error, MessageAction)
-}
-
-type CfgExtension interface {
-	RunWithConfig(Message, ExtensionConfig)
+	Run(Message, ExtensionConfig) (error, MessageAction)
 }
 
 type cfg_int int

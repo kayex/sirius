@@ -113,7 +113,7 @@ Executes ext(msg) and passes the results onto act
 */
 func execute(ext Extension, msg *Message, act chan<- MessageAction) {
 	go func() {
-		err, a := ext.Run(*msg)
+		err, a := ext.Run(*msg, ExtensionConfig{})
 
 		if err != nil {
 			panic(err)
