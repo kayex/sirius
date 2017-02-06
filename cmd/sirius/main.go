@@ -8,9 +8,11 @@ import (
 	"golang.org/x/net/context"
 	"io/ioutil"
 	"os"
+	"github.com/kayex/sirius/config"
 )
 
 func main() {
+	cfg := config.FromEnv()
 	tokens := getTokensFromJson()
 	users := []sirius.User{}
 
@@ -31,7 +33,7 @@ func main() {
 	}
 
 	for _, user := range users {
-		cl := sirius.NewClient(&user, extension.NewStaticExtensionLoader())
+		cl := sirius.NewClient(&user, extension.NewStaticExtensionLoader(cfg))
 		go cl.Start(context.TODO())
 	}
 

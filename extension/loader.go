@@ -4,12 +4,17 @@ import (
 	"fmt"
 	"errors"
 	"github.com/kayex/sirius"
+	"github.com/kayex/sirius/config"
 )
 
-type StaticExtensionLoader struct{}
+type StaticExtensionLoader struct{
+	cfg config.AppConfig
+}
 
-func NewStaticExtensionLoader() *StaticExtensionLoader {
-	return &StaticExtensionLoader{}
+func NewStaticExtensionLoader(cfg config.AppConfig) *StaticExtensionLoader {
+	return &StaticExtensionLoader{
+		cfg: cfg,
+	}
 }
 
 func (l *StaticExtensionLoader) Load(eid sirius.EID) (error, sirius.Extension) {
