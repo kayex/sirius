@@ -1,6 +1,10 @@
 package extension
 
-import "github.com/kayex/sirius"
+import (
+	"fmt"
+	"errors"
+	"github.com/kayex/sirius"
+)
 
 type StaticExtensionLoader struct{}
 
@@ -8,17 +12,17 @@ func NewStaticExtensionLoader() *StaticExtensionLoader {
 	return &StaticExtensionLoader{}
 }
 
-func (r *StaticExtensionLoader) Load(eid sirius.EID) sirius.Extension {
+func (r *StaticExtensionLoader) Load(eid sirius.EID) (error, sirius.Extension) {
 	switch eid {
 	case "thumbs_up":
-		return &ThumbsUp{}
+		return nil, &ThumbsUp{}
 	case "ripperino":
-		return &Ripperino{}
+		return nil, &Ripperino{}
 	case "replacer":
-		return &Replacer{}
+		return nil, &Replacer{}
 	case "quotes":
-		return &Quotes{}
+		return nil, &Quotes{}
 	}
 
-	panic("Invalid eid: " + eid)
+	return errors.New(fmt.Sprintf("Invalid eid: %v", eid)), nil
 }

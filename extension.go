@@ -7,5 +7,5 @@ type Extension interface {
 type EID string
 
 type ExtensionLoader interface {
-	Load(EID) Extension
+	Load(EID) (error, Extension)
 }

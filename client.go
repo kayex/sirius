@@ -52,7 +52,11 @@ func (c *Client) runExtensions(msg *Message) []MessageAction {
 	act := make(chan MessageAction, len(cfgs))
 
 	for _, cfg := range cfgs {
-		ext := c.loader.Load(cfg.EID)
+		err, ext := c.loader.Load(cfg.EID)
+
+		if err != nil {
+			panic(err)
+		}
 
 		execute(ext, msg, act)
 	}
