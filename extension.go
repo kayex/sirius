@@ -10,6 +10,7 @@ type cfg_float float64
 type cfg_list []string
 
 type EID string
+
 type ExtensionLoader interface {
 	Load(EID) Extension
 }
