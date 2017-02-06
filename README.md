@@ -3,6 +3,8 @@ Sirius is a standalone Slack extension runner written in Go. It enables you to w
 
 For example, the `thumbs_up` extension automatically swaps all ocurrences of `(y)` in your messages to `👍` (thumbs up emojii).
 
+The latest release notes can be found [here](https://github.com/kayex/sirius/releases/tag/0.4.0).
+
 ## How does it work?
 Sirius connects to the [Slack Real Time Messaging API](https://api.slack.com/rtm) using your Slack OAuth token. Once logged in, it monitors your active conversations, making intelligent edits to your messages based on their contents.
 
