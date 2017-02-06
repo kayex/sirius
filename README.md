@@ -8,7 +8,7 @@ For example, the `thumbs_up` extension automatically swaps all ocurrences of `(y
 ## How does it work?
 Sirius runs as a service and connects to the [Slack Real Time Messaging API](https://api.slack.com/rtm) using your Slack OAuth token. Once logged in, it monitors your active conversations and automatically makes intelligent edits to your messages based on their contents.
 
-## Included extensions
+## Extensions
 
 ### thumbs_up
 Converts `(y)` to `👍` (thumbs up emojii) in all outgoing messages.
@@ -61,9 +61,6 @@ You can then start the main service by simply running the `sirius` executable:
 ```
 $ ./sirius
 ```
-
-### Users with multiple Slack accounts
-Sirius has multi-account support, which means that you can use Sirius with any number of Slack accounts without having to run multiple service instances. Simply add one OAuth token per account that you wish to use with Sirius to the `users.json` file.
 
 ## Can I request a new extension?
 Of course! Just [submit a new issue](https://github.com/kayex/sirius/issues/new) and make sure to tag it with the `extension` label. You can also submit your own extension for inclusion in the set of default extensions, by submitting it as a pull request.
