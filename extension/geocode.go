@@ -38,9 +38,9 @@ func (gc *Geocode) Run(m sirius.Message, cfg sirius.ExtensionConfig) (error, sir
 
 	pos := res[0]
 	location := pos.Geometry.Location
-	coords := fmt.Sprintf("*%v*\n`(%.6f, %.6f)`", pos.FormattedAddress, location.Lat, location.Lng)
+	formatted := fmt.Sprintf("*%v*\n`(%.6f, %.6f)`", pos.FormattedAddress, location.Lat, location.Lng)
 
-	edit := m.EditText().ReplaceWith(coords)
+	edit := m.EditText().ReplaceWith(formatted)
 
 	return nil, edit
 }
