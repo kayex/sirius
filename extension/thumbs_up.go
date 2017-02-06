@@ -6,8 +6,8 @@ const slackThumb string = ":+1:"
 
 type ThumbsUp struct{}
 
-func (*ThumbsUp) Run(sirius.Message) (error, sirius.MessageAction) {
-	edit := sirius.TextEdit()
+func (*ThumbsUp) Run(m sirius.Message) (error, sirius.MessageAction) {
+	edit := m.EditText()
 	edit.Substitute("(y)", slackThumb)
 	edit.Substitute("(Y)", slackThumb)
 

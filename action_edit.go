@@ -12,7 +12,7 @@ func (edit *TextEditAction) Get() []TextTransform {
 	return edit.trans
 }
 
-func TextEdit() *TextEditAction {
+func (m *Message) EditText() *TextEditAction {
 	return &TextEditAction{}
 }
 

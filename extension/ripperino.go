@@ -23,7 +23,7 @@ func (*Ripperino) Run(m sirius.Message) (error, sirius.MessageAction) {
 		return nil, sirius.NoAction()
 	}
 
-	edit := sirius.TextEdit()
+	edit := m.EditText()
 
 	// 1 in 10 times, go full Grino
 	if rand.Int()%10 == 1 {

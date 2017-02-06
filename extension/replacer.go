@@ -12,8 +12,8 @@ var phrases = map[string]string{
 	"cancer":    "Does this dress make me look fat?",
 }
 
-func (*Replacer) Run(sirius.Message) (error, sirius.MessageAction) {
-	edit := sirius.TextEdit()
+func (*Replacer) Run(m sirius.Message) (error, sirius.MessageAction) {
+	edit := m.EditText()
 
 	for search, replace := range phrases {
 		edit.Substitute(strings.ToLower(search), replace)

@@ -9,7 +9,7 @@ type Quotes struct{}
 
 func (*Quotes) Run(m sirius.Message) (error, sirius.MessageAction) {
 	if strings.HasPrefix(m.Text, ">") {
-		edit := sirius.TextEdit()
+		edit := m.EditText()
 
 		edit.Substitute("\n", "\n>") // Don't break quote on line breaks
 
