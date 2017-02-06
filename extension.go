@@ -38,7 +38,7 @@ func (cfg ExtensionConfig) read(key string, def interface{}) interface{} {
 	return def
 }
 
-func (cfg ExtensionConfig) integer(key string, def int) cfg_int {
+func (cfg ExtensionConfig) integer(key string, def int) int {
 	if val, ok := cfg[key]; ok {
 		switch b := val.(type) {
 		case int:
@@ -49,7 +49,7 @@ func (cfg ExtensionConfig) integer(key string, def int) cfg_int {
 	return def
 }
 
-func (cfg ExtensionConfig) boolean(key string, def bool) cfg_bool {
+func (cfg ExtensionConfig) boolean(key string, def bool) bool {
 	if val, ok := cfg[key]; ok {
 		switch b := val.(type) {
 		case bool:
@@ -67,7 +67,7 @@ func (cfg ExtensionConfig) boolean(key string, def bool) cfg_bool {
 	return def
 }
 
-func (cfg ExtensionConfig) float(key string, def float64) cfg_float {
+func (cfg ExtensionConfig) float(key string, def float64) float64 {
 	if val, ok := cfg[key]; ok {
 		switch f := val.(type) {
 		case float32:
@@ -80,7 +80,7 @@ func (cfg ExtensionConfig) float(key string, def float64) cfg_float {
 	return def
 }
 
-func (cfg ExtensionConfig) list(key string, def []string) cfg_list {
+func (cfg ExtensionConfig) list(key string, def []string) []string {
 	if val, ok := cfg[key]; ok {
 		switch l := val.(type) {
 		case []string:
