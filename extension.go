@@ -29,6 +29,17 @@ func (cfg ExtensionConfig) Read(key string, def interface{}) interface{} {
 	return def
 }
 
+func (cfg ExtensionConfig) String(key string, def string) string {
+	if val, ok := cfg[key]; ok {
+		switch s := val.(type) {
+		case string:
+			return s
+		}
+	}
+
+	return def
+}
+
 func (cfg ExtensionConfig) Integer(key string, def int) int {
 	if val, ok := cfg[key]; ok {
 		switch b := val.(type) {
