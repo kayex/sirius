@@ -8,14 +8,14 @@ import (
 
 type Client struct {
 	user *User
-	conn *Connection
+	conn Connection
 }
 
 func NewClient(user *User) *Client {
-	conn := NewConnection(user.Token)
+	conn := NewRTMConnection(user.Token)
 
 	return &Client{
-		conn: &conn,
+		conn: conn,
 		user: user,
 	}
 }
@@ -25,7 +25,7 @@ func (c *Client) Start(ctx context.Context) {
 
 	for {
 		select {
-		case msg := <-c.conn.Incoming:
+		case msg := <-c.conn.Messages():
 			c.handleMessage(&msg)
 		}
 	}
