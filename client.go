@@ -71,8 +71,8 @@ ActionReceive:
 		case a := <-act:
 			actions = append(actions, a)
 
-		// Allow extensions max 200ms to execute and provide an actionable result
-		case <-time.After(time.Millisecond * 200):
+		// Allow extensions max 2s to execute and provide an actionable result
+		case <-time.After(time.Second * 2):
 			break ActionReceive
 		}
 	}
