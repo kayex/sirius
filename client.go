@@ -122,7 +122,7 @@ func execute(ext Extension, msg *Message, act chan<- MessageAction) {
 		err, a := ext.Run(*msg, ExtensionConfig{})
 
 		if err != nil {
-			fmt.Printf("[%s]: %v", reflect.TypeOf(ext), err)
+			fmt.Printf("[%s]: %v\n", reflect.TypeOf(ext), err)
 			return
 		}
 
