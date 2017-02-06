@@ -1,7 +1,8 @@
-package sirius
+package extension
 
 import (
 	"fmt"
+	"github.com/kayex/sirius"
 	"math/rand"
 	"strings"
 )
@@ -17,12 +18,12 @@ var endings = []string{
 
 type Ripperino struct{}
 
-func (*Ripperino) Run(m Message) (error, MessageAction) {
+func (*Ripperino) Run(m sirius.Message) (error, sirius.MessageAction) {
 	if !strings.HasPrefix(m.Text, base) {
-		return nil, NoAction()
+		return nil, sirius.NoAction()
 	}
 
-	edit := TextEdit()
+	edit := sirius.TextEdit()
 
 	// 1 in 10 times, go full Grino
 	if rand.Int()%10 == 1 {
