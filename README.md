@@ -64,27 +64,17 @@ Creating a new extension is only a matter of implementing either the `Extension`
 package sirius
 
 type Extension interface {
-	Run(Message) (error, MessageAction)
+	Run(Message, ExtensionConfig) (error, MessageAction)
 }
 ```
 
-The `Run` function is called with every outgoing message captured via the RTM API, and should return either an `error` or a `MessageAction`.
+The `Run` function is called with every outgoing message captured via the RTM API, and should return either an `error` or a `MessageAction`. It is passed an `ExtensionConfig` with every invocation, which is a read-only key/value configuration store. The `ExtensionConfig` is unique per user and extension.
 
 `MessageAction`s are returned by extensions to describe changes that should be made to the processed message. This includes things such as editing the message text, or deleting the message entirely. These changes are accumulated by the extension runner and broadcasted via the RTM API in timed batches.
 
 Extensions that do not need to modify the message in any way can simply `return NoAction()`.
 
 An extension has exactly **200 ms** to finish execution if it wishes to provide a `MessageAction` other than the `EmptyAction` (as returned by `NoAction()`). Extensions that fail to complete execution before this deadline will be allowed to finish, but none of the message actions they return will be applied to the message or broadcasted via the API.
-
-### Configurable extensions
-To create an extension that can accept a set of read-only configuration values at the beginning of each execution, implement the `CfgExtension` interface instead:
-```go
-package sirius
-
-type CfgExtension interface {
-	Run(Message, ExtensionConfig) (error, MessageAction)
-}
-```
 
 ### Standard MessageActions
 These are the default `MessageActions`. New actions can be created by implementing the `MessageAction` interface:
