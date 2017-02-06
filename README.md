@@ -63,7 +63,7 @@ $ ./sirius
 ```
 
 ## Can I request a new extension?
-Of course! Just [submit a new issue](https://github.com/kayex/sirius/issues/new) and make sure to tag it with the `extension` label. You can also submit your own extension for inclusion in the set of default extensions, by submitting it as a pull request.
+Of course! Just [submit a new issue](https://github.com/kayex/sirius/issues/new) and make sure to tag it with the `extension` label. You can also submit your own extension by creating a pull request.
 
 ## Creating a new extension
 Creating a new extension is only a matter of implementing the `Extension` interface:
