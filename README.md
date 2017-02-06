@@ -87,7 +87,7 @@ type MessageAction interface {
 #### TextEditAction
 Modifications to the message text are easily done using `(*Message) EditText()`.
 ```go
-func (*ThumbsUp) Run(m sirius.Message, cfg sirius.ExtensionConfig) (error, MessageAction) {
+func (*ThumbsUp) Run(m Message, cfg ExtensionConfig) (error, MessageAction) {
 	edit := m.EditText()
 	
 	edit.Substitute("(y)", ":+1:")
