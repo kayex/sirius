@@ -1,5 +1,5 @@
 # sirius
-Server-side Slack extensions that improve your outgoing messages in realtime. Written in Go.
+Server-side Slack extensions that improve your outgoing messages in real-time. Written in Go.
 
 For example, the `thumbs_up` extension automatically swaps all ocurrences of `(y)` in your messages to `👍` (thumbs up emojii).
 
