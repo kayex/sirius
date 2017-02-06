@@ -42,9 +42,9 @@ func (cfg ExtensionConfig) String(key string, def string) string {
 
 func (cfg ExtensionConfig) Integer(key string, def int) int {
 	if val, ok := cfg[key]; ok {
-		switch b := val.(type) {
+		switch i := val.(type) {
 		case int:
-			return b
+			return i
 		}
 	}
 
