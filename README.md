@@ -13,38 +13,35 @@ Sirius runs as a service and connects to the [Slack Real Time Messaging API](htt
 ### thumbs_up
 Converts `(y)` to `👍` (thumbs up emojii) in all outgoing messages.
 
-*before*
+>**kayex**: Awesome (y)
 
->**kayex**: Awesome (y)  
+⚡
 
-*after*
-
->**kayex**: Awesome 👍 (edited)  
+>**kayex**: Awesome 👍
 
 
 ### geocode
 Fills in missing address info and provides exact coordinates.
 
-*before*
 >**kayex**: <address Empire State Building
-*after*  
+
+⚡
+
 >**kayex**: **350 5th Ave, New York, NY 10118, USA**  
 `(40.748441, -73.985664)`
 
 ### quotes
-Avoids breaking blockquotes when the quote contains newlines.
-
-*before*
+Avoids breaking blockquotes that contain newlines.
 
 >**kayex**: >This is  
-           a multi-paragraph  
-	   quote.  
-	     
-*after*
+           a multi-line  
+	   quote.
+
+⚡
 
 >**kayex**: >This is  
-           >a multi-paragraph  
-	   >quote. (edited)
+           >a multi-line  
+	   >quote.
 
 
 ## Setup
