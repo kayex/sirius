@@ -7,7 +7,7 @@ import (
 
 type Quotes struct{}
 
-func (*Quotes) Run(m sirius.Message) (error, sirius.MessageAction) {
+func (*Quotes) Run(m sirius.Message, cfg sirius.ExtensionConfig) (error, sirius.MessageAction) {
 	if strings.HasPrefix(m.Text, ">") {
 		edit := m.EditText()
 

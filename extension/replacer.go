@@ -12,7 +12,7 @@ var phrases = map[string]string{
 	"cancer":    "Does this dress make me look fat?",
 }
 
-func (*Replacer) Run(m sirius.Message) (error, sirius.MessageAction) {
+func (*Replacer) Run(m sirius.Message, cfg sirius.ExtensionConfig) (error, sirius.MessageAction) {
 	edit := m.EditText()
 
 	for search, replace := range phrases {

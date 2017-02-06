@@ -18,7 +18,7 @@ var endings = []string{
 
 type Ripperino struct{}
 
-func (*Ripperino) Run(m sirius.Message) (error, sirius.MessageAction) {
+func (*Ripperino) Run(m sirius.Message, cfg sirius.ExtensionConfig) (error, sirius.MessageAction) {
 	if !strings.HasPrefix(m.Text, base) {
 		return nil, sirius.NoAction()
 	}
