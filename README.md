@@ -18,7 +18,7 @@ Converts `(y)` to `👍` (thumbs up emojii) in all outgoing messages.
 >**kayex**: Awesome 👍
 
 ### quotes
-Avoids breaking blockquotes when the quote contains newlines.
+Avoids breaking blockquotes that contain newlines.
 
 >**kayex**: >This is  
            a multi-paragraph  
