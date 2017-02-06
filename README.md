@@ -6,10 +6,7 @@ For example, the `thumbs_up` extension automatically swaps all ocurrences of `(y
 ## How does it work?
 Sirius connects to the [Slack Real Time Messaging API](https://api.slack.com/rtm) using your Slack OAuth token. Once logged in, it monitors your active conversations, making intelligent edits to your messages based on their contents.
 
-## Wait, does this mean that Sirius can read all my messages?
-Yes. Any message sent or received by your Slack account while Sirius is running will be intercepted via the RTM API and processed by the enabled extensions. However, Sirius does not store any messages or message metadata, and does not collect any message content in its logs. Messages are only kept in memory while the extensions are actively executing.
-
-## Setup and run
+## Setup and running
 Sirius is run as a standalone service, which means it does *not* have to be run on the same device that you are messaging from. *A cloud version of Sirius is coming soon.*
 
 Before starting the service, you need to create a `users.json` file in the same directory as the executable. The file should consist of a single JSON array containing OAuth tokens for the Slack accounts you wish to enable Sirius for:
