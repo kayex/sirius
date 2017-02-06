@@ -4,11 +4,6 @@ type Extension interface {
 	Run(Message, ExtensionConfig) (error, MessageAction)
 }
 
-type cfg_int int
-type cfg_bool bool
-type cfg_float float64
-type cfg_list []string
-
 type EID string
 
 type ExtensionLoader interface {
