@@ -12,7 +12,7 @@ func NewStaticExtensionLoader() *StaticExtensionLoader {
 	return &StaticExtensionLoader{}
 }
 
-func (r *StaticExtensionLoader) Load(eid sirius.EID) (error, sirius.Extension) {
+func (l *StaticExtensionLoader) Load(eid sirius.EID) (error, sirius.Extension) {
 	switch eid {
 	case "thumbs_up":
 		return nil, &ThumbsUp{}
