@@ -38,7 +38,9 @@ Avoids breaking blockquotes when the quote contains newlines.
 
 
 ## Setup and running
-Sirius is run as a standalone service, which means it does *not* have to be run on the same device that you are messaging from. *A cloud version of Sirius is coming soon, which will allow you to use sirius without installing anything.*
+***A cloud version of Sirius is coming soon, which will allow you to use sirius without installing anything.***
+
+Sirius is run as a standalone service, which means it does *not* have to be run on the same device that you are messaging from.
 
 Before starting the service, you need to create a `users.json` file in the same directory as the executable. The file should consist of a single JSON array containing OAuth tokens for the Slack accounts you wish to enable Sirius for:
 
