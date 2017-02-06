@@ -38,7 +38,7 @@ func (cfg ExtensionConfig) read(key string, def interface{}) interface{} {
 	return def
 }
 
-func (cfg ExtensionConfig) int(key string, def int) cfg_int {
+func (cfg ExtensionConfig) integer(key string, def int) cfg_int {
 	if val, ok := cfg[key]; ok {
 		switch b := val.(type) {
 		case int:
@@ -49,7 +49,7 @@ func (cfg ExtensionConfig) int(key string, def int) cfg_int {
 	return cfg_int(def)
 }
 
-func (cfg ExtensionConfig) bool(key string, def bool) cfg_bool {
+func (cfg ExtensionConfig) boolean(key string, def bool) cfg_bool {
 	if val, ok := cfg[key]; ok {
 		switch b := val.(type) {
 		case bool:
