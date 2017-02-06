@@ -33,6 +33,14 @@ func (edit *TextEditAction) Perform(msg *Message) error {
 	return nil
 }
 
+func (edit *TextEditAction) ReplaceWith(replacement string) *TextEditAction {
+	edit.add(&ReplaceMutation{
+		Replacement: replacement,
+	})
+
+	return edit
+}
+
 func (edit *TextEditAction) Substitute(search string, sub string) *TextEditAction {
 	edit.add(&SubMutation{
 		Search: search,
@@ -61,6 +69,10 @@ type TextMutation interface {
 	Apply(text string) string
 }
 
+type ReplaceMutation struct {
+	Replacement string
+}
+
 type SubMutation struct {
 	Search string
 	Sub    string
@@ -70,14 +82,18 @@ type AppendMutation struct {
 	Appendix string
 }
 
-func (st *SubMutation) Apply(text string) string {
-	return strings.Replace(text, st.Search, st.Sub, -1)
+func (rm *ReplaceMutation) Apply(text string) string {
+	return rm.Replacement
 }
 
-func (at *AppendMutation) Apply(text string) string {
-	if len(at.Appendix) == 0 {
+func (sm *SubMutation) Apply(text string) string {
+	return strings.Replace(text, sm.Search, sm.Sub, -1)
+}
+
+func (am *AppendMutation) Apply(text string) string {
+	if len(am.Appendix) == 0 {
 		return text
 	}
 
-	return text + at.Appendix
+	return text + am.Appendix
 }
