@@ -61,7 +61,7 @@ Sirius has multi-account support, which means that you can use Sirius with any n
 Of course! Just [submit a new issue](https://github.com/kayex/sirius/issues/new) and make sure to tag it with the `extension` label. You can also submit your own extension for inclusion in the set of default extensions, by submitting it as a pull request.
 
 ## Creating a new extension
-Creating a new extension is only a matter of implementing either the `Extension` interface:
+Creating a new extension is only a matter of implementing the `Extension` interface:
 ```go
 package sirius
 
@@ -70,7 +70,7 @@ type Extension interface {
 }
 ```
 
-The `Run` function is called with every outgoing message captured via the RTM API, and should return either an `error` or a `MessageAction`. It is passed an `ExtensionConfig` with every invocation, which is a read-only key/value configuration store. The `ExtensionConfig` is unique per user and extension.
+The `Run` function is called with every outgoing message captured via the RTM API, and should return either an `error` or a `MessageAction`. Each extension is passed an `ExtensionConfig` with every invocation, which is a read-only key/value configuration store. The `ExtensionConfig` is unique per user and extension, and is used to access all extension-specific configuration values.
 
 `MessageAction`s are returned by extensions to describe changes that should be made to the processed message. This includes things such as editing the message text, or deleting the message entirely. These changes are accumulated by the extension runner and broadcasted via the RTM API in timed batches.
 
