@@ -19,6 +19,16 @@ Converts `(y)` to `👍` (thumbs up emojii) in all outgoing messages.
 
 >**kayex** Awesome 👍 (edited)  
 
+
+### geocode
+Fills in missing address info and provides exact coordinates.
+
+*before*
+>**kayex** <address Empire State Building
+*after*
+>**kayex** **350 5th Ave, New York, NY 10118, USA**
+           `(40.748441, -73.985664)`
+
 ### quotes
 Avoids breaking blockquotes when the quote contains newlines.
 
