@@ -13,34 +13,34 @@ Converts `(y)` to `👍` (thumbs up emojii) in all outgoing messages.
 
 *before*
 
->**kayex** Awesome (y)  
+>**kayex**: Awesome (y)  
 
 *after*
 
->**kayex** Awesome 👍 (edited)  
+>**kayex**: Awesome 👍 (edited)  
 
 
 ### geocode
 Fills in missing address info and provides exact coordinates.
 
 *before*
->**kayex** <address Empire State Building
-*after*
->**kayex** **350 5th Ave, New York, NY 10118, USA**
-           `(40.748441, -73.985664)`
+>**kayex**: <address Empire State Building
+*after*  
+>**kayex**: **350 5th Ave, New York, NY 10118, USA**  
+`(40.748441, -73.985664)`
 
 ### quotes
 Avoids breaking blockquotes when the quote contains newlines.
 
 *before*
 
->**kayex** >This is  
+>**kayex**: >This is  
            a multi-paragraph  
 	   quote.  
 	     
 *after*
 
->**kayex** >This is  
+>**kayex**: >This is  
            >a multi-paragraph  
 	   >quote. (edited)
 
