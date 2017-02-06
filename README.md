@@ -3,7 +3,7 @@ Slack extensions that improve your outgoing messages in real-time. Written in Go
 
 For example, the `thumbs_up` extension automatically swaps all ocurrences of `(y)` in your messages to `👍` (thumbs up emojii).
 
-*The latest release notes can be found [here](https://github.com/kayex/sirius/releases/tag/0.4.0).*
+*The latest release notes can be found [here](https://github.com/kayex/sirius/releases).*
 
 ## How does it work?
 Sirius runs as a service and connects to the [Slack Real Time Messaging API](https://api.slack.com/rtm) using your Slack OAuth token. Once logged in, it monitors your active conversations and automatically makes intelligent edits to your messages based on their contents.
