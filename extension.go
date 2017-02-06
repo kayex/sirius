@@ -42,49 +42,49 @@ func (cfg ExtensionConfig) integer(key string, def int) cfg_int {
 	if val, ok := cfg[key]; ok {
 		switch b := val.(type) {
 		case int:
-			return cfg_int(b)
+			return b
 		}
 	}
 
-	return cfg_int(def)
+	return def
 }
 
 func (cfg ExtensionConfig) boolean(key string, def bool) cfg_bool {
 	if val, ok := cfg[key]; ok {
 		switch b := val.(type) {
 		case bool:
-			return cfg_bool(b)
+			return b
 		case int:
 			// Require explicit 0 or 1
 			if b == 0 {
-				return cfg_bool(false)
+				return false
 			} else if b == 1 {
-				return cfg_bool(true)
+				return true
 			}
 		}
 	}
 
-	return cfg_bool(def)
+	return def
 }
 
 func (cfg ExtensionConfig) float(key string, def float64) cfg_float {
 	if val, ok := cfg[key]; ok {
 		switch f := val.(type) {
 		case float32:
-			return cfg_float(f)
+			return float64(f)
 		case float64:
-			return cfg_float(f)
+			return f
 		}
 	}
 
-	return cfg_float(def)
+	return def
 }
 
 func (cfg ExtensionConfig) list(key string, def []string) cfg_list {
 	if val, ok := cfg[key]; ok {
 		switch l := val.(type) {
 		case []string:
-			return cfg_list(l)
+			return l
 		}
 
 	}
