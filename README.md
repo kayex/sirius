@@ -21,13 +21,13 @@ Converts `(y)` to `👍` (thumbs up emojii) in all outgoing messages.
 Avoids breaking blockquotes that contain newlines.
 
 >**kayex**: >This is  
-           a multi-paragraph  
+           a multi-line  
 	   quote.
 
 ⚡
 
 >**kayex**: >This is  
-           >a multi-paragraph  
+           >a multi-line  
 	   >quote.
 
 
