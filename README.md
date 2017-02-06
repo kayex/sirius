@@ -6,27 +6,7 @@ For example, the `thumbs_up` extension automatically swaps all ocurrences of `(y
 ## How does it work?
 Sirius connects to the [Slack Real Time Messaging API](https://api.slack.com/rtm) using your Slack OAuth token. Once logged in, it monitors your active conversations, making intelligent edits to your messages based on their contents.
 
-## Setup and running
-Sirius is run as a standalone service, which means it does *not* have to be run on the same device that you are messaging from. *A cloud version of Sirius is coming soon.*
-
-Before starting the service, you need to create a `users.json` file in the same directory as the executable. The file should consist of a single JSON array containing OAuth tokens for the Slack accounts you wish to enable Sirius for:
-
-**users.json**
-```json
-[
-	"xoxp-234234234-23234234-234234324234234-2342343242433"
-]
-```
-
-You can then start the main service by simply running the `sirius` executable:
-```
-$ ./sirius
-```
-
-### Users with multiple Slack accounts
-Sirius has multi-account support, which means that you can use Sirius with any number of Slack accounts without having to run multiple service instances. Simply add one OAuth token per account that you wish to use with Sirius to the `users.json` file.
-
-## Default extensions
+## Included extensions
 
 ### thumbs_up
 Converts `(y)` to `👍` (thumbs up emojii) in all outgoing messages.
@@ -53,6 +33,27 @@ Avoids breaking blockquotes when the quote contains newlines.
 >**kayex** >This is  
            >a multi-paragraph  
 	   >quote. (edited)
+
+
+## Setup and running
+Sirius is run as a standalone service, which means it does *not* have to be run on the same device that you are messaging from. *A cloud version of Sirius is coming soon.*
+
+Before starting the service, you need to create a `users.json` file in the same directory as the executable. The file should consist of a single JSON array containing OAuth tokens for the Slack accounts you wish to enable Sirius for:
+
+**users.json**
+```json
+[
+	"xoxp-234234234-23234234-234234324234234-2342343242433"
+]
+```
+
+You can then start the main service by simply running the `sirius` executable:
+```
+$ ./sirius
+```
+
+### Users with multiple Slack accounts
+Sirius has multi-account support, which means that you can use Sirius with any number of Slack accounts without having to run multiple service instances. Simply add one OAuth token per account that you wish to use with Sirius to the `users.json` file.
 
 ## Can I request a new extension?
 Of course! Just [submit a new issue](https://github.com/kayex/sirius/issues/new) and make sure to tag it with the `extension` label. You can also submit your own extension for inclusion in the set of default extensions, by submitting it as a pull request.
