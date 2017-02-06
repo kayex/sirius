@@ -20,7 +20,7 @@ type Connection interface {
 }
 
 type RTMConnection struct {
-	Rtm           *slack.RTM
+	rtm           *slack.RTM
 	id            SlackID
 	messages      chan Message
 	authenticated bool
@@ -52,7 +52,7 @@ func NewRTMConnection(token string) *RTMConnection {
 	msg := make(chan Message)
 
 	return &RTMConnection{
-		Rtm:      rtm,
+		rtm:      rtm,
 		messages: msg,
 		client:   client,
 		token:    token,
@@ -68,11 +68,11 @@ func (conn *RTMConnection) ID() (error, SlackID) {
 }
 
 func (conn *RTMConnection) Listen() {
-	go conn.Rtm.ManageConnection()
+	go conn.rtm.ManageConnection()
 
 	for !conn.authenticated {
 		select {
-		case ev := <-conn.Rtm.IncomingEvents:
+		case ev := <-conn.rtm.IncomingEvents:
 			switch msg := ev.Data.(type) {
 			case *slack.InvalidAuthEvent:
 				panic(msg)
@@ -85,7 +85,7 @@ func (conn *RTMConnection) Listen() {
 
 	for {
 		select {
-		case ev := <-conn.Rtm.IncomingEvents:
+		case ev := <-conn.rtm.IncomingEvents:
 			conn.handleIncomingEvent(ev)
 		}
 	}
@@ -96,12 +96,12 @@ func (conn *RTMConnection) Messages() chan Message {
 }
 
 func (conn *RTMConnection) SendMessage(msg *Message) {
-	omsg := conn.Rtm.NewOutgoingMessage(msg.Text, msg.Channel)
-	conn.Rtm.SendMessage(omsg)
+	omsg := conn.rtm.NewOutgoingMessage(msg.Text, msg.Channel)
+	conn.rtm.SendMessage(omsg)
 }
 
 func (conn *RTMConnection) Update(msg *Message) error {
-	_, _, _, err := conn.Rtm.UpdateMessage(msg.Channel, msg.Timestamp, msg.Text)
+	_, _, _, err := conn.rtm.UpdateMessage(msg.Channel, msg.Timestamp, msg.Text)
 	return err
 }
 
