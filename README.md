@@ -11,24 +11,20 @@ Sirius connects to the [Slack Real Time Messaging API](https://api.slack.com/rtm
 ### thumbs_up
 Converts `(y)` to `👍` (thumbs up emojii) in all outgoing messages.
 
-*before*
+>**kayex** Awesome (y)
 
->**kayex** Awesome (y)  
+⚡
 
-*after*
-
->**kayex** Awesome 👍 (edited)  
+>**kayex** Awesome 👍 (edited)
 
 ### quotes
 Avoids breaking blockquotes when the quote contains newlines.
 
-*before*
-
 >**kayex** >This is  
            a multi-paragraph  
-	   quote.  
-	     
-*after*
+	   quote.
+
+⚡
 
 >**kayex** >This is  
            >a multi-paragraph  
