@@ -7,16 +7,18 @@ import (
 )
 
 type Client struct {
-	user *User
-	conn *Connection
+	user   *User
+	conn   Connection
+	loader ExtensionLoader
 }
 
-func NewClient(user *User) *Client {
-	conn := NewConnection(user.Token)
+func NewClient(user *User, loader ExtensionLoader) *Client {
+	conn := NewRTMConnection(user.Token)
 
 	return &Client{
-		conn: &conn,
-		user: user,
+		conn:   conn,
+		user:   user,
+		loader: loader,
 	}
 }
 
@@ -25,7 +27,7 @@ func (c *Client) Start(ctx context.Context) {
 
 	for {
 		select {
-		case msg := <-c.conn.Incoming:
+		case msg := <-c.conn.Messages():
 			c.handleMessage(&msg)
 		}
 	}
@@ -50,7 +52,7 @@ func (c *Client) runExtensions(msg *Message) []MessageAction {
 	act := make(chan MessageAction, len(cfgs))
 
 	for _, cfg := range cfgs {
-		ext := LoadExtension(cfg.EID)
+		ext := c.loader.Load(cfg.EID)
 
 		execute(ext, msg, act)
 	}
@@ -88,16 +90,14 @@ func (c *Client) applyActions(act []MessageAction, msg *Message) {
 	}
 }
 
-/*
-Notice that user IDs are not guaranteed to be globally unique across all Slack users.
-The combination of user ID and team ID, on the other hand, is guaranteed to be globally unique.
-
-- Slack API documentation
-*/
 func (c *Client) isSender(msg *Message) bool {
-	return c.conn.ID.UserID == msg.UserID &&
-		c.conn.ID.TeamID == msg.TeamID
+	err, id := c.conn.ID()
 
+	if err != nil {
+		panic(err)
+	}
+
+	return id.Equals(&msg.UserID)
 }
 
 func (m *Message) escaped() bool {

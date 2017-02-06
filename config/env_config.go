@@ -2,8 +2,8 @@ package config
 
 import "os"
 
-func FromEnv() Config {
-	return Config{
+func FromEnv() AppConfig {
+	return AppConfig{
 		DBHost:     env(`DB_HOST`, `127.0.0.1`),
 		DBPort:     env(`DB_PORT`, `5432`),
 		DBDatabase: env(`DB_DATABASE`, ``),
