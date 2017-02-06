@@ -4,6 +4,10 @@ type Extension interface {
 	Run(Message) (error, MessageAction)
 }
 
+type CfgExtension interface {
+	Run(ExtensionConfig, Message) (error, MessageAction)
+}
+
 type cfg_int int
 type cfg_bool bool
 type cfg_float float64
