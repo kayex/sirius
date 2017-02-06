@@ -4,6 +4,8 @@ import (
 	"golang.org/x/net/context"
 	"strings"
 	"time"
+	"fmt"
+	"reflect"
 )
 
 type Client struct {
@@ -69,8 +71,8 @@ ActionReceive:
 		case a := <-act:
 			actions = append(actions, a)
 
-		// Allow extensions max 200ms to execute and provide an actionable result
-		case <-time.After(time.Millisecond * 200):
+		// Allow extensions max 2s to execute and provide an actionable result
+		case <-time.After(time.Second * 2):
 			break ActionReceive
 		}
 	}
@@ -120,7 +122,8 @@ func execute(ext Extension, msg *Message, act chan<- MessageAction) {
 		err, a := ext.Run(*msg, ExtensionConfig{})
 
 		if err != nil {
-			panic(err)
+			fmt.Printf("[%s]: %v", reflect.TypeOf(ext), err)
+			return
 		}
 
 		act <- a

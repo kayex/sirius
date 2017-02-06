@@ -27,6 +27,10 @@ func (l *StaticExtensionLoader) Load(eid sirius.EID) (error, sirius.Extension) {
 		return nil, &Replacer{}
 	case "quotes":
 		return nil, &Quotes{}
+	case "geocode":
+		return nil, &Geocode{
+			APIKey: l.cfg.Maps.APIKey,
+		}
 	}
 
 	return errors.New(fmt.Sprintf("Invalid eid: %v", eid)), nil
