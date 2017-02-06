@@ -1,45 +1,78 @@
 package sirius
 
 import (
+	"errors"
 	"fmt"
 	"github.com/nlopes/slack"
-	"log"
 	"strings"
 )
 
-type Connection struct {
-	ID       SlackID
-	Rtm      *slack.RTM
-	Incoming chan Message
-	ready    bool
-	client   *slack.Client
-	token    string
+type SlackID struct {
+	UserID string
+	TeamID string
 }
 
-func CInit(logger *log.Logger) {
-	slack.SetLogger(logger)
+type Connection interface {
+	ID() (error, SlackID)
+	Listen()
+	Messages() chan Message
+	Update(*Message) error
 }
 
-func NewConnection(token string) Connection {
+type RTMConnection struct {
+	rtm           *slack.RTM
+	id            SlackID
+	messages      chan Message
+	authenticated bool
+	client        *slack.Client
+	token         string
+}
+
+func NewSlackID(userID, teamID string) SlackID {
+	return SlackID{
+		UserID: userID,
+		TeamID: teamID,
+	}
+}
+
+/*
+Notice that user IDs are not guaranteed to be globally unique across all Slack users.
+The combination of user ID and team ID, on the other hand, is guaranteed to be globally unique.
+
+- Slack API documentation
+*/
+func (s *SlackID) Equals(o *SlackID) bool {
+	return s.UserID == o.UserID && s.TeamID == o.TeamID
+}
+
+func NewRTMConnection(token string) *RTMConnection {
 	client := slack.New(token)
 
 	rtm := client.NewRTM()
-	inc := make(chan Message)
+	msg := make(chan Message)
 
-	return Connection{
-		Rtm:      rtm,
-		Incoming: inc,
+	return &RTMConnection{
+		rtm:      rtm,
+		messages: msg,
 		client:   client,
 		token:    token,
 	}
 }
 
-func (conn *Connection) Listen() {
-	go conn.Rtm.ManageConnection()
+func (conn *RTMConnection) ID() (error, SlackID) {
+	if !conn.authenticated {
+		return errors.New("Cannot get UserID before authentication completes"), SlackID{}
+	}
 
-	for !conn.ready {
+	return nil, conn.id
+}
+
+func (conn *RTMConnection) Listen() {
+	go conn.rtm.ManageConnection()
+
+	for !conn.authenticated {
 		select {
-		case ev := <-conn.Rtm.IncomingEvents:
+		case ev := <-conn.rtm.IncomingEvents:
 			switch msg := ev.Data.(type) {
 			case *slack.InvalidAuthEvent:
 				panic(msg)
@@ -52,31 +85,35 @@ func (conn *Connection) Listen() {
 
 	for {
 		select {
-		case ev := <-conn.Rtm.IncomingEvents:
+		case ev := <-conn.rtm.IncomingEvents:
 			conn.handleIncomingEvent(ev)
 		}
 	}
 }
 
-func (conn *Connection) SendMessage(msg *Message) {
-	omsg := conn.Rtm.NewOutgoingMessage(msg.Text, msg.Channel)
-	conn.Rtm.SendMessage(omsg)
+func (conn *RTMConnection) Messages() chan Message {
+	return conn.messages
 }
 
-func (conn *Connection) Update(msg *Message) error {
-	_, _, _, err := conn.Rtm.UpdateMessage(msg.Channel, msg.Timestamp, msg.Text)
+func (conn *RTMConnection) SendMessage(msg *Message) {
+	omsg := conn.rtm.NewOutgoingMessage(msg.Text, msg.Channel)
+	conn.rtm.SendMessage(omsg)
+}
+
+func (conn *RTMConnection) Update(msg *Message) error {
+	_, _, _, err := conn.rtm.UpdateMessage(msg.Channel, msg.Timestamp, msg.Text)
 	return err
 }
 
-func (conn *Connection) authenticate(e *slack.ConnectedEvent) bool {
+func (conn *RTMConnection) authenticate(e *slack.ConnectedEvent) bool {
 	info := e.Info
-	conn.ID = NewSlackID(info.User.ID, info.Team.ID)
-	conn.ready = true
+	conn.id = NewSlackID(info.User.ID, info.Team.ID)
+	conn.authenticated = true
 
 	return true
 }
 
-func (conn *Connection) handleIncomingEvent(ev slack.RTMEvent) {
+func (conn *RTMConnection) handleIncomingEvent(ev slack.RTMEvent) {
 	switch msg := ev.Data.(type) {
 	case *slack.MessageEvent:
 		conn.handleIncomingMessage(msg)
@@ -87,15 +124,15 @@ func (conn *Connection) handleIncomingEvent(ev slack.RTMEvent) {
 	}
 }
 
-func (conn *Connection) handleIncomingMessage(ev *slack.MessageEvent) {
+func (conn *RTMConnection) handleIncomingMessage(ev *slack.MessageEvent) {
 	text := removeEscapeCharacters(ev.Text)
 	msg := NewMessage(text, ev.User, ev.Team, ev.Channel, ev.Timestamp)
-	conn.Incoming <- msg
+	conn.messages <- msg
 }
 
-var escapeCharacters map[string]string = map[string]string {
-	"&lt;": "<",
-	"&gt;": ">",
+var escapeCharacters map[string]string = map[string]string{
+	"&lt;":  "<",
+	"&gt;":  ">",
 	"&amp;": "&",
 }
 

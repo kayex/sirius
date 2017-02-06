@@ -12,7 +12,7 @@ func (edit *TextEditAction) Get() []TextTransform {
 	return edit.trans
 }
 
-func TextEdit() *TextEditAction {
+func (m *Message) EditText() *TextEditAction {
 	return &TextEditAction{}
 }
 
@@ -50,10 +50,6 @@ TextTransform represents an alteration of the message Text property.
 */
 type TextTransform interface {
 	Apply(text string) string
-}
-
-func NoTransform() []TextTransform {
-	return []TextTransform{}
 }
 
 type SubTransform struct {

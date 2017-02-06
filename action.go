@@ -18,6 +18,6 @@ func NoAction() *EmptyAction {
 	return &EmptyAction{}
 }
 
-func (na *EmptyAction) Perform(*Message) error {
+func (*EmptyAction) Perform(*Message) error {
 	return nil
 }

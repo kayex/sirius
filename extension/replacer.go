@@ -1,6 +1,7 @@
-package sirius
+package extension
 
 import (
+	"github.com/kayex/sirius"
 	"strings"
 )
 
@@ -11,8 +12,8 @@ var phrases = map[string]string{
 	"cancer":    "Does this dress make me look fat?",
 }
 
-func (*Replacer) Run(Message) (error, MessageAction) {
-	edit := TextEdit()
+func (*Replacer) Run(m sirius.Message, cfg sirius.ExtensionConfig) (error, sirius.MessageAction) {
+	edit := m.EditText()
 
 	for search, replace := range phrases {
 		edit.Substitute(strings.ToLower(search), replace)

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/kayex/sirius"
+	"github.com/kayex/sirius/extension"
 	"golang.org/x/net/context"
 	"io/ioutil"
 	"os"
@@ -30,7 +31,7 @@ func main() {
 	}
 
 	for _, user := range users {
-		cl := sirius.NewClient(&user)
+		cl := sirius.NewClient(&user, extension.NewStaticExtensionLoader())
 		go cl.Start(context.TODO())
 	}
 
