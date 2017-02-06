@@ -3,7 +3,7 @@ package sirius
 type Message struct {
 	Text      string
 	Modified  bool
-	UserID    string
+	UserID    SlackID
 	TeamID    string
 	Channel   string
 	Timestamp string
@@ -11,9 +11,11 @@ type Message struct {
 
 func NewMessage(text, user, team, channel, timestamp string) Message {
 	return Message{
-		Text:      text,
-		UserID:    user,
-		TeamID:    team,
+		Text: text,
+		UserID: SlackID{
+			UserID: user,
+			TeamID: team,
+		},
 		Channel:   channel,
 		Timestamp: timestamp,
 	}

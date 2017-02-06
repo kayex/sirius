@@ -88,16 +88,14 @@ func (c *Client) applyActions(act []MessageAction, msg *Message) {
 	}
 }
 
-/*
-Notice that user IDs are not guaranteed to be globally unique across all Slack users.
-The combination of user ID and team ID, on the other hand, is guaranteed to be globally unique.
-
-- Slack API documentation
-*/
 func (c *Client) isSender(msg *Message) bool {
-	return c.conn.ID.UserID == msg.UserID &&
-		c.conn.ID.TeamID == msg.TeamID
+	err, id := c.conn.ID()
 
+	if err != nil {
+		panic(err)
+	}
+
+	return id.Equals(&msg.UserID)
 }
 
 func (m *Message) escaped() bool {
