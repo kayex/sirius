@@ -7,16 +7,18 @@ import (
 )
 
 type Client struct {
-	user *User
-	conn Connection
+	user   *User
+	conn   Connection
+	loader ExtensionLoader
 }
 
-func NewClient(user *User) *Client {
+func NewClient(user *User, loader ExtensionLoader) *Client {
 	conn := NewRTMConnection(user.Token)
 
 	return &Client{
-		conn: conn,
-		user: user,
+		conn:   conn,
+		user:   user,
+		loader: loader,
 	}
 }
 
@@ -50,7 +52,7 @@ func (c *Client) runExtensions(msg *Message) []MessageAction {
 	act := make(chan MessageAction, len(cfgs))
 
 	for _, cfg := range cfgs {
-		ext := LoadExtension(cfg.EID)
+		ext := c.loader.Load(cfg.EID)
 
 		execute(ext, msg, act)
 	}
