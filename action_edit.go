@@ -52,10 +52,6 @@ type TextTransform interface {
 	Apply(text string) string
 }
 
-func NoTransform() []TextTransform {
-	return []TextTransform{}
-}
-
 type SubTransform struct {
 	Search string
 	Sub    string
