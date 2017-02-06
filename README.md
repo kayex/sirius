@@ -1,5 +1,5 @@
 # sirius
-Sirius is a standalone Slack extension runner written in Go. It enables you to write and run simple extensions that can read and alter your outgoing messages in realtime.
+Sirius is a standalone Slack extension runner that lets you run extensions that read and alter your outgoing messages in realtime. Written in Go.
 
 For example, the `thumbs_up` extension automatically swaps all ocurrences of `(y)` in your messages to `👍` (thumbs up emojii).
 
