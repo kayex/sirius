@@ -5,7 +5,7 @@ type Extension interface {
 }
 
 type CfgExtension interface {
-	Run(Message, ExtensionConfig) (error, MessageAction)
+	RunWithConfig(Message, ExtensionConfig)
 }
 
 type cfg_int int
