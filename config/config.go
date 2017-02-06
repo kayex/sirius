@@ -6,4 +6,9 @@ type AppConfig struct {
 	DBDatabase string
 	DBUser     string
 	DBPassword string
+	Maps MapsConfig
+}
+
+type MapsConfig struct {
+	APIKey string
 }

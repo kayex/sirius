@@ -4,20 +4,45 @@ import (
 	"strings"
 )
 
+/*
+TextEditAction represents a series of
+edits to the message Text property
+
+Usage:
+
+var msg Message
+
+edit := msg.EditText()
+edit.Substitute("foo", "bar")
+edit.Append("-ending")
+
+ */
 type TextEditAction struct {
-	trans []TextTransform
+	mutations []TextMutation
 }
 
-func (edit *TextEditAction) Get() []TextTransform {
-	return edit.trans
-}
-
-func (m *Message) EditText() *TextEditAction {
+func (*Message) EditText() *TextEditAction {
 	return &TextEditAction{}
 }
 
+func (edit *TextEditAction) Perform(msg *Message) error {
+	for _, m := range edit.mutations {
+		msg.Text = m.Apply(msg.Text)
+	}
+
+	return nil
+}
+
+func (edit *TextEditAction) ReplaceWith(replacement string) *TextEditAction {
+	edit.add(&ReplaceMutation{
+		Replacement: replacement,
+	})
+
+	return edit
+}
+
 func (edit *TextEditAction) Substitute(search string, sub string) *TextEditAction {
-	edit.add(&SubTransform{
+	edit.add(&SubMutation{
 		Search: search,
 		Sub:    sub,
 	})
@@ -26,49 +51,49 @@ func (edit *TextEditAction) Substitute(search string, sub string) *TextEditActio
 }
 
 func (edit *TextEditAction) Append(app string) *TextEditAction {
-	edit.add(&AppendTransform{
+	edit.add(&AppendMutation{
 		Appendix: app,
 	})
 
 	return edit
 }
 
-func (edit *TextEditAction) Perform(msg *Message) error {
-	for _, t := range edit.trans {
-		msg.Text = t.Apply(msg.Text)
-	}
-
-	return nil
-}
-
-func (edit *TextEditAction) add(t TextTransform) {
-	edit.trans = append(edit.trans, t)
+func (edit *TextEditAction) add(m TextMutation) {
+	edit.mutations = append(edit.mutations, m)
 }
 
 /*
-TextTransform represents an alteration of the message Text property.
+TextTransform represents a string mutation
 */
-type TextTransform interface {
+type TextMutation interface {
 	Apply(text string) string
 }
 
-type SubTransform struct {
+type ReplaceMutation struct {
+	Replacement string
+}
+
+type SubMutation struct {
 	Search string
 	Sub    string
 }
 
-type AppendTransform struct {
+type AppendMutation struct {
 	Appendix string
 }
 
-func (st *SubTransform) Apply(text string) string {
-	return strings.Replace(text, st.Search, st.Sub, -1)
+func (rm *ReplaceMutation) Apply(text string) string {
+	return rm.Replacement
 }
 
-func (at *AppendTransform) Apply(text string) string {
-	if len(at.Appendix) == 0 {
+func (sm *SubMutation) Apply(text string) string {
+	return strings.Replace(text, sm.Search, sm.Sub, -1)
+}
+
+func (am *AppendMutation) Apply(text string) string {
+	if len(am.Appendix) == 0 {
 		return text
 	}
 
-	return text + at.Appendix
+	return text + am.Appendix
 }

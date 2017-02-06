@@ -101,7 +101,7 @@ func (c *Client) isSender(msg *Message) bool {
 		panic(err)
 	}
 
-	return id.Equals(&msg.UserID)
+	return msg.UserID.Equals(&id)
 }
 
 func (m *Message) escaped() bool {

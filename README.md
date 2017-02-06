@@ -1,7 +1,7 @@
 # sirius
 Slack extensions that improve your outgoing messages in real-time. Written in Go.
 
-For example, the `thumbs_up` extension automatically swaps all ocurrences of `(y)` in your messages to `👍` (thumbs up emojii).
+For example, the `thumbs_up` extension automatically swaps all occurrences of `(y)` in your messages for `👍` (thumbs up emojii).
 
 *The latest release notes can be found [here](https://github.com/kayex/sirius/releases).*
 
@@ -15,24 +15,34 @@ Converts `(y)` to `👍` (thumbs up emojii) in all outgoing messages.
 
 *before*
 
->**kayex** Awesome (y)  
+>**kayex**: Awesome (y)  
 
 *after*
 
->**kayex** Awesome 👍 (edited)  
+>**kayex**: Awesome 👍 (edited)  
+
+
+### geocode
+Fills in missing address info and provides exact coordinates.
+
+*before*
+>**kayex**: <address Empire State Building
+*after*  
+>**kayex**: **350 5th Ave, New York, NY 10118, USA**  
+`(40.748441, -73.985664)`
 
 ### quotes
 Avoids breaking blockquotes when the quote contains newlines.
 
 *before*
 
->**kayex** >This is  
+>**kayex**: >This is  
            a multi-paragraph  
 	   quote.  
 	     
 *after*
 
->**kayex** >This is  
+>**kayex**: >This is  
            >a multi-paragraph  
 	   >quote. (edited)
 
@@ -83,7 +93,7 @@ Extensions that do not need to modify the message in any way can simply `return 
 
 An extension has exactly **200 ms** to finish execution if it wishes to provide a `MessageAction` other than the `EmptyAction` (as returned by `NoAction()`). Extensions that fail to complete execution before this deadline will be allowed to finish, but none of the message actions they return will be applied to the message or broadcasted via the API.
 
-### Standard MessageActions
+### `MessageAction`s
 These are the default `MessageActions`. New actions can be created by implementing the `MessageAction` interface:
 ```go
 type MessageAction interface {
@@ -92,7 +102,7 @@ type MessageAction interface {
 ```
 
 #### TextEditAction
-Modifications to the message text are easily done using `(*Message) EditText()`.
+Modifications to the message text are easily done using `(*Message) EditText()`:
 ```go
 func (*ThumbsUp) Run(m Message, cfg ExtensionConfig) (error, MessageAction) {
 	edit := m.EditText()

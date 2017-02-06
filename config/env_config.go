@@ -9,6 +9,9 @@ func FromEnv() AppConfig {
 		DBDatabase: env(`DB_DATABASE`, ``),
 		DBUser:     env(`DB_USER`, ``),
 		DBPassword: env(`DB_PASSWORD`, ``),
+		Maps: MapsConfig{
+			APIKey: env("MAPS_API_KEY", ""),
+		},
 	}
 }
 
