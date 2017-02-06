@@ -59,7 +59,7 @@ Sirius has multi-account support, which means that you can use Sirius with any n
 Of course! Just [submit a new issue](https://github.com/kayex/sirius/issues/new) and make sure to tag it with the `extension` label. You can also submit your own extension for inclusion in the set of default extensions, by submitting it as a pull request.
 
 ## Creating a new extension
-Creating a new extension is only a matter of implementing the `Extension` interface:
+Creating a new extension is only a matter of implementing either the `Extension` interface:
 ```go
 package sirius
 
@@ -75,6 +75,16 @@ The `Run` function is called with every outgoing message captured via the RTM AP
 Extensions that do not need to modify the message in any way can simply `return NoAction()`.
 
 An extension has exactly **200 ms** to finish execution if it wishes to provide a `MessageAction` other than the `EmptyAction` (as returned by `NoAction()`). Extensions that fail to complete execution before this deadline will be allowed to finish, but none of the message actions they return will be applied to the message or broadcasted via the API.
+
+### Configurable extensions
+To create an extension that can accept a set of configuration values at the beginning of each execution, implement the `CfgExtension` interface instead:
+```go
+package sirius
+
+type CfgExtension interface {
+	Run(Message, ExtensionConfig) (error, MessageAction)
+}
+```
 
 ### Standard MessageActions
 These are the default `MessageActions`. New actions can be created by implementing the `MessageAction` interface:
