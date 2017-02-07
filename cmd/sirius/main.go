@@ -36,8 +36,23 @@ func main() {
 		users = append(users, user)
 	}
 
+	loader := extension.NewStaticExtensionLoader(cfg)
+
 	for _, user := range users {
-		cl := sirius.NewClient(&user, extension.NewStaticExtensionLoader(cfg))
+		var ext []sirius.Extension
+
+		for _, c := range user.Configurations {
+			err, x := loader.Load(c.EID)
+
+			if err != nil {
+				panic(err)
+			}
+
+			ext = append(ext, x)
+		}
+
+		cl := sirius.NewClient(&user, ext)
+
 		go cl.Start(context.TODO())
 	}
 

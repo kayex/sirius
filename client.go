@@ -1,26 +1,27 @@
 package sirius
 
 import (
-	"fmt"
+	"errors"
 	"golang.org/x/net/context"
-	"reflect"
 	"strings"
 	"time"
 )
 
 type Client struct {
-	user   *User
-	conn   Connection
-	loader ExtensionLoader
+	user       *User
+	conn       Connection
+	extensions []Extension
+	runner     ExtensionRunner
 }
 
-func NewClient(user *User, loader ExtensionLoader) *Client {
+func NewClient(user *User, ext []Extension) *Client {
 	conn := NewRTMConnection(user.Token)
 
 	return &Client{
-		conn:   conn,
-		user:   user,
-		loader: loader,
+		conn:       conn,
+		user:       user,
+		extensions: ext,
+		runner:     NewAsyncRunner(),
 	}
 }
 
@@ -35,6 +36,8 @@ func (c *Client) Start(ctx context.Context) {
 
 	for {
 		select {
+		case <-ctx.Done():
+			return
 		case msg := <-c.conn.Messages():
 			c.handleMessage(&msg)
 		}
@@ -56,78 +59,72 @@ func (c *Client) authenticate() error {
 }
 
 func (c *Client) handleMessage(msg *Message) {
-	if !c.isSender(msg) {
-		return
 	// We only care about outgoing messages
 	if !c.sender(msg) {
 		//return
 	}
 
 	if msg.escaped() {
-		msg.Text = trimEscape(msg.Text)
+		edit := msg.EditText().ReplaceWith(trimEscape(msg.Text))
+		msg.perform(edit)
+
 		c.conn.Update(msg)
 		return
 	}
 
-	act := c.runExtensions(msg)
-	c.applyActions(act, msg)
+	c.run(msg)
 }
 
-func (c *Client) runExtensions(msg *Message) []MessageAction {
-	cfgs := c.user.Configurations
-	act := make(chan MessageAction, len(cfgs))
+func (c *Client) run(m *Message) {
+	var exe []Execution
+	var act []MessageAction
 
-	for _, cfg := range cfgs {
-		err, ext := c.loader.Load(cfg.EID)
-
-		if err != nil {
-			panic(err)
-		}
-
-		execute(ext, msg, act)
+	for _, x := range c.extensions {
+		exe = append(exe, *NewExecution(x, *m, ExtensionConfig{}))
 	}
 
-	var actions []MessageAction
+	res := make(chan ExecutionResult, len(c.extensions))
 
-ActionReceive:
-	for range cfgs {
-		select {
-		case a := <-act:
-			actions = append(actions, a)
+	c.runner.Run(exe, res, time.Second*2)
 
-		// Allow extensions max 2s to execute and provide an actionable result
-		case <-time.After(time.Second * 2):
-			break ActionReceive
+	for {
+		if r, more := <-res; more {
+			if r.Error != nil {
+				panic(r.Error)
+			}
+
+			act = append(act, r.Action)
+			continue
 		}
+
+		break
 	}
 
-	return actions
+	updated := c.performActions(act, m)
+
+	if updated {
+		c.conn.Update(m)
+	}
 }
 
-func (c *Client) applyActions(act []MessageAction, msg *Message) {
-	oldText := msg.Text
+func (c *Client) performActions(act []MessageAction, msg *Message) bool {
+	var update bool
 
 	for _, a := range act {
-		err := a.Perform(msg)
+		err, modified := msg.perform(a)
 
 		if err != nil {
 			panic(err)
 		}
+
+		update = update || modified
 	}
 
-	if msg.Text != oldText {
-		c.conn.Update(msg)
-	}
+	return update
 }
 
-func (c *Client) isSender(msg *Message) bool {
-	err, id := c.conn.ID()
-
-	if err != nil {
-		panic(err)
-	}
-
-	return msg.UserID.Equals(&id)
+func (c *Client) sender(msg *Message) bool {
+	return msg.UserID.Equals(c.user.ID)
 }
 
 func (m *Message) escaped() bool {
@@ -136,20 +133,4 @@ func (m *Message) escaped() bool {
 
 func trimEscape(text string) string {
 	return strings.TrimPrefix(text, `\`)
-}
-
-/*
-Executes ext(msg) and passes the results onto act
-*/
-func execute(ext Extension, msg *Message, act chan<- MessageAction) {
-	go func() {
-		err, a := ext.Run(*msg, ExtensionConfig{})
-
-		if err != nil {
-			fmt.Printf("[%s]: %v\n", reflect.TypeOf(ext), err)
-			return
-		}
-
-		act <- a
-	}()
 }

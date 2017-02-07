@@ -1,6 +1,7 @@
 package sirius
 
 type User struct {
+	ID             SlackID
 	Token          string
 	Configurations []*Configuration
 }

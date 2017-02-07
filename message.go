@@ -4,18 +4,14 @@ type Message struct {
 	Text      string
 	Modified  bool
 	UserID    SlackID
-	TeamID    string
 	Channel   string
 	Timestamp string
 }
 
-func NewMessage(text, user, team, channel, timestamp string) Message {
+func NewMessage(userID SlackID, text, channel, timestamp string) Message {
 	return Message{
-		Text: text,
-		UserID: SlackID{
-			UserID: user,
-			TeamID: team,
-		},
+		Text:      text,
+		UserID:    userID,
 		Channel:   channel,
 		Timestamp: timestamp,
 	}
