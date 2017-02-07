@@ -6,8 +6,8 @@ type User struct {
 	Configurations []*Configuration
 }
 
-func NewUser(token string) User {
-	return User{
+func NewUser(token string) *User {
+	return &User{
 		Token: token,
 	}
 }

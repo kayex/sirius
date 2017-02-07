@@ -19,12 +19,12 @@ func main() {
 	for _, token := range tokens {
 		user := sirius.NewUser(token)
 
-		tu := sirius.NewConfiguration(&user, "thumbs_up")
-		rip := sirius.NewConfiguration(&user, "ripperino")
-		rpl := sirius.NewConfiguration(&user, "replacer")
-		qts := sirius.NewConfiguration(&user, "quotes")
-		ip := sirius.NewConfiguration(&user, "ip_lookup")
-		gc := sirius.NewConfiguration(&user, "geocode")
+		tu := sirius.NewConfiguration(user, "thumbs_up")
+		rip := sirius.NewConfiguration(user, "ripperino")
+		rpl := sirius.NewConfiguration(user, "replacer")
+		qts := sirius.NewConfiguration(user, "quotes")
+		ip := sirius.NewConfiguration(user, "ip_lookup")
+		gc := sirius.NewConfiguration(user, "geocode")
 
 		user.AddConfiguration(&tu)
 		user.AddConfiguration(&rip)
@@ -33,7 +33,7 @@ func main() {
 		user.AddConfiguration(&ip)
 		user.AddConfiguration(&gc)
 
-		users = append(users, user)
+		users = append(users, *user)
 	}
 
 	loader := extension.NewStaticExtensionLoader(cfg)
