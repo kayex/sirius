@@ -31,7 +31,7 @@ Type `!address` followed by any sort of geographical location, and the `geocode`
 `(40.748441, -73.985664)`
 
 ### ip_lookup
-Type `!ip-lookup` followed by an IP address to fetch related geolocation information.
+Type `!ip` followed by an IP address to fetch related geolocation information.
 
 >**kayex**: !ip 8.8.8.8  
 >**kayex**: !ip 2001:4860:4860::8888 // IPv6
@@ -43,6 +43,7 @@ Mountain View, United States (`US`)
 Google  
 >**kayex**: `2001:4860:4860::8888`  
 Chicago, United States (`US`)
+Google
 
 ### quotes
 Avoids breaking blockquotes that contain newlines.
