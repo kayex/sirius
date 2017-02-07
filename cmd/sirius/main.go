@@ -23,12 +23,14 @@ func main() {
 		rip := sirius.NewConfiguration(&user, "ripperino")
 		rpl := sirius.NewConfiguration(&user, "replacer")
 		qts := sirius.NewConfiguration(&user, "quotes")
+		ip := sirius.NewConfiguration(&user, "ip_lookup")
 		gc := sirius.NewConfiguration(&user, "geocode")
 
 		user.AddConfiguration(&tu)
 		user.AddConfiguration(&rip)
 		user.AddConfiguration(&rpl)
 		user.AddConfiguration(&qts)
+		user.AddConfiguration(&ip)
 		user.AddConfiguration(&gc)
 
 		users = append(users, user)
