@@ -13,11 +13,11 @@ type Geocode struct {
 }
 
 func (gc *Geocode) Run(m sirius.Message, cfg sirius.ExtensionConfig) (error, sirius.MessageAction) {
-	if !strings.HasPrefix(m.Text, "<address") {
+	address, run := sirius.NewCommand("address").Match(&m)
+
+	if !run {
 		return nil, sirius.NoAction()
 	}
-
-	address := strings.TrimPrefix(m.Text, "<address ")
 
 	c, err := maps.NewClient(maps.WithAPIKey(gc.APIKey))
 
