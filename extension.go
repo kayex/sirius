@@ -12,15 +12,6 @@ type ExtensionLoader interface {
 
 type ExtensionConfig map[string]interface{}
 
-type InvalidConfig struct {
-	Key string
-	msg string
-}
-
-func (ic InvalidConfig) Error() string {
-	return ic.msg
-}
-
 func (cfg ExtensionConfig) Read(key string, def interface{}) interface{} {
 	if val, ok := cfg[key]; ok {
 		return val
