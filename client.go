@@ -43,6 +43,7 @@ func (c *Client) handleMessage(msg *Message) {
 	if msg.escaped() {
 		msg.Text = trimEscape(msg.Text)
 		c.conn.Update(msg)
+		return
 	}
 
 	act := c.runExtensions(msg)
