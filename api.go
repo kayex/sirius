@@ -15,6 +15,7 @@ type SlackID struct {
 type Connection interface {
 	ID() (error, SlackID)
 	Listen()
+	Auth() chan SlackID
 	Messages() chan Message
 	Update(*Message) error
 }
@@ -26,6 +27,7 @@ type RTMConnection struct {
 	authenticated bool
 	client        *slack.Client
 	token         string
+	auth     chan SlackID
 }
 
 func NewSlackID(userID, teamID string) SlackID {
@@ -49,10 +51,12 @@ func NewRTMConnection(token string) *RTMConnection {
 	client := slack.New(token)
 
 	rtm := client.NewRTM()
+	auth := make(chan SlackID)
 	msg := make(chan Message)
 
 	return &RTMConnection{
 		rtm:      rtm,
+		auth:     auth,
 		messages: msg,
 		client:   client,
 		token:    token,
@@ -89,6 +93,10 @@ func (conn *RTMConnection) Listen() {
 			conn.handleIncomingEvent(ev)
 		}
 	}
+}
+
+func (conn *RTMConnection) Auth() chan SlackID {
+	return conn.auth
 }
 
 func (conn *RTMConnection) Messages() chan Message {
