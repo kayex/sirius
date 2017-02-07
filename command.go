@@ -2,7 +2,7 @@ package sirius
 
 import "strings"
 
-const commandPrefix = `<`
+const commandPrefix = `!`
 
 type Command struct {
 	name string
