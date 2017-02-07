@@ -42,7 +42,7 @@ Type `!ip` followed by an IP address to fetch related geolocation information.
 Mountain View, United States (`US`)  
 Google  
 >**kayex**: `2001:4860:4860::8888`  
-Chicago, United States (`US`)
+Chicago, United States (`US`)  
 Google
 
 ### quotes
