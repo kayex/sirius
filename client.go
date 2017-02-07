@@ -1,11 +1,11 @@
 package sirius
 
 import (
+	"fmt"
 	"golang.org/x/net/context"
+	"reflect"
 	"strings"
 	"time"
-	"fmt"
-	"reflect"
 )
 
 type Client struct {
@@ -43,6 +43,7 @@ func (c *Client) handleMessage(msg *Message) {
 	if msg.escaped() {
 		msg.Text = trimEscape(msg.Text)
 		c.conn.Update(msg)
+		return
 	}
 
 	act := c.runExtensions(msg)
@@ -122,7 +123,7 @@ func execute(ext Extension, msg *Message, act chan<- MessageAction) {
 		err, a := ext.Run(*msg, ExtensionConfig{})
 
 		if err != nil {
-			fmt.Printf("[%s]: %v", reflect.TypeOf(ext), err)
+			fmt.Printf("[%s]: %v\n", reflect.TypeOf(ext), err)
 			return
 		}
 

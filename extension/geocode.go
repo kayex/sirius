@@ -1,12 +1,11 @@
 package extension
 
 import (
-	"github.com/kayex/sirius"
-	"googlemaps.github.io/maps"
-	"golang.org/x/net/context"
 	"errors"
-	"strings"
 	"fmt"
+	"github.com/kayex/sirius"
+	"golang.org/x/net/context"
+	"googlemaps.github.io/maps"
 )
 
 type Geocode struct {
@@ -14,11 +13,11 @@ type Geocode struct {
 }
 
 func (gc *Geocode) Run(m sirius.Message, cfg sirius.ExtensionConfig) (error, sirius.MessageAction) {
-	if !strings.HasPrefix(m.Text, "<address") {
+	address, run := sirius.NewCommand("address").Match(&m)
+
+	if !run {
 		return nil, sirius.NoAction()
 	}
-
-	address := strings.TrimPrefix(m.Text, "<address ")
 
 	c, err := maps.NewClient(maps.WithAPIKey(gc.APIKey))
 
@@ -38,9 +37,9 @@ func (gc *Geocode) Run(m sirius.Message, cfg sirius.ExtensionConfig) (error, sir
 
 	pos := res[0]
 	location := pos.Geometry.Location
-	coords := fmt.Sprintf("*%v*\n`(%.6f, %.6f)`", pos.FormattedAddress, location.Lat, location.Lng)
+	formatted := fmt.Sprintf("*%v*\n`(%.6f, %.6f)`", pos.FormattedAddress, location.Lat, location.Lng)
 
-	edit := m.EditText().ReplaceWith(coords)
+	edit := m.EditText().ReplaceWith(formatted)
 
 	return nil, edit
 }

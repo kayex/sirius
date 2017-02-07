@@ -1,13 +1,13 @@
 package extension
 
 import (
-	"fmt"
 	"errors"
+	"fmt"
 	"github.com/kayex/sirius"
 	"github.com/kayex/sirius/config"
 )
 
-type StaticExtensionLoader struct{
+type StaticExtensionLoader struct {
 	cfg config.AppConfig
 }
 
@@ -27,6 +27,8 @@ func (l *StaticExtensionLoader) Load(eid sirius.EID) (error, sirius.Extension) {
 		return nil, &Replacer{}
 	case "quotes":
 		return nil, &Quotes{}
+	case "ip_lookup":
+		return nil, &IPLookup{}
 	case "geocode":
 		return nil, &Geocode{
 			APIKey: l.cfg.Maps.APIKey,
