@@ -4,11 +4,13 @@ import "os"
 
 func FromEnv() AppConfig {
 	return AppConfig{
-		DBHost:     env(`DB_HOST`, `127.0.0.1`),
-		DBPort:     env(`DB_PORT`, `5432`),
-		DBDatabase: env(`DB_DATABASE`, ``),
-		DBUser:     env(`DB_USER`, ``),
-		DBPassword: env(`DB_PASSWORD`, ``),
+		DB: DBConfig{
+			Host:     env(`DB_HOST`, `127.0.0.1`),
+			Port:     env(`DB_PORT`, `5432`),
+			Database: env(`DB_DATABASE`, ``),
+			User:     env(`DB_USER`, ``),
+			Password: env(`DB_PASSWORD`, ``),
+		},
 		Maps: MapsConfig{
 			APIKey: env("MAPS_API_KEY", ""),
 		},
