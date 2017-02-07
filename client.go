@@ -27,6 +27,12 @@ func NewClient(user *User, loader ExtensionLoader) *Client {
 func (c *Client) Start(ctx context.Context) {
 	go c.conn.Listen()
 
+	err := c.authenticate()
+
+	if err != nil {
+		panic(err)
+	}
+
 	for {
 		select {
 		case msg := <-c.conn.Messages():
@@ -35,9 +41,26 @@ func (c *Client) Start(ctx context.Context) {
 	}
 }
 
+func (c *Client) authenticate() error {
+	for c.user.ID.Missing() {
+		select {
+		case id := <-c.conn.Auth():
+			c.user.ID = id
+			return nil
+		case <-time.After(time.Second * 3):
+			return errors.New("Dynamic client authentication timed out (<-c.conn.Auth())")
+		}
+	}
+
+	return nil
+}
+
 func (c *Client) handleMessage(msg *Message) {
 	if !c.isSender(msg) {
 		return
+	// We only care about outgoing messages
+	if !c.sender(msg) {
+		//return
 	}
 
 	if msg.escaped() {
