@@ -30,7 +30,7 @@ Type `!address` followed by any sort of geographical location, and the `geocode`
 >**kayex**: **350 5th Ave, New York, NY 10118, USA**  
 `(40.748441, -73.985664)`
 
-### ip-lookup
+### ip_lookup
 Type `!ip-lookup` followed by an IP address to fetch related geolocation information.
 
 >**kayex**: !ip 8.8.8.8  
