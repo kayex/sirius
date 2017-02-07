@@ -6,7 +6,7 @@ For example, the `thumbs_up` extension automatically swaps all occurrences of `(
 *The latest release notes can be found [here](https://github.com/kayex/sirius/releases).*
 
 ## How does it work?
-Sirius runs as a service and connects to the [Slack Real Time Messaging API](https://api.slack.com/rtm) using your Slack OAuth token. Once logged in, it monitors your active conversations and automatically makes intelligent edits to your messages based on their contents.
+Sirius runs as a service and connects to the [Slack Real Time Messaging API](https://api.slack.com/rtm) using your Slack OAuth token. Once logged in, it monitors your active conversations and automatically makes intelligent edits to your messages.
 
 ## Extensions
 
