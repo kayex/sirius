@@ -1,11 +1,11 @@
 package sirius
 
 import (
+	"fmt"
 	"golang.org/x/net/context"
+	"reflect"
 	"strings"
 	"time"
-	"fmt"
-	"reflect"
 )
 
 type Client struct {

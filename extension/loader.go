@@ -1,13 +1,13 @@
 package extension
 
 import (
-	"fmt"
 	"errors"
+	"fmt"
 	"github.com/kayex/sirius"
 	"github.com/kayex/sirius/config"
 )
 
-type StaticExtensionLoader struct{
+type StaticExtensionLoader struct {
 	cfg config.AppConfig
 }
 

@@ -1,12 +1,11 @@
 package extension
 
 import (
-	"github.com/kayex/sirius"
-	"googlemaps.github.io/maps"
-	"golang.org/x/net/context"
 	"errors"
-	"strings"
 	"fmt"
+	"github.com/kayex/sirius"
+	"golang.org/x/net/context"
+	"googlemaps.github.io/maps"
 )
 
 type Geocode struct {
