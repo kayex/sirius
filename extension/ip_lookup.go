@@ -1,14 +1,14 @@
 package extension
 
 import (
-	"github.com/kayex/sirius"
 	"encoding/json"
-	"net/http"
 	"errors"
 	"fmt"
+	"github.com/kayex/sirius"
+	"net/http"
 )
 
-type IPLookup struct {}
+type IPLookup struct{}
 
 func (ipl *IPLookup) Run(m sirius.Message, cfg sirius.ExtensionConfig) (error, sirius.MessageAction) {
 	ip, run := sirius.NewCommand("ip").Match(&m)
@@ -30,7 +30,6 @@ func (ipl *IPLookup) Run(m sirius.Message, cfg sirius.ExtensionConfig) (error, s
 
 	return nil, edit
 }
-
 
 func ipLookup(ip string) (error, map[string]interface{}) {
 	url := "http://ip-api.com/json/" + ip
