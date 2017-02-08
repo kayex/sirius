@@ -1,16 +1,16 @@
 package sirius
 
+type EID string
+type ExtensionConfig map[string]interface{}
+
 type Extension interface {
 	Run(Message, ExtensionConfig) (error, MessageAction)
 }
 
-type EID string
-
 type ExtensionLoader interface {
-	Load(EID) (error, Extension)
+	Load(EID) (Extension, error)
 }
 
-type ExtensionConfig map[string]interface{}
 
 func (cfg ExtensionConfig) Read(key string, def interface{}) interface{} {
 	if val, ok := cfg[key]; ok {
