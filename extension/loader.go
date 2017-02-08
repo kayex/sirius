@@ -1,10 +1,10 @@
 package extension
 
 import (
-	"github.com/kayex/sirius/config"
-	"github.com/kayex/sirius"
 	"errors"
 	"fmt"
+	"github.com/kayex/sirius"
+	"github.com/kayex/sirius/config"
 )
 
 type StaticLoader struct {

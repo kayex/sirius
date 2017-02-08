@@ -11,7 +11,6 @@ type ExtensionLoader interface {
 	Load(EID) (Extension, error)
 }
 
-
 func (cfg ExtensionConfig) Read(key string, def interface{}) interface{} {
 	if val, ok := cfg[key]; ok {
 		return val

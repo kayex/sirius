@@ -1,13 +1,13 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/kayex/sirius"
 	"github.com/kayex/sirius/config"
 	"github.com/kayex/sirius/extension"
 	"golang.org/x/net/context"
-	"encoding/json"
 	"io/ioutil"
-	"fmt"
 )
 
 var extensions []string = []string{
