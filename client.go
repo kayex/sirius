@@ -60,7 +60,7 @@ func (c *Client) authenticate() error {
 
 func (c *Client) handleMessage(msg *Message) {
 	// We only care about outgoing messages
-	if !c.user.sent(msg) {
+	if !msg.sentBy(c.user) {
 		return
 	}
 
@@ -118,8 +118,8 @@ func (c *Client) loadExecutions(m *Message) []Execution {
 	return exe
 }
 
-func (u *User) sent(msg *Message) bool {
-	return u.ID.Equals(msg.UserID.Secure())
+func (m *Message) sentBy(u *User) bool {
+	return m.UserID.Secure().Equals(u.ID)
 }
 
 func (m *Message) escaped() bool {
