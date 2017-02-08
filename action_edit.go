@@ -63,9 +63,6 @@ func (edit *TextEditAction) add(m TextMutation) {
 	edit.mutations = append(edit.mutations, m)
 }
 
-/*
-TextTransform represents a string mutation
-*/
 type TextMutation interface {
 	Apply(text string) string
 }
