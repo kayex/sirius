@@ -15,10 +15,10 @@ func NewCommand(name string) *Command {
 }
 
 func (c *Command) Match(m *Message) (string, bool) {
-	command := prefix + c.name + " "
-	if !strings.HasPrefix(m.Text, command) {
+	cmd := prefix + c.name + " "
+	if !strings.HasPrefix(m.Text, cmd) {
 		return "", false
 	}
 
-	return strings.TrimPrefix(m.Text, command), true
+	return strings.TrimPrefix(m.Text, cmd), true
 }
