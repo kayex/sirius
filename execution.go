@@ -58,12 +58,12 @@ ActionReceive:
 
 func (r *AsyncRunner) execute(e Execution, res chan<- ExecutionResult) {
 	go func() {
-		var r ExecutionResult
-
 		err, a := e.Extension.Run(e.Message, e.Config)
 
-		r.Error = err
-		r.Action = a
+		r := ExecutionResult{
+			Error: err,
+			Action: a,
+		}
 
 		res <- r
 	}()
