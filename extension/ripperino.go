@@ -29,7 +29,7 @@ func (*Ripperino) Run(m sirius.Message, cfg sirius.ExtensionConfig) (error, siri
 	if rand.Int()%10 == 1 {
 		edit.Substitute(base, fmt.Sprintf("~%s~ RAPPER GRINO", base))
 	} else {
-		edit.Append(" " + getRandomEnding())
+		edit.Substitute(base, fmt.Sprintf("%v %s", base, getRandomEnding()))
 	}
 
 	return nil, edit
