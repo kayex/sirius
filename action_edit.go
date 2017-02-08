@@ -17,6 +17,7 @@ edit.Substitute("foo", "bar")
 edit.Append("-ending")
 
 */
+
 type TextEditAction struct {
 	mutations []TextMutation
 }
