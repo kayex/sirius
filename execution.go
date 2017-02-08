@@ -61,7 +61,7 @@ func (r *AsyncRunner) execute(e Execution, res chan<- ExecutionResult) {
 		err, a := e.Extension.Run(e.Message, e.Config)
 
 		r := ExecutionResult{
-			Error: err,
+			Error:  err,
 			Action: a,
 		}
 
