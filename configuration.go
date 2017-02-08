@@ -1,8 +1,6 @@
 package sirius
 
 type Configuration struct {
-	ID     string
-	Name   string
 	User   *User
 	EID    EID
 	Config map[string]interface{}
