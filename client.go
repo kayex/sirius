@@ -130,7 +130,7 @@ func (c *Client) performActions(act []MessageAction, msg *Message) bool {
 }
 
 func (c *Client) sender(msg *Message) bool {
-	return c.user.ID.Equals(msg.UserID)
+	return c.user.ID.Equals(msg.UserID.Secure())
 }
 
 func (m *Message) escaped() bool {
