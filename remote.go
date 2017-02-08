@@ -31,7 +31,7 @@ func (ru *RemoteUser) Convert() *User {
 	u.ID = slack.SecureID{ru.IDHash}
 
 	for eid, c := range ru.Config {
-		cfg := NewConfiguration(u, EID(eid))
+		cfg := NewConfiguration(EID(eid))
 
 		if conf, ok := c.(map[string]interface{}); ok {
 			cfg.Config = conf

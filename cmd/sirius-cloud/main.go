@@ -18,24 +18,7 @@ func main() {
 	}
 
 	loader := extension.NewStaticLoader(cfg)
+	service := sirius.NewService(loader, cfg)
 
-	for _, user := range users {
-		var ext []sirius.Extension
-
-		for _, c := range user.Configurations {
-			err, x := loader.Load(c.EID)
-
-			if err != nil {
-				panic(err)
-			}
-
-			ext = append(ext, x)
-		}
-
-		cl := sirius.NewClient(&user, ext)
-
-		go cl.Start(context.TODO())
-	}
-
-	select {}
+	service.Start(context.TODO(), users)
 }
