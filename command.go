@@ -2,7 +2,7 @@ package sirius
 
 import "strings"
 
-const commandPrefix = `!`
+const prefix = `!`
 
 type Command struct {
 	name string
@@ -15,10 +15,10 @@ func NewCommand(name string) *Command {
 }
 
 func (c *Command) Match(m *Message) (string, bool) {
-	fullCommandName := commandPrefix + c.name + " "
-	if !strings.HasPrefix(m.Text, fullCommandName) {
+	command := prefix + c.name + " "
+	if !strings.HasPrefix(m.Text, command) {
 		return "", false
 	}
 
-	return strings.TrimPrefix(m.Text, fullCommandName), true
+	return strings.TrimPrefix(m.Text, command), true
 }
