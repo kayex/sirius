@@ -21,8 +21,7 @@ func (cfg ExtensionConfig) Read(key string, def interface{}) interface{} {
 
 func (cfg ExtensionConfig) String(key string, def string) string {
 	if val, ok := cfg[key]; ok {
-		switch s := val.(type) {
-		case string:
+		if s, ok := val.(string); ok {
 			return s
 		}
 	}
@@ -32,8 +31,7 @@ func (cfg ExtensionConfig) String(key string, def string) string {
 
 func (cfg ExtensionConfig) Integer(key string, def int) int {
 	if val, ok := cfg[key]; ok {
-		switch i := val.(type) {
-		case int:
+		if i, ok := val.(int); ok {
 			return i
 		}
 	}
@@ -74,11 +72,9 @@ func (cfg ExtensionConfig) Float(key string, def float64) float64 {
 
 func (cfg ExtensionConfig) List(key string, def []string) []string {
 	if val, ok := cfg[key]; ok {
-		switch l := val.(type) {
-		case []string:
+		if l, ok := val.([]string); ok {
 			return l
 		}
-
 	}
 
 	return def
