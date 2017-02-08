@@ -121,7 +121,7 @@ func (c *Client) loadExecutions(m *Message) []Execution {
 }
 
 func (m *Message) sentBy(u *User) bool {
-	return m.UserID.Secure().Equals(u.ID)
+	return u.ID.Equals(m.UserID.Secure())
 }
 
 func (m *Message) escaped() bool {
