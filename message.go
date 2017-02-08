@@ -1,14 +1,16 @@
 package sirius
 
+import "github.com/kayex/sirius/slack"
+
 type Message struct {
 	Text      string
 	Modified  bool
-	UserID    SlackID
+	UserID    slack.UserID
 	Channel   string
 	Timestamp string
 }
 
-func NewMessage(userID SlackID, text, channel, timestamp string) Message {
+func NewMessage(userID slack.UserID, text, channel, timestamp string) Message {
 	return Message{
 		Text:      text,
 		UserID:    userID,

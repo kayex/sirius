@@ -1,7 +1,11 @@
 package sirius
 
+import (
+	"github.com/kayex/sirius/slack"
+)
+
 type User struct {
-	ID             SlackID
+	ID             slack.SecureID
 	Token          string
 	Configurations []*Configuration
 }

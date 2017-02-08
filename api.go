@@ -2,56 +2,31 @@ package sirius
 
 import (
 	"fmt"
-	"github.com/nlopes/slack"
+	"github.com/kayex/sirius/slack"
+	api "github.com/nlopes/slack"
 	"strings"
 )
 
-type SlackID struct {
-	UserID string
-	TeamID string
-}
-
 type Connection interface {
 	Listen()
-	Auth() chan SlackID
+	Auth() chan slack.UserID
 	Messages() chan Message
 	Update(*Message) error
 }
 
 type RTMConnection struct {
 	token    string
-	rtm      *slack.RTM
-	client   *slack.Client
-	auth     chan SlackID
+	rtm      *api.RTM
+	client   *api.Client
+	auth     chan slack.UserID
 	messages chan Message
 }
 
-func NewSlackID(userID, teamID string) SlackID {
-	return SlackID{
-		UserID: userID,
-		TeamID: teamID,
-	}
-}
-
-func (id SlackID) Missing() bool {
-	return id.UserID == "" && id.TeamID == ""
-}
-
-/*
-Notice that user IDs are not guaranteed to be globally unique across all Slack users.
-The combination of user ID and team ID, on the other hand, is guaranteed to be globally unique.
-
-- Slack API documentation
-*/
-func (id SlackID) Equals(o SlackID) bool {
-	return id.UserID == o.UserID && id.TeamID == o.TeamID
-}
-
 func NewRTMConnection(token string) *RTMConnection {
-	client := slack.New(token)
+	client := api.New(token)
 
 	rtm := client.NewRTM()
-	auth := make(chan SlackID)
+	auth := make(chan slack.UserID, 1)
 	msg := make(chan Message)
 
 	return &RTMConnection{
@@ -74,7 +49,7 @@ func (conn *RTMConnection) Listen() {
 	}
 }
 
-func (conn *RTMConnection) Auth() chan SlackID {
+func (conn *RTMConnection) Auth() chan slack.UserID {
 	return conn.auth
 }
 
@@ -92,35 +67,35 @@ func (conn *RTMConnection) Update(msg *Message) error {
 	return err
 }
 
-func (conn *RTMConnection) authenticate(e *slack.ConnectedEvent) {
+func (conn *RTMConnection) authenticate(e *api.ConnectedEvent) {
 	info := e.Info
-	id := NewSlackID(info.User.ID, info.Team.ID)
+	id := slack.UserID{info.User.ID, info.Team.ID}
 	conn.auth <- id
 }
 
-func (conn *RTMConnection) handleIncomingEvent(ev slack.RTMEvent) {
+func (conn *RTMConnection) handleIncomingEvent(ev api.RTMEvent) {
 	switch msg := ev.Data.(type) {
-	case *slack.ConnectedEvent:
+	case *api.ConnectedEvent:
 		conn.authenticate(msg)
-	case *slack.InvalidAuthEvent:
+	case *api.InvalidAuthEvent:
 		panic(msg)
-	case *slack.MessageEvent:
+	case *api.MessageEvent:
 		conn.handleIncomingMessage(msg)
 
-	case *slack.RTMError:
+	case *api.RTMError:
 		fmt.Printf("Error: %s\n", msg.Error())
 		panic(msg)
 	}
 }
 
-func (conn *RTMConnection) handleIncomingMessage(ev *slack.MessageEvent) {
+func (conn *RTMConnection) handleIncomingMessage(ev *api.MessageEvent) {
 	// Drop messages with incomplete data
 	if ev.User == "" || ev.Team == "" {
 		return
 	}
 
 	text := removeEscapeCharacters(ev.Text)
-	msg := NewMessage(SlackID{ev.User, ev.Team}, text, ev.Channel, ev.Timestamp)
+	msg := NewMessage(slack.UserID{ev.User, ev.Team}, text, ev.Channel, ev.Timestamp)
 
 	conn.messages <- msg
 }

@@ -45,10 +45,10 @@ func (c *Client) Start(ctx context.Context) {
 }
 
 func (c *Client) authenticate() error {
-	for c.user.ID.Missing() {
+	for c.user.ID.Empty() {
 		select {
 		case id := <-c.conn.Auth():
-			c.user.ID = id
+			c.user.ID = id.Secure()
 			return nil
 		case <-time.After(time.Second * 3):
 			return errors.New("Dynamic client authentication timed out (<-c.conn.Auth())")
@@ -61,7 +61,7 @@ func (c *Client) authenticate() error {
 func (c *Client) handleMessage(msg *Message) {
 	// We only care about outgoing messages
 	if !c.sender(msg) {
-		//return
+		return
 	}
 
 	if msg.escaped() {
@@ -88,7 +88,7 @@ func (c *Client) run(m *Message) {
 	c.runner.Run(exe, res, time.Second*2)
 
 	for {
-		if r, more := <-res; more {
+		if r, running := <-res; running {
 			if r.Error != nil {
 				panic(r.Error)
 			}
@@ -124,7 +124,7 @@ func (c *Client) performActions(act []MessageAction, msg *Message) bool {
 }
 
 func (c *Client) sender(msg *Message) bool {
-	return msg.UserID.Equals(c.user.ID)
+	return c.user.ID.Equals(msg.UserID)
 }
 
 func (m *Message) escaped() bool {
