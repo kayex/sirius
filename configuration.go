@@ -2,11 +2,11 @@ package sirius
 
 type Configuration struct {
 	EID    EID
-	Config map[string]interface{}
+	Config ExtensionConfig
 }
 
 func NewConfiguration(eid EID) Configuration {
 	return Configuration{
-		EID:  eid,
+		EID: eid,
 	}
 }

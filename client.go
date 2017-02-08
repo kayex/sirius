@@ -8,20 +8,20 @@ import (
 )
 
 type Client struct {
-	user       *User
-	conn       Connection
-	extensions []Extension
-	runner     ExtensionRunner
+	user   *User
+	conn   Connection
+	loader ExtensionLoader
+	runner ExtensionRunner
 }
 
-func NewClient(user *User, ext []Extension) *Client {
+func NewClient(user *User, loader ExtensionLoader) *Client {
 	conn := NewRTMConnection(user.Token)
 
 	return &Client{
-		conn:       conn,
-		user:       user,
-		extensions: ext,
-		runner:     NewAsyncRunner(),
+		conn:   conn,
+		user:   user,
+		loader: loader,
+		runner: NewAsyncRunner(),
 	}
 }
 
@@ -79,11 +79,17 @@ func (c *Client) run(m *Message) {
 	var exe []Execution
 	var act []MessageAction
 
-	for _, x := range c.extensions {
-		exe = append(exe, *NewExecution(x, *m, ExtensionConfig{}))
+	for _, cf := range c.user.Configurations {
+		x, err := c.loader.Load(cf.EID)
+
+		if err != nil {
+			panic(err)
+		}
+
+		exe = append(exe, *NewExecution(x, *m, cf.Config))
 	}
 
-	res := make(chan ExecutionResult, len(c.extensions))
+	res := make(chan ExecutionResult, len(c.user.Configurations))
 
 	c.runner.Run(exe, res, time.Second*2)
 

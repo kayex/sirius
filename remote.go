@@ -33,7 +33,7 @@ func (ru *RemoteUser) Convert() *User {
 	for eid, c := range ru.Config {
 		cfg := NewConfiguration(EID(eid))
 
-		if conf, ok := c.(map[string]interface{}); ok {
+		if conf, ok := c.(ExtensionConfig); ok {
 			cfg.Config = conf
 		}
 
