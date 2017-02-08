@@ -1,8 +1,9 @@
 package config
 
 type AppConfig struct {
-	DB   DBConfig
-	Maps MapsConfig
+	DB     DBConfig
+	Remote RemoteConfig
+	Maps   MapsConfig
 }
 
 type MapsConfig struct {
@@ -15,4 +16,9 @@ type DBConfig struct {
 	Database string
 	User     string
 	Password string
+}
+
+type RemoteConfig struct {
+	URL   string
+	Token string
 }
