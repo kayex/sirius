@@ -10,11 +10,11 @@ import (
 
 type IPLookup struct{}
 
-func (ipl *IPLookup) Run(m sirius.Message, cfg sirius.ExtensionConfig) (error, sirius.MessageAction) {
+func (ipl *IPLookup) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.MessageAction, error) {
 	ip, run := sirius.NewCommand("ip").Match(&m)
 
 	if !run {
-		return nil, sirius.NoAction()
+		return sirius.NoAction(), nil
 	}
 
 	var lookup map[string]interface{}
@@ -22,13 +22,13 @@ func (ipl *IPLookup) Run(m sirius.Message, cfg sirius.ExtensionConfig) (error, s
 	err, lookup := ipLookup(ip)
 
 	if err != nil {
-		return errors.New(fmt.Sprintf("IP Lookup error: %v", err)), nil
+		return nil, errors.New(fmt.Sprintf("IP Lookup error: %v", err))
 	}
 
 	output := fmt.Sprintf("`%v`\n%v, %v (`%v`)\n%v", ip, lookup["city"], lookup["country"], lookup["countryCode"], lookup["isp"])
 	edit := m.EditText().ReplaceWith(output)
 
-	return nil, edit
+	return edit, nil
 }
 
 func ipLookup(ip string) (error, map[string]interface{}) {

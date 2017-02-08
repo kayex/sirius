@@ -4,7 +4,7 @@ type EID string
 type ExtensionConfig map[string]interface{}
 
 type Extension interface {
-	Run(Message, ExtensionConfig) (error, MessageAction)
+	Run(Message, ExtensionConfig) (MessageAction, error)
 }
 
 type ExtensionLoader interface {
