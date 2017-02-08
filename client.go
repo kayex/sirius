@@ -60,7 +60,7 @@ func (c *Client) authenticate() error {
 
 func (c *Client) handleMessage(msg *Message) {
 	// We only care about outgoing messages
-	if !c.sender(msg) {
+	if !c.user.sent(msg) {
 		return
 	}
 
@@ -76,19 +76,9 @@ func (c *Client) handleMessage(msg *Message) {
 }
 
 func (c *Client) run(m *Message) {
-	var exe []Execution
 	var act []MessageAction
 
-	for _, cf := range c.user.Configurations {
-		x, err := c.loader.Load(cf.EID)
-
-		if err != nil {
-			panic(err)
-		}
-
-		exe = append(exe, *NewExecution(x, *m, cf.Config))
-	}
-
+	exe := c.loadExecutions(m)
 	res := make(chan ExecutionResult, len(c.user.Configurations))
 
 	c.runner.Run(exe, res, time.Second*2)
@@ -100,20 +90,47 @@ func (c *Client) run(m *Message) {
 			}
 
 			act = append(act, r.Action)
-			continue
+		} else {
+			break
 		}
-
-		break
 	}
 
-	updated := c.performActions(act, m)
+	updated := performActions(act, m)
 
 	if updated {
 		c.conn.Update(m)
 	}
 }
 
-func (c *Client) performActions(act []MessageAction, msg *Message) bool {
+func (c *Client) loadExecutions(m *Message) []Execution {
+	var exe []Execution
+
+	for _, cf := range c.user.Configurations {
+		x, err := c.loader.Load(cf.EID)
+
+		if err != nil {
+			panic(err)
+		}
+
+		exe = append(exe, *NewExecution(x, *m, cf.Config))
+	}
+
+	return exe
+}
+
+func (u *User) sent(msg *Message) bool {
+	return u.ID.Equals(msg.UserID.Secure())
+}
+
+func (m *Message) escaped() bool {
+	return strings.HasPrefix(m.Text, `\`)
+}
+
+func trimEscape(text string) string {
+	return strings.TrimPrefix(text, `\`)
+}
+
+func performActions(act []MessageAction, msg *Message) bool {
 	var update bool
 
 	for _, a := range act {
@@ -127,16 +144,4 @@ func (c *Client) performActions(act []MessageAction, msg *Message) bool {
 	}
 
 	return update
-}
-
-func (c *Client) sender(msg *Message) bool {
-	return c.user.ID.Equals(msg.UserID.Secure())
-}
-
-func (m *Message) escaped() bool {
-	return strings.HasPrefix(m.Text, `\`)
-}
-
-func trimEscape(text string) string {
-	return strings.TrimPrefix(text, `\`)
 }
