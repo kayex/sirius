@@ -61,7 +61,6 @@ func (c *Client) authenticate() error {
 }
 
 func (c *Client) handleMessage(msg *Message) {
-	// We only care about outgoing messages
 	if !msg.sentBy(c.user) {
 		return
 	}
