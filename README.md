@@ -60,7 +60,7 @@ Avoids breaking blockquotes that contain newlines.
 
 ### Building
 ```
-$ go build github.com/kayex/sirius/cmd/sirius
+$ go build github.com/kayex/sirius/cmd/sirius-local
 ```
 
 ### Running
@@ -75,9 +75,9 @@ Before starting the service, you need to create a `users.json` file in the same 
 ]
 ```
 
-You can then start the main service by simply running the `sirius` executable:
+You can then start the main service by simply running the `sirius-local` executable:
 ```
-$ ./sirius
+$ ./sirius-local
 ```
 
 ## Can I request a new extension?
