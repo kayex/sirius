@@ -8,20 +8,22 @@ import (
 )
 
 type Client struct {
-	user   *User
-	conn   Connection
-	loader ExtensionLoader
-	runner ExtensionRunner
+	user    *User
+	conn    Connection
+	loader  ExtensionLoader
+	runner  ExtensionRunner
+	timeout time.Duration
 }
 
 func NewClient(user *User, loader ExtensionLoader) *Client {
 	conn := NewRTMConnection(user.Token)
 
 	return &Client{
-		conn:   conn,
-		user:   user,
-		loader: loader,
-		runner: NewAsyncRunner(),
+		conn:    conn,
+		user:    user,
+		loader:  loader,
+		runner:  NewAsyncRunner(),
+		timeout: time.Second * 2,
 	}
 }
 
@@ -81,7 +83,7 @@ func (c *Client) run(m *Message) {
 	exe := c.loadExecutions(m)
 	res := make(chan ExecutionResult, len(c.user.Configurations))
 
-	c.runner.Run(exe, res, time.Second*2)
+	c.runner.Run(exe, res, c.timeout)
 
 	for {
 		if r, running := <-res; running {
