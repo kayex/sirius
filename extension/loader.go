@@ -7,17 +7,17 @@ import (
 	"github.com/kayex/sirius/config"
 )
 
-type StaticExtensionLoader struct {
+type StaticLoader struct {
 	cfg config.AppConfig
 }
 
-func NewStaticExtensionLoader(cfg config.AppConfig) *StaticExtensionLoader {
-	return &StaticExtensionLoader{
+func NewStaticLoader(cfg config.AppConfig) *StaticLoader {
+	return &StaticLoader{
 		cfg: cfg,
 	}
 }
 
-func (l *StaticExtensionLoader) Load(eid sirius.EID) (error, sirius.Extension) {
+func (l *StaticLoader) Load(eid sirius.EID) (error, sirius.Extension) {
 	switch eid {
 	case "thumbs_up":
 		return nil, &ThumbsUp{}

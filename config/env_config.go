@@ -11,6 +11,10 @@ func FromEnv() AppConfig {
 			User:     env("DB_USER", ""),
 			Password: env("DB_PASSWORD", ""),
 		},
+		Remote: RemoteConfig{
+			URL:   env("REMOTE_URL", ""),
+			Token: env("REMOTE_TOKEN", ""),
+		},
 		Maps: MapsConfig{
 			APIKey: env("MAPS_API_KEY", ""),
 		},
