@@ -12,7 +12,7 @@ type Geocode struct {
 }
 
 func (x *Geocode) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.MessageAction, error) {
-	cmd, match := m.Command("geocode")
+	cmd, match := m.Command("address")
 
 	if !match {
 		return sirius.NoAction(), nil
