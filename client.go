@@ -109,7 +109,7 @@ func (c *Client) loadExecutions(m *Message) []Execution {
 			panic(err)
 		}
 
-		exe = append(exe, *NewExecution(x, *m, cf.Config))
+		exe = append(exe, *NewExecution(x, *m, cf.Cfg))
 	}
 
 	return exe

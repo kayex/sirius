@@ -34,7 +34,7 @@ func (ru *RemoteUser) Convert() *User {
 		cfg := NewConfiguration(EID(eid))
 
 		if conf, ok := c.(ExtensionConfig); ok {
-			cfg.Config = conf
+			cfg.Cfg = conf
 		}
 
 		u.Configurations = append(u.Configurations, &cfg)
