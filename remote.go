@@ -26,7 +26,7 @@ func NewRemote(url, token string) *Remote {
 	}
 }
 
-func (ru *RemoteUser) Convert() *User {
+func (ru *RemoteUser) convert() *User {
 	u := NewUser(ru.Token)
 	u.ID = slack.SecureID{ru.IDHash}
 
@@ -43,7 +43,7 @@ func (ru *RemoteUser) Convert() *User {
 	return u
 }
 
-func (r *Remote) Request(endpoint string) (*http.Response, error) {
+func (r *Remote) request(endpoint string) (*http.Response, error) {
 	url := r.url + endpoint + "?token=" + r.token
 
 	return r.client.Get(url)
@@ -51,7 +51,7 @@ func (r *Remote) Request(endpoint string) (*http.Response, error) {
 
 func (r *Remote) GetUsers() ([]User, error) {
 	var remoteUsers []RemoteUser
-	res, err := r.Request("/configs")
+	res, err := r.request("/configs")
 
 	if err != nil {
 		return nil, err
@@ -65,7 +65,7 @@ func (r *Remote) GetUsers() ([]User, error) {
 	var users []User
 
 	for _, ru := range remoteUsers {
-		users = append(users, *ru.Convert())
+		users = append(users, *ru.convert())
 	}
 
 	return users, nil
