@@ -84,16 +84,12 @@ func (c *Client) run(m *Message) {
 
 	c.runner.Run(exe, res, c.timeout)
 
-	for {
-		if r, running := <-res; running {
-			if r.Err != nil {
-				panic(r.Err)
-			}
-
-			act = append(act, r.Action)
-		} else {
-			break
+	for r := range res {
+		if r.Err != nil {
+			panic(r.Err)
 		}
+
+		act = append(act, r.Action)
 	}
 
 	updated := performActions(act, m)
