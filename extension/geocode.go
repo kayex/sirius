@@ -12,21 +12,21 @@ type Geocode struct {
 	APIKey string
 }
 
-func (gc *Geocode) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.MessageAction, error) {
-	address, run := sirius.NewCommand("address").Match(&m)
+func (x *Geocode) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.MessageAction, error) {
+	cmd, match := m.Command("geocode")
 
-	if !run {
+	if !match {
 		return sirius.NoAction(), nil
 	}
 
-	c, err := maps.NewClient(maps.WithAPIKey(gc.APIKey))
+	c, err := maps.NewClient(maps.WithAPIKey(x.APIKey))
 
 	if err != nil {
 		return nil, errors.New(fmt.Sprintf("Maps client error: %v", err.Error()))
 	}
 
 	r := &maps.GeocodingRequest{
-		Address: address,
+		Address: cmd.Args[0],
 	}
 
 	res, err := c.Geocode(context.Background(), r)
