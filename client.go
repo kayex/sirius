@@ -86,8 +86,8 @@ func (c *Client) run(m *Message) {
 
 	for {
 		if r, running := <-res; running {
-			if r.Error != nil {
-				panic(r.Error)
+			if r.Err != nil {
+				panic(r.Err)
 			}
 
 			act = append(act, r.Action)

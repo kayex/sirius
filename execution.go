@@ -9,13 +9,13 @@ type ExtensionRunner interface {
 }
 
 type Execution struct {
-	Extension Extension
-	Message   Message
-	Config    ExtensionConfig
+	Ext Extension
+	Msg Message
+	Cfg ExtensionConfig
 }
 
 type ExecutionResult struct {
-	Error  error
+	Err    error
 	Action MessageAction
 }
 
@@ -25,9 +25,9 @@ type AsyncRunner struct {
 
 func NewExecution(x Extension, m Message, cfg ExtensionConfig) *Execution {
 	return &Execution{
-		Extension: x,
-		Message:   m,
-		Config:    cfg,
+		Ext: x,
+		Msg: m,
+		Cfg: cfg,
 	}
 }
 
@@ -58,10 +58,10 @@ ActionReceive:
 
 func (r *AsyncRunner) execute(e Execution, res chan<- ExecutionResult) {
 	go func() {
-		a, err := e.Extension.Run(e.Message, e.Config)
+		a, err := e.Ext.Run(e.Msg, e.Cfg)
 
 		r := ExecutionResult{
-			Error:  err,
+			Err:    err,
 			Action: a,
 		}
 
