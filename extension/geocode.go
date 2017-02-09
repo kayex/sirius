@@ -1,7 +1,6 @@
 package extension
 
 import (
-	"errors"
 	"fmt"
 	"github.com/kayex/sirius"
 	"golang.org/x/net/context"
@@ -22,7 +21,7 @@ func (x *Geocode) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.Mess
 	c, err := maps.NewClient(maps.WithAPIKey(x.APIKey))
 
 	if err != nil {
-		return nil, errors.New(fmt.Sprintf("Maps client error: %v", err.Error()))
+		return nil, err
 	}
 
 	r := &maps.GeocodingRequest{
@@ -32,7 +31,7 @@ func (x *Geocode) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.Mess
 	res, err := c.Geocode(context.Background(), r)
 
 	if err != nil {
-		return nil, errors.New(fmt.Sprintf("Geocoding error: %v", err.Error()))
+		return nil, err
 	}
 
 	pos := res[0]
