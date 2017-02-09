@@ -27,7 +27,19 @@ func (ipl *IPLookup) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.M
 		return nil, errors.New(fmt.Sprintf("IP Lookup error: %v", err))
 	}
 
-	output := fmt.Sprintf("`%v`\n%v, %v (`%v`)\n%v", ip, lookup["city"], lookup["country"], lookup["countryCode"], lookup["isp"])
+	/*
+		IP
+		City, Country (CODE)
+		ISP
+	*/
+	output := fmt.Sprintf("`%v`\n"+
+		"%v, %v (`%v`)\n"+
+		"%v",
+		ip,
+		lookup["city"],
+		lookup["country"],
+		lookup["countryCode"],
+		lookup["isp"])
 	edit := m.EditText().ReplaceWith(output)
 
 	return edit, nil
