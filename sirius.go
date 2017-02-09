@@ -25,5 +25,8 @@ func (s *Service) Start(ctx context.Context, users []User) {
 		go cl.Start(ctx)
 	}
 
-	select {}
+	select {
+	case <-ctx.Done():
+		break
+	}
 }
