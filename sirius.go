@@ -37,11 +37,9 @@ func (s *Service) Start(ctx context.Context, users []User) {
 		s.startClient(&u)
 	}
 
-	for {
-		select {
-		case <-s.ctx.Done():
-			break
-		}
+	select {
+	case <-s.ctx.Done():
+		break
 	}
 }
 
