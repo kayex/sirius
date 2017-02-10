@@ -4,7 +4,6 @@ import "github.com/kayex/sirius/slack"
 
 type Message struct {
 	Text      string
-	Modified  bool
 	UserID    slack.UserID
 	Channel   string
 	Timestamp string
