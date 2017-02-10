@@ -45,6 +45,6 @@ func (id SecureID) Equals(o SecureID) bool {
 	return id.HashSum == o.HashSum
 }
 
-func (id SecureID) Empty() bool {
+func (id *SecureID) Empty() bool {
 	return id.HashSum == ""
 }
