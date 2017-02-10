@@ -2,23 +2,25 @@ package sirius
 
 import "strings"
 
-const commandPrefix = `!`
+const prefix = `!`
 
 type Command struct {
-	name string
+	Name string
+	Args []string
 }
 
-func NewCommand(name string) *Command {
-	return &Command{
-		name: name,
-	}
-}
+func (m *Message) Command(name string) (*Command, bool) {
+	cmd := prefix + name + " "
 
-func (c *Command) Match(m *Message) (string, bool) {
-	fullCommandName := commandPrefix + c.name + " "
-	if !strings.HasPrefix(m.Text, fullCommandName) {
-		return "", false
+	if strings.HasPrefix(m.Text, cmd) {
+		trim := strings.TrimPrefix(m.Text, cmd)
+		args := strings.Split(trim, " ")
+
+		return &Command{
+			Name: name,
+			Args: args,
+		}, true
 	}
 
-	return strings.TrimPrefix(m.Text, fullCommandName), true
+	return nil, false
 }

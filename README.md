@@ -64,7 +64,7 @@ Avoids breaking blockquotes that contain newlines.
 
 ### Building
 ```
-$ go build github.com/kayex/sirius/cmd/sirius
+$ go build github.com/kayex/sirius/cmd/sirius-local
 ```
 
 ### Running
@@ -79,9 +79,9 @@ Before starting the service, you need to create a `users.json` file in the same 
 ]
 ```
 
-You can then start the main service by simply running the `sirius` executable:
+You can then start the main service by simply running the `sirius-local` executable:
 ```
-$ ./sirius
+$ ./sirius-local
 ```
 
 ## Can I request a new extension?
@@ -93,7 +93,7 @@ Creating a new extension is only a matter of implementing the `Extension` interf
 package sirius
 
 type Extension interface {
-	Run(Message, ExtensionConfig) (error, MessageAction)
+	Run(Message, ExtensionConfig) (MessageAction, error)
 }
 ```
 
@@ -101,7 +101,7 @@ The `Run` function is called with every outgoing message captured via the RTM AP
 
 `MessageAction`s are returned by extensions to describe changes that should be made to the processed message. This includes things such as editing the message text or deleting the message entirely. Actions are accumulated by the extension runner and broadcasted via the RTM API in timed batches.
 
-Extensions that do not need to modify the message in any way can simply `return nil, NoAction()`.
+Extensions that do not need to modify the message in any way can simply `return NoAction(), nil`.
 
 An extension has exactly **2000 ms** to finish execution if it wishes to provide a `MessageAction` (other than `NoAction()`). Extensions executing past this deadline will be allowed to finish, but any message actions returned will be discarded.
 
@@ -116,7 +116,7 @@ type MessageAction interface {
 #### TextEditAction
 Modifications to the message text are easily done using `(*Message) EditText()`:
 ```go
-func (*ThumbsUp) Run(m Message, cfg ExtensionConfig) (error, MessageAction) {
+func (*ThumbsUp) Run(m Message, cfg ExtensionConfig) (MessageAction, error) {
 	edit := m.EditText()
 	
 	edit.Substitute("(y)", ":+1:")

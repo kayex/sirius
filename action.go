@@ -21,3 +21,19 @@ func NoAction() *EmptyAction {
 func (*EmptyAction) Perform(*Message) error {
 	return nil
 }
+
+/*
+Applies a MessageAction to a message, returning
+a bool indicating whether the message was actually
+modified or not.
+*/
+func (m *Message) perform(a MessageAction) (error, bool) {
+	oldText := m.Text
+	err := a.Perform(m)
+
+	if err != nil {
+		return err, false
+	}
+
+	return nil, m.Text != oldText
+}

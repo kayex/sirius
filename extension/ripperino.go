@@ -18,9 +18,9 @@ var endings = []string{
 
 type Ripperino struct{}
 
-func (*Ripperino) Run(m sirius.Message, cfg sirius.ExtensionConfig) (error, sirius.MessageAction) {
+func (*Ripperino) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.MessageAction, error) {
 	if !strings.HasPrefix(m.Text, base) {
-		return nil, sirius.NoAction()
+		return sirius.NoAction(), nil
 	}
 
 	edit := m.EditText()
@@ -29,10 +29,10 @@ func (*Ripperino) Run(m sirius.Message, cfg sirius.ExtensionConfig) (error, siri
 	if rand.Int()%10 == 1 {
 		edit.Substitute(base, fmt.Sprintf("~%s~ RAPPER GRINO", base))
 	} else {
-		edit.Append(" " + getRandomEnding())
+		edit.Substitute(base, fmt.Sprintf("%v %s", base, getRandomEnding()))
 	}
 
-	return nil, edit
+	return edit, nil
 }
 
 func getRandomEnding() string {

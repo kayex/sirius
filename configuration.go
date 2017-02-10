@@ -1,20 +1,12 @@
 package sirius
 
 type Configuration struct {
-	ID     string
-	Name   string
-	User   *User
-	EID    EID
-	Config map[string]interface{}
+	EID EID
+	Cfg ExtensionConfig
 }
 
-func NewConfiguration(usr *User, eid EID) Configuration {
+func NewConfiguration(eid EID) Configuration {
 	return Configuration{
-		User: usr,
-		EID:  eid,
+		EID: eid,
 	}
-}
-
-func (c *Configuration) SetConfig(cfg map[string]interface{}) {
-	c.Config = cfg
 }

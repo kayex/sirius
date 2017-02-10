@@ -7,33 +7,33 @@ import (
 	"github.com/kayex/sirius/config"
 )
 
-type StaticExtensionLoader struct {
-	cfg config.AppConfig
+type StaticLoader struct {
+	config config.AppConfig
 }
 
-func NewStaticExtensionLoader(cfg config.AppConfig) *StaticExtensionLoader {
-	return &StaticExtensionLoader{
-		cfg: cfg,
+func NewStaticLoader(cfg config.AppConfig) *StaticLoader {
+	return &StaticLoader{
+		config: cfg,
 	}
 }
 
-func (l *StaticExtensionLoader) Load(eid sirius.EID) (error, sirius.Extension) {
+func (l *StaticLoader) Load(eid sirius.EID) (sirius.Extension, error) {
 	switch eid {
 	case "thumbs_up":
-		return nil, &ThumbsUp{}
+		return &ThumbsUp{}, nil
 	case "ripperino":
-		return nil, &Ripperino{}
+		return &Ripperino{}, nil
 	case "replacer":
-		return nil, &Replacer{}
+		return &Replacer{}, nil
 	case "quotes":
-		return nil, &Quotes{}
+		return &Quotes{}, nil
 	case "ip_lookup":
-		return nil, &IPLookup{}
+		return &IPLookup{}, nil
 	case "geocode":
-		return nil, &Geocode{
-			APIKey: l.cfg.Maps.APIKey,
-		}
+		return &Geocode{
+			APIKey: l.config.Maps.APIKey,
+		}, nil
 	}
 
-	return errors.New(fmt.Sprintf("Invalid eid: %v", eid)), nil
+	return nil, errors.New(fmt.Sprintf("Invalid eid: %v", eid))
 }

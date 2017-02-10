@@ -1,36 +1,49 @@
 package extension
 
 import (
-	"github.com/kayex/sirius"
 	"encoding/json"
-	"net/http"
 	"errors"
 	"fmt"
+	"github.com/kayex/sirius"
+	"net/http"
 )
 
-type IPLookup struct {}
+type IPLookup struct{}
 
-func (ipl *IPLookup) Run(m sirius.Message, cfg sirius.ExtensionConfig) (error, sirius.MessageAction) {
-	ip, run := sirius.NewCommand("ip").Match(&m)
+func (ipl *IPLookup) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.MessageAction, error) {
+	cmd, match := m.Command("ip")
 
-	if !run {
-		return nil, sirius.NoAction()
+	if !match {
+		return sirius.NoAction(), nil
 	}
+
+	ip := cmd.Args[0]
 
 	var lookup map[string]interface{}
 
 	err, lookup := ipLookup(ip)
 
 	if err != nil {
-		return errors.New(fmt.Sprintf("IP Lookup error: %v", err)), nil
+		return nil, errors.New(fmt.Sprintf("IP Lookup error: %v", err))
 	}
 
-	output := fmt.Sprintf("`%v`\n%v, %v (`%v`)\n%v", ip, lookup["city"], lookup["country"], lookup["countryCode"], lookup["isp"])
+	/*
+		IP
+		City, Country (CODE)
+		ISP
+	*/
+	output := fmt.Sprintf("`%v`\n"+
+		"%v, %v (`%v`)\n"+
+		"%v",
+		ip,
+		lookup["city"],
+		lookup["country"],
+		lookup["countryCode"],
+		lookup["isp"])
 	edit := m.EditText().ReplaceWith(output)
 
-	return nil, edit
+	return edit, nil
 }
-
 
 func ipLookup(ip string) (error, map[string]interface{}) {
 	url := "http://ip-api.com/json/" + ip

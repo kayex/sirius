@@ -17,6 +17,7 @@ edit.Substitute("foo", "bar")
 edit.Append("-ending")
 
 */
+
 type TextEditAction struct {
 	mutations []TextMutation
 }
@@ -62,9 +63,6 @@ func (edit *TextEditAction) add(m TextMutation) {
 	edit.mutations = append(edit.mutations, m)
 }
 
-/*
-TextTransform represents a string mutation
-*/
 type TextMutation interface {
 	Apply(text string) string
 }
