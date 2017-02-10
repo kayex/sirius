@@ -17,8 +17,8 @@ func main() {
 		panic(err)
 	}
 
-	loader := extension.NewStaticLoader(cfg)
-	service := sirius.NewService(loader)
+	l := extension.NewStaticLoader(cfg)
+	s := sirius.NewService(l)
 
-	service.Start(context.TODO(), users)
+	s.Start(context.TODO(), users)
 }
