@@ -26,7 +26,7 @@ func NewRemote(url, token string) *Remote {
 	}
 }
 
-func (ru *RemoteUser) convert() *User {
+func (ru *RemoteUser) ToUser() *User {
 	u := NewUser(ru.Token)
 	u.ID = slack.SecureID{ru.IDHash}
 
@@ -50,7 +50,7 @@ func (r *Remote) request(endpoint string) (*http.Response, error) {
 }
 
 func (r *Remote) GetUsers() ([]User, error) {
-	var remoteUsers []RemoteUser
+	var ru []RemoteUser
 	res, err := r.request("/configs")
 
 	if err != nil {
@@ -58,14 +58,14 @@ func (r *Remote) GetUsers() ([]User, error) {
 	}
 	defer res.Body.Close()
 
-	if err = json.NewDecoder(res.Body).Decode(&remoteUsers); err != nil {
+	if err = json.NewDecoder(res.Body).Decode(&ru); err != nil {
 		return nil, err
 	}
 
 	var users []User
 
-	for _, ru := range remoteUsers {
-		users = append(users, *ru.convert())
+	for _, u := range ru {
+		users = append(users, *u.ToUser())
 	}
 
 	return users, nil
