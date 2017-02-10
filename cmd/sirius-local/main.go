@@ -24,7 +24,7 @@ func main() {
 	users := createUsers(getTokensFromJSON())
 
 	loader := extension.NewStaticLoader(cfg)
-	service := sirius.NewService(loader, cfg)
+	service := sirius.NewService(loader)
 
 	service.Start(context.TODO(), users)
 }
