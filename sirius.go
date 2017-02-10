@@ -16,8 +16,10 @@ func NewService(l ExtensionLoader) *Service {
 }
 
 func (s *Service) Start(ctx context.Context, users []User) {
-	for _, user := range users {
-		cl := NewClient(&user, s.loader)
+	for _, u := range users {
+		u := u
+		cl := NewClient(&u, s.loader)
+		s.clients = append(s.clients, *cl)
 
 		go cl.Start(ctx)
 	}
