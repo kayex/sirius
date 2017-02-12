@@ -13,9 +13,9 @@ type Remote struct {
 }
 
 type RemoteUser struct {
-	IDHash string                 `json:"id_hash_sha256"`
-	Token  string                 `json:"slack_token"`
-	Config map[string]interface{} `json:"config"`
+	IDHash string      `json:"id_hash_sha256"`
+	Token  string      `json:"slack_token"`
+	Config interface{} `json:"config"`
 }
 
 func NewRemote(url, token string) *Remote {
@@ -30,14 +30,22 @@ func (ru *RemoteUser) ToUser() *User {
 	u := NewUser(ru.Token)
 	u.ID = slack.SecureID{ru.IDHash}
 
-	for eid, c := range ru.Config {
-		cfg := NewConfiguration(EID(eid))
+	switch cfg := ru.Config.(type) {
+	case map[string]interface{}:
+		for eid, c := range cfg {
+			cfg := NewConfiguration(EID(eid))
 
-		if conf, ok := c.(ExtensionConfig); ok {
-			cfg.Cfg = conf
+			if conf, ok := c.(map[string]interface{}); ok {
+				cfg.Cfg = conf
+			}
+
+			u.Configurations = append(u.Configurations, &cfg)
 		}
-
-		u.Configurations = append(u.Configurations, &cfg)
+	case []interface{}:
+		for eid := range cfg {
+			c := NewConfiguration(EID(eid))
+			u.Configurations = append(u.Configurations, &c)
+		}
 	}
 
 	return u
