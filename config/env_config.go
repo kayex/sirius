@@ -15,7 +15,7 @@ func FromEnv() AppConfig {
 			Password: os.Getenv("DB_PASSWORD"),
 		},
 		Remote: RemoteConfig{
-			URL:   os.Getenv("REMOTE_URL"),
+			URL:   os.Getenv("REMOTE_HOST"),
 			Token: os.Getenv("REMOTE_TOKEN"),
 		},
 		Maps: MapsConfig{
