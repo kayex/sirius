@@ -32,6 +32,12 @@
 			"revisionTime": "2017-01-26T11:54:58Z"
 		},
 		{
+			"checksumSHA1": "EFv2fHTe/0194O+Zs+z8wp+GQLk=",
+			"path": "golang.org/x/net/context/ctxhttp",
+			"revision": "61557ac0112b576429a0df080e1c2cef5dfbb642",
+			"revisionTime": "2017-01-26T11:54:58Z"
+		},
+		{
 			"checksumSHA1": "r5XsDTZuQRg+Qj1PR6NOxy/MEQM=",
 			"path": "golang.org/x/net/websocket",
 			"revision": "4cfeeeb61ae8daa2a4b06572024786e56f23504c",
