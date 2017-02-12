@@ -35,7 +35,7 @@ func (s *SyncedService) Start(ctx context.Context, u []User) {
 
 type MQTTSync struct {
 	mqtt    *mqtt.MQTT
-	topic string
+	topic   string
 	rmt     *Remote
 	service *Service
 }
@@ -49,9 +49,9 @@ func (s *Service) WithSync(sync Sync) *SyncedService {
 
 func NewMQTTSync(rmt *Remote, cfg mqtt.Config, topic string) *MQTTSync {
 	return &MQTTSync{
-		mqtt: mqtt.New(cfg),
+		mqtt:  mqtt.New(cfg),
 		topic: topic,
-		rmt:  rmt,
+		rmt:   rmt,
 	}
 }
 
