@@ -45,5 +45,8 @@
 			"revisionTime": "2017-01-30T05:32:17Z"
 		}
 	],
-	"rootPath": "github.com/kayex/sirius"
+	"rootPath": "github.com/kayex/sirius",
+	"heroku": {
+		"install": ["./cmd/sirius-cloud"]
+	}
 }
