@@ -8,7 +8,7 @@ import (
 	"net"
 )
 
-type MQTTConfig struct {
+type Config struct {
 	Host string
 	Port string
 	User string
@@ -17,7 +17,7 @@ type MQTTConfig struct {
 }
 
 type MQTT struct {
-	MQTTConfig
+	Config
 	Messages chan Publish
 	cl       *mqtt.ClientConn
 }
@@ -28,14 +28,14 @@ type Publish struct {
 	Msg   string
 }
 
-func New(cfg MQTTConfig) *MQTT {
+func New(cfg Config) *MQTT {
 	return &MQTT{
-		MQTTConfig: cfg,
+		Config: cfg,
 		Messages:   make(chan Publish),
 	}
 }
 
-func (m *MQTT) Connect(ctx context.Context) {
+func (m *MQTT) Connect(ctx context.Context) error {
 	conn, err := net.Dial("tcp", m.Host+":"+m.Port)
 
 	if err != nil {
@@ -45,9 +45,15 @@ func (m *MQTT) Connect(ctx context.Context) {
 	m.cl = mqtt.NewClientConn(conn)
 	m.cl.ClientId = m.CID
 
-	m.cl.Connect(m.User, m.Pass)
+	err = m.cl.Connect(m.User, m.Pass)
+
+	if err != nil {
+		return err
+	}
 
 	go m.listen(ctx)
+
+	return nil
 }
 
 func (m *MQTT) Subscribe(topic string) {
@@ -63,16 +69,13 @@ func (m *MQTT) Subscribe(topic string) {
 }
 
 func (m *MQTT) listen(ctx context.Context) {
-	defer m.cl.Disconnect()
-	defer close(m.Messages)
-
 Listen:
 	for {
 		select {
-		case p := <-m.cl.Incoming:
-			m.receive(p)
 		case <-ctx.Done():
 			break Listen
+		case p := <-m.cl.Incoming:
+			m.receive(p)
 		}
 	}
 }

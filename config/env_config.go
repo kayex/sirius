@@ -1,6 +1,9 @@
 package config
 
-import "os"
+import (
+	"github.com/kayex/sirius/mqtt"
+	"os"
+)
 
 func FromEnv() AppConfig {
 	return AppConfig{
@@ -17,6 +20,16 @@ func FromEnv() AppConfig {
 		},
 		Maps: MapsConfig{
 			APIKey: os.Getenv("MAPS_API_KEY"),
+		},
+		MQTT: MQTTConfig{
+			Config: mqtt.Config{
+				Host: os.Getenv("SYNC_HOST"),
+				Port: os.Getenv("SYNC_PORT"),
+				User: os.Getenv("SYNC_USER"),
+				Pass: os.Getenv("SYNC_PASS"),
+				CID:  os.Getenv("SYNC_CID"),
+			},
+			Topic: os.Getenv("SYNC_TOPIC"),
 		},
 	}
 }
