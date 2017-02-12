@@ -9,16 +9,18 @@ import (
 
 func main() {
 	cfg := config.FromEnv()
-
 	rmt := sirius.NewRemote(cfg.Remote.URL, cfg.Remote.Token)
+
 	users, err := rmt.GetUsers()
 
 	if err != nil {
 		panic(err)
 	}
 
-	l := extension.NewStaticLoader(cfg)
-	s := sirius.NewService(l)
+	ld := extension.NewStaticLoader(cfg)
+	sync := sirius.NewMQTTSync(rmt, cfg.MQTT.Config, cfg.MQTT.Topic)
 
-	s.Start(context.TODO(), users)
+	s := sirius.NewService(ld).WithSync(sync)
+
+	s.Start(context.Background(), users)
 }
