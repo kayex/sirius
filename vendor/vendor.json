@@ -15,20 +15,6 @@
 			"revisionTime": "2016-02-12T11:29:54Z"
 		},
 		{
-			"checksumSHA1": "oONaja1SA8xsG5eqRKz8UZ9IHVI=",
-			"origin": "googlemaps.github.io/maps/vendor/github.com/kr/pretty",
-			"path": "github.com/kr/pretty",
-			"revision": "61ce2cef47693eb7afabab2ae77fd218f928a0c4",
-			"revisionTime": "2017-01-30T05:32:17Z"
-		},
-		{
-			"checksumSHA1": "yHHAiCGQPKOlbQZKsxZrY/PL+cw=",
-			"origin": "googlemaps.github.io/maps/vendor/github.com/kr/text",
-			"path": "github.com/kr/text",
-			"revision": "61ce2cef47693eb7afabab2ae77fd218f928a0c4",
-			"revisionTime": "2017-01-30T05:32:17Z"
-		},
-		{
 			"checksumSHA1": "Tlq7BNgLVmyPRVwFE7dBMt57+ro=",
 			"path": "github.com/nlopes/slack",
 			"revision": "e595e9d8590a04ff76407e4e7d1791d25b095c66",
@@ -41,12 +27,6 @@
 			"revisionTime": "2016-10-30T07:22:20Z"
 		},
 		{
-			"checksumSHA1": "LolXS3+kS96mT/9wLQVhVmeIDCU=",
-			"origin": "googlemaps.github.io/maps/vendor/golang.org/x/net/context/ctxhttp",
-			"path": "golang.org/x/net/context/ctxhttp",
-			"revision": "61ce2cef47693eb7afabab2ae77fd218f928a0c4",
-			"revisionTime": "2017-01-30T05:32:17Z"
-		},
 		{
 			"checksumSHA1": "r5XsDTZuQRg+Qj1PR6NOxy/MEQM=",
 			"path": "golang.org/x/net/websocket",
