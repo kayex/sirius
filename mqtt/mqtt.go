@@ -84,12 +84,10 @@ func (m *MQTT) receive(p *proto.Publish) {
 		panic(err)
 	}
 
-	s := buf.String()
-
 	pb := Publish{
 		Topic: p.TopicName,
 		ID:    p.MessageId,
-		Msg:   s,
+		Msg:   buf.String(),
 	}
 
 	m.Messages <- pb
