@@ -5,6 +5,7 @@ import (
 	"github.com/kayex/sirius/config"
 	"github.com/kayex/sirius/extension"
 	"golang.org/x/net/context"
+	"fmt"
 )
 
 func main() {
@@ -15,6 +16,10 @@ func main() {
 
 	if err != nil {
 		panic(err)
+	}
+
+	for _, u := range users {
+		fmt.Printf("[%v] %v cfgs\n", u.Token, len(u.Configurations))
 	}
 
 	ld := extension.NewStaticLoader(cfg)
