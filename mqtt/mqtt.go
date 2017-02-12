@@ -39,7 +39,7 @@ func (m *MQTT) Connect(ctx context.Context) error {
 	conn, err := net.Dial("tcp", m.Host+":"+m.Port)
 
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	m.cl = mqtt.NewClientConn(conn)
