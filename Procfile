@@ -1,1 +1,1 @@
-sirius: ./sirius-cloud
+sirius: sirius-cloud
