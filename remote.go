@@ -57,6 +57,23 @@ func (r *Remote) request(endpoint string) (*http.Response, error) {
 	return r.client.Get(url)
 }
 
+func (r *Remote) GetUser(token string) (*User, error) {
+	var ru RemoteUser
+
+	res, err := r.request("/configs/" + token)
+
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	if err = json.NewDecoder(res.Body).Decode(&ru); err != nil {
+		return nil, err
+	}
+
+	return ru.ToUser(), nil
+}
+
 func (r *Remote) GetUsers() ([]User, error) {
 	var ru []RemoteUser
 	res, err := r.request("/configs")
