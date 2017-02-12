@@ -9,7 +9,7 @@ import (
 
 func main() {
 	cfg := config.FromEnv()
-	rmt := sirius.NewRemote(cfg.Remote.URL, cfg.Remote.Token)
+	rmt := sirius.NewRemote(cfg.Remote.Host, cfg.Remote.Token)
 
 	users, err := rmt.GetUsers()
 
