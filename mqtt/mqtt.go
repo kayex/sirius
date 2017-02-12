@@ -30,8 +30,8 @@ type Publish struct {
 
 func New(cfg Config) *MQTT {
 	return &MQTT{
-		Config: cfg,
-		Messages:   make(chan Publish),
+		Config:   cfg,
+		Messages: make(chan Publish),
 	}
 }
 
