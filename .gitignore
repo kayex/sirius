@@ -23,10 +23,6 @@ _testmain.go
 *.test
 *.prof
 
-# External dependencies
-vendor/*
-!vendor/vendor.json
-
 # JetBrains IDE
 .idea
 
