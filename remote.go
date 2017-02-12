@@ -7,7 +7,7 @@ import (
 )
 
 type Remote struct {
-	url    string
+	host   string
 	token  string
 	client *http.Client
 }
@@ -18,9 +18,9 @@ type RemoteUser struct {
 	Config interface{} `json:"config"`
 }
 
-func NewRemote(url, token string) *Remote {
+func NewRemote(host, token string) *Remote {
 	return &Remote{
-		url:    url,
+		host:   host,
 		token:  token,
 		client: &http.Client{},
 	}
@@ -52,7 +52,7 @@ func (ru *RemoteUser) ToUser() *User {
 }
 
 func (r *Remote) request(endpoint string) (*http.Response, error) {
-	url := r.url + endpoint + "?token=" + r.token
+	url := r.host + endpoint + "?token=" + r.token
 
 	return r.client.Get(url)
 }

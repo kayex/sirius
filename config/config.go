@@ -22,7 +22,7 @@ type DBConfig struct {
 }
 
 type RemoteConfig struct {
-	URL   string
+	Host  string
 	Token string
 }
 

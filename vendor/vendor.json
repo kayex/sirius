@@ -8,6 +8,12 @@
 	"ignore": "",
 	"package": [
 		{
+			"checksumSHA1": "1fRXowiFWTHcHcJR/EoH50VxW94=",
+			"path": "github.com/huin/gobinarytest",
+			"revision": "de322f729af68c9e5ecde2bff780d105f0fbe745",
+			"revisionTime": "2014-02-11T22:50:34Z"
+		},
+		{
 			"checksumSHA1": "JEA7ILZ5YctdrBiwlf2IIea6tk8=",
 			"path": "github.com/huin/mqtt",
 			"revision": "c2d0e7ca9387fcfe29274b4b32ac80798d57ad4d",
@@ -18,6 +24,18 @@
 			"path": "github.com/jeffallen/mqtt",
 			"revision": "36aebe6d2ee4168d176bc3ef22c875b387cb0b19",
 			"revisionTime": "2016-02-12T11:29:54Z"
+		},
+		{
+			"checksumSHA1": "oONaja1SA8xsG5eqRKz8UZ9IHVI=",
+			"path": "github.com/kr/pretty",
+			"revision": "cfb55aafdaf3ec08f0db22699ab822c50091b1c4",
+			"revisionTime": "2016-08-23T17:07:15Z"
+		},
+		{
+			"checksumSHA1": "yHHAiCGQPKOlbQZKsxZrY/PL+cw=",
+			"path": "github.com/kr/text",
+			"revision": "7cafcd837844e784b526369c9bce262804aebc60",
+			"revisionTime": "2016-05-04T02:26:26Z"
 		},
 		{
 			"checksumSHA1": "Tlq7BNgLVmyPRVwFE7dBMt57+ro=",
