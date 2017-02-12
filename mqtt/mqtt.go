@@ -57,6 +57,9 @@ func (m *MQTT) Connect(ctx context.Context) error {
 }
 
 func (m *MQTT) Subscribe(topic string) {
+	if topic == "" {
+		return
+	}
 
 	sub := []proto.TopicQos{
 		{
