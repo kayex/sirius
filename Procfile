@@ -1,1 +1,1 @@
-sirius: sirius
+sirius: sirius-cloud

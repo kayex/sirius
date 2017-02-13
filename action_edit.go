@@ -10,11 +10,15 @@ edits to the message Text property
 
 Usage:
 
-var msg Message
+msg := Message{
+	Text: "foo bar",
+}
 
 edit := msg.EditText()
 edit.Substitute("foo", "bar")
-edit.Append("-ending")
+edit.Append(" baz")
+
+fmt.Println(msg.Text) // "bar bar baz"
 
 */
 
