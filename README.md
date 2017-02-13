@@ -19,6 +19,7 @@ Converts `(y)` to `👍` in all outgoing messages.
 
 >**kayex**: Awesome 👍
 
+---
 
 ### geocode
 Type `!address` followed by any sort of geographical location, and the `geocode` extension will fetch the exact address and coordinates for you.
@@ -29,6 +30,8 @@ Type `!address` followed by any sort of geographical location, and the `geocode`
 
 >**kayex**: **350 5th Ave, New York, NY 10118, USA**  
 `(40.748441, -73.985664)`
+
+--
 
 ### ip_lookup
 Type `!ip` followed by an IP address to fetch related geolocation information.
@@ -45,6 +48,8 @@ Google
 Chicago, United States (`US`)  
 Google
 
+---
+
 ### quotes
 Avoids breaking blockquotes that contain newlines.
 
@@ -58,6 +63,7 @@ Avoids breaking blockquotes that contain newlines.
            >a multi-line  
 	   >quote.
 
+---
 
 ## Getting started
 Sirius is available as a free, hosted service at http://adsa.se/sirius.
