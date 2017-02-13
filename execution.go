@@ -38,16 +38,16 @@ func NewAsyncRunner() *AsyncRunner {
 }
 
 func (r *AsyncRunner) Run(exe []Execution, res chan<- ExecutionResult, timeout time.Duration) {
-	act := make(chan ExecutionResult, len(exe))
+	er := make(chan ExecutionResult, len(exe))
 
 	for _, e := range exe {
-		r.execute(e, act)
+		r.execute(e, er)
 	}
 
 ActionReceive:
 	for range exe {
 		select {
-		case res <- <-act:
+		case res <- <-er:
 		case <-time.After(timeout):
 			break ActionReceive
 		}
