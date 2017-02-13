@@ -13,7 +13,7 @@ type Remote struct {
 }
 
 type RemoteUser struct {
-	IDHash string      `json:"id_hash_sha256"`
+	IDHash string      `json:"sirius_id"`
 	Token  string      `json:"slack_token"`
 	Config interface{} `json:"config"`
 }
@@ -57,10 +57,10 @@ func (r *Remote) request(endpoint string) (*http.Response, error) {
 	return r.client.Get(url)
 }
 
-func (r *Remote) GetUser(token string) (*User, error) {
+func (r *Remote) GetUser(id slack.SecureID) (*User, error) {
 	var ru RemoteUser
 
-	res, err := r.request("/configs/" + token)
+	res, err := r.request("/configs/" + id.HashSum)
 
 	if err != nil {
 		return nil, err

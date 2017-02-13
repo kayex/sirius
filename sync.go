@@ -4,6 +4,7 @@ import (
 	"github.com/kayex/sirius/mqtt"
 	"golang.org/x/net/context"
 	"strings"
+	"github.com/kayex/sirius/slack"
 )
 
 type SyncAction string
@@ -16,7 +17,7 @@ const (
 
 type SyncMessage struct {
 	Type  SyncAction
-	Token string
+	ID slack.SecureID
 }
 
 type Sync interface {
@@ -77,10 +78,10 @@ func (m *MQTTSync) start() {
 
 		switch msg.Type {
 		case UPDATE:
-			m.service.DropUserWithToken(msg.Token)
+			m.service.DropUser(msg.ID)
 			fallthrough
 		case NEW:
-			u, err := m.rmt.GetUser(msg.Token)
+			u, err := m.rmt.GetUser(msg.ID)
 
 			if err != nil {
 				break
@@ -88,7 +89,7 @@ func (m *MQTTSync) start() {
 
 			m.service.AddUser(u)
 		case DELETE:
-			m.service.DropUserWithToken(msg.Token)
+			m.service.DropUser(msg.ID)
 		}
 	}
 }
@@ -101,7 +102,7 @@ func parseSyncMessage(msg string) (*SyncMessage, bool) {
 	}
 
 	msgType := SyncAction(split[0])
-	token := split[1]
+	id := slack.SecureID{split[1]}
 
 	switch msgType {
 	case NEW:
@@ -111,7 +112,7 @@ func parseSyncMessage(msg string) (*SyncMessage, bool) {
 	case DELETE:
 		return &SyncMessage{
 			Type:  msgType,
-			Token: token,
+			ID: id,
 		}, true
 	default:
 		return nil, false

@@ -2,6 +2,7 @@ package sirius
 
 import (
 	"golang.org/x/net/context"
+	"github.com/kayex/sirius/slack"
 )
 
 type Service struct {
@@ -47,8 +48,8 @@ func (s *Service) AddUser(u *User) {
 	s.startClient(u)
 }
 
-func (s *Service) DropUserWithToken(t string) bool {
-	if cl, ok := s.clients[t]; ok {
+func (s *Service) DropUser(id slack.SecureID) bool {
+	if cl, ok := s.clients[id.HashSum]; ok {
 		cl.Cancel()
 
 		return true
@@ -59,7 +60,7 @@ func (s *Service) DropUserWithToken(t string) bool {
 
 func (s *Service) startClient(u *User) {
 	// Make sure we stop any existing client for the same user
-	if ex, ok := s.clients[u.Token]; ok {
+	if ex, ok := s.clients[u.ID.HashSum]; ok {
 		ex.Cancel()
 	}
 
@@ -68,5 +69,5 @@ func (s *Service) startClient(u *User) {
 
 	go cl.Start(ctx)
 
-	s.clients[u.Token] = cl
+	s.clients[u.ID.HashSum] = cl
 }
