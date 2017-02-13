@@ -47,9 +47,9 @@ func (r *AsyncRunner) Run(exe []Execution, res chan<- ExecutionResult, timeout t
 ActionReceive:
 	for range exe {
 		select {
-		case res <- <-er:
 		case <-time.After(timeout):
 			break ActionReceive
+		case res <- <-er:
 		}
 	}
 
