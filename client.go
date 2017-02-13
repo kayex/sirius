@@ -89,6 +89,10 @@ func (c *Client) run(m *Message) {
 			panic(r.Err)
 		}
 
+		if _, ok := r.Action.(*EmptyAction); ok {
+			continue
+		}
+
 		act = append(act, r.Action)
 	}
 
