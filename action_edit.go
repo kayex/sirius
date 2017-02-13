@@ -63,6 +63,14 @@ func (edit *TextEditAction) Append(app string) *TextEditAction {
 	return edit
 }
 
+func (edit *TextEditAction) Prepend(pre string) *TextEditAction {
+	edit.add(&PrependMutation{
+		Prefix: pre,
+	})
+
+	return edit
+}
+
 func (edit *TextEditAction) add(m TextMutation) {
 	edit.mutations = append(edit.mutations, m)
 }
@@ -84,6 +92,10 @@ type AppendMutation struct {
 	Appendix string
 }
 
+type PrependMutation struct {
+	Prefix string
+}
+
 func (rm *ReplaceMutation) Apply(text string) string {
 	return rm.Replacement
 }
@@ -98,4 +110,12 @@ func (am *AppendMutation) Apply(text string) string {
 	}
 
 	return text + am.Appendix
+}
+
+func (pm *PrependMutation) Apply(text string) string {
+	if len(pm.Prefix) == 0 {
+		return text
+	}
+
+	return pm.Prefix + text
 }
