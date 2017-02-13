@@ -2,9 +2,9 @@ package sirius
 
 import (
 	"github.com/kayex/sirius/mqtt"
+	"github.com/kayex/sirius/slack"
 	"golang.org/x/net/context"
 	"strings"
-	"github.com/kayex/sirius/slack"
 )
 
 type SyncAction string
@@ -16,8 +16,8 @@ const (
 )
 
 type SyncMessage struct {
-	Type  SyncAction
-	ID slack.SecureID
+	Type SyncAction
+	ID   slack.SecureID
 }
 
 type Sync interface {
@@ -111,8 +111,8 @@ func parseSyncMessage(msg string) (*SyncMessage, bool) {
 		fallthrough
 	case DELETE:
 		return &SyncMessage{
-			Type:  msgType,
-			ID: id,
+			Type: msgType,
+			ID:   id,
 		}, true
 	default:
 		return nil, false

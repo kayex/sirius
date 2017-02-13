@@ -1,8 +1,8 @@
 package sirius
 
 import (
-	"golang.org/x/net/context"
 	"github.com/kayex/sirius/slack"
+	"golang.org/x/net/context"
 )
 
 type Service struct {
