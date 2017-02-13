@@ -1,4 +1,6 @@
 # sirius ⚡
+![](https://travis-ci.org/kayex/sirius.svg?branch=develop)
+
 Small extensions that improve your outgoing Slack messages in real-time. Written in Go.
 
 For example, the `thumbs_up` extension automatically swaps all occurrences of `(y)` in your messages for `👍` (the thumbs up emojii).
