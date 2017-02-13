@@ -57,7 +57,6 @@ func NewMQTTSync(rmt *Remote, cfg mqtt.Config, topic string) *MQTTSync {
 
 func (m *MQTTSync) Sync(s *Service) {
 	m.service = s
-
 	err := m.mqtt.Connect(context.TODO())
 
 	if err != nil {
@@ -65,7 +64,6 @@ func (m *MQTTSync) Sync(s *Service) {
 	}
 
 	m.mqtt.Subscribe(m.topic)
-
 	m.start()
 }
 
