@@ -1,9 +1,9 @@
 package sirius
 
 import (
+	"github.com/kayex/sirius/slack"
 	"testing"
 	"time"
-	"github.com/kayex/sirius/slack"
 )
 
 type TestExtension struct {
@@ -38,11 +38,11 @@ func TestAsyncRunner_Run_RespectsTimeout(t *testing.T) {
 	r := NewAsyncRunner()
 	res := make(chan ExecutionResult, 1)
 
-	r.Run(exe, res, time.Millisecond * 1)
+	r.Run(exe, res, time.Millisecond*1)
 
 	count := 0
 
-	for er := range res {
+	for range res {
 		count++
 		if count > 1 {
 			t.Fatal("Expected only 1 ExecutionResult but received 2")
