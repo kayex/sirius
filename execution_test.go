@@ -44,8 +44,6 @@ func TestAsyncRunner_Run_RespectsTimeout(t *testing.T) {
 
 	for er := range res {
 		count++
-		t.Log(er)
-
 		if count > 1 {
 			t.Fatal("Expected only 1 ExecutionResult but received 2")
 		}
