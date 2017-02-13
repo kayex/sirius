@@ -59,8 +59,10 @@ Avoids breaking blockquotes that contain newlines.
 	   >quote.
 
 
-## Setup
-***A cloud version of Sirius is coming soon, which will allow you to use sirius without installing anything.***
+## Getting started
+Sirius is available as a free, hosted service at http://adsa.se/sirius.
+
+You can also run Sirius yourself by following the instructions below.
 
 ### Building
 ```
@@ -68,9 +70,7 @@ $ go build github.com/kayex/sirius/cmd/sirius-local
 ```
 
 ### Running
-Sirius is run as a standalone service, which means it does *not* have to be run on the same device that you are messaging from.
-
-Before starting the service, you need to create a `users.json` file in the same directory as the executable. The file should consist of a single JSON array containing OAuth tokens for the Slack accounts you wish to enable Sirius for:
+Before starting the service, a `users.json` file needs to be created in the same directory as the executable will run from. The file should consist of a single JSON array containing OAuth tokens for the Slack accounts that Sirius should be enabled for:
 
 **users.json**
 ```json
