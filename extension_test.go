@@ -40,7 +40,7 @@ func testingExtensionConfig() ExtensionConfig {
 		"float_1.1":    1.1,
 		"bool_true":    true,
 		"bool_false":   false,
-		"string":       "Hello World!",
+		"string_hello": "hello",
 		"string_empty": "",
 		"list":         []string{"Hit", "Me", "Up"},
 	}
@@ -98,7 +98,7 @@ func TestExtensionConfig_String(t *testing.T) {
 			return cfg.String(k, "Darth Vader")
 		},
 		exp: valueMatches{
-			"string":       "Hello World!",
+			"string_hello": "hello",
 			"string_empty": "",
 		},
 		def: "Darth Vader",
@@ -118,7 +118,7 @@ func TestExtensionConfig_Read(t *testing.T) {
 			"float_1.1":    1.1,
 			"bool_true":    true,
 			"bool_false":   false,
-			"string":       "Hello World!",
+			"string_hello": "hello",
 			"string_empty": "",
 		},
 		def: nil,
