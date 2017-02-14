@@ -47,7 +47,7 @@ func (c *Client) Start(ctx context.Context) {
 }
 
 func (c *Client) authenticate() error {
-	for c.user.ID.Empty() {
+	for c.user.ID.Incomplete() {
 		select {
 		case id := <-c.conn.Auth():
 			c.user.ID = id.Secure()
