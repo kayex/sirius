@@ -39,7 +39,7 @@ func (cfg ExtensionConfig) Integer(key string, def int) int {
 	return def
 }
 
-func (cfg ExtensionConfig) Boolean(key string, def bool) bool {
+func (cfg ExtensionConfig) Boolean(key string) bool {
 	if val, ok := cfg[key]; ok {
 		switch b := val.(type) {
 		case bool:
@@ -54,7 +54,7 @@ func (cfg ExtensionConfig) Boolean(key string, def bool) bool {
 		}
 	}
 
-	return def
+	return false
 }
 
 func (cfg ExtensionConfig) Float(key string, def float64) float64 {
