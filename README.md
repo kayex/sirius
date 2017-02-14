@@ -21,6 +21,7 @@ Converts `(y)` to `👍` in all outgoing messages.
 
 >**kayex**: Awesome 👍
 
+--
 
 ### geocode
 Type `!address` followed by any sort of geographical location, and the `geocode` extension will fetch the exact address and coordinates for you.
@@ -32,16 +33,24 @@ Type `!address` followed by any sort of geographical location, and the `geocode`
 >**kayex**: **350 5th Ave, New York, NY 10118, USA**  
 `(40.748441, -73.985664)`
 
-### ip-lookup
-Type `!ip-lookup` followed by an IP address to fetch related geolocation information.
+--
 
->**kayex**: !ip 8.8.8.8
+### ip_lookup
+Type `!ip` followed by an IP address to fetch related geolocation information.
+
+>**kayex**: !ip 8.8.8.8  
+>**kayex**: !ip 2001:4860:4860::8888 // IPv6
 
 ⚡
 
 >**kayex**: `8.8.8.8`  
 Mountain View, United States (`US`)  
+Google  
+>**kayex**: `2001:4860:4860::8888`  
+Chicago, United States (`US`)  
 Google
+
+--
 
 ### quotes
 Avoids breaking blockquotes that contain newlines.
@@ -56,9 +65,12 @@ Avoids breaking blockquotes that contain newlines.
            >a multi-line  
 	   >quote.
 
+--
 
-## Setup
-***A cloud version of Sirius is coming soon, which will allow you to use sirius without installing anything.***
+## Getting started
+Sirius is available as a free, hosted service at http://adsa.se/sirius.
+
+You can also run Sirius yourself by following the instructions below.
 
 ### Building
 ```
@@ -66,9 +78,7 @@ $ go build github.com/kayex/sirius/cmd/sirius-local
 ```
 
 ### Running
-Sirius is run as a standalone service, which means it does *not* have to be run on the same device that you are messaging from.
-
-Before starting the service, you need to create a `users.json` file in the same directory as the executable. The file should consist of a single JSON array containing OAuth tokens for the Slack accounts you wish to enable Sirius for:
+Before starting the service, a `users.json` file needs to be created in the same directory as the executable will run from. The file should consist of a single JSON array containing OAuth tokens for the Slack accounts that Sirius should be enabled for:
 
 **users.json**
 ```json
