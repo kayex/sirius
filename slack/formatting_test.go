@@ -38,6 +38,6 @@ func TestFormattingCode(t *testing.T) {
 	act := code(s)
 
 	if act != exp {
-		t.Fatalf("Expected code(%s) to be (%s), got (%)", s, exp, act)
+		t.Fatalf("Expected code(%s) to be (%s), got (%s)", s, exp, act)
 	}
 }
