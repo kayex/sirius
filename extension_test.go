@@ -42,7 +42,6 @@ func testingExtensionConfig() ExtensionConfig {
 		"bool_false":   false,
 		"string_hello": "hello",
 		"string_empty": "",
-		"list":         []string{"Hit", "Me", "Up"},
 	}
 
 }
@@ -127,25 +126,31 @@ func TestExtensionConfig_Read(t *testing.T) {
 
 func TestExtensionConfig_List(t *testing.T) {
 	cfg := testingExtensionConfig()
+	cfg["list"] = []string{"Hit", "Me", "Up"}
 
-	exp := map[string]bool{
-		"list": true,
+	match := map[string][]string{
+		"list": {"Hit", "Me", "Up"},
 	}
 
 	for field := range cfg {
-		a := cfg.List(field, nil)
+		a := cfg.List(field)
 
-		e, match := exp[field]
+		exp, ok := match[field]
 
-		if match {
-			if a[0] != "Hit" || a[1] != "Me" || a[2] != "Up" {
-				t.Fatalf("Expected (%s) to resolve into %v, got %v", field, e, a)
+		if !ok {
+			if len(a) != 0 {
+				t.Fatalf("Expected default value []string{} for (%s), got %v with len %v", field, a, len(a))
 			}
-			return
 		}
 
-		if a != nil {
-			t.Fatalf("Expected default value '%v' for (%s), got %v", nil, field, a)
+		if len(a) != len(exp) {
+			t.Fatalf("Expected list of length %v, got %v", len(exp), len(a))
+		}
+
+		for i, e := range exp {
+			if a[i] != e {
+				t.Fatalf("Expected (%s) to resolve into %v, got %v", field, e, a)
+			}
 		}
 	}
 }
