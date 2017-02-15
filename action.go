@@ -23,11 +23,8 @@ func (*EmptyAction) Perform(*Message) error {
 //Returns a bool indicating whether a actually modified m
 func (m *Message) perform(a MessageAction) (err error, mod bool) {
 	oldText := m.Text
-	err := a.Perform(m)
+	err = a.Perform(m)
+	mod = m.Text != oldText
 
-	if err != nil {
-		return err, false
-	}
-
-	return nil, m.Text != oldText
+	return
 }
