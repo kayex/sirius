@@ -82,12 +82,12 @@ func (cfg ExtensionConfig) Float(key string, def float64) float64 {
 
 // List fetches a list value for key.
 // Returns def if key is not set
-func (cfg ExtensionConfig) List(key string, def []string) []string {
+func (cfg ExtensionConfig) List(key string) []string {
 	if val, ok := cfg[key]; ok {
 		if l, ok := val.([]string); ok {
 			return l
 		}
 	}
 
-	return def
+	return []string{}
 }
