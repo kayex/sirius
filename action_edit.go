@@ -4,24 +4,8 @@ import (
 	"strings"
 )
 
-/*
-TextEditAction represents a series of
-edits to the message Text property
-
-Usage:
-
-msg := Message{
-	Text: "foo bar",
-}
-
-edit := msg.EditText()
-edit.Substitute("foo", "bar")
-edit.Append(" baz")
-
-fmt.Println(msg.Text) // "bar bar baz"
-
-*/
-
+// TextEditAction represents a series of
+// modifications to the message Text property
 type TextEditAction struct {
 	mutations []TextMutation
 }
