@@ -11,6 +11,8 @@ type ExtensionLoader interface {
 	Load(EID) (Extension, error)
 }
 
+// Read fetches a value of any type for key.
+// Returns def if key is not set.
 func (cfg ExtensionConfig) Read(key string, def interface{}) interface{} {
 	if val, ok := cfg[key]; ok {
 		return val
@@ -19,6 +21,8 @@ func (cfg ExtensionConfig) Read(key string, def interface{}) interface{} {
 	return def
 }
 
+// String fetches a string value for key.
+// Returns def if key is not set
 func (cfg ExtensionConfig) String(key string, def string) string {
 	if val, ok := cfg[key]; ok {
 		if s, ok := val.(string); ok {
@@ -29,6 +33,8 @@ func (cfg ExtensionConfig) String(key string, def string) string {
 	return def
 }
 
+// Integer fetches an integer value for key.
+// Returns def if key is not set
 func (cfg ExtensionConfig) Integer(key string, def int) int {
 	if val, ok := cfg[key]; ok {
 		if i, ok := val.(int); ok {
@@ -39,6 +45,8 @@ func (cfg ExtensionConfig) Integer(key string, def int) int {
 	return def
 }
 
+// Boolean fetches a boolean value for key.
+// Returns false if key is not set
 func (cfg ExtensionConfig) Boolean(key string) bool {
 	if val, ok := cfg[key]; ok {
 		switch b := val.(type) {
@@ -57,6 +65,8 @@ func (cfg ExtensionConfig) Boolean(key string) bool {
 	return false
 }
 
+// Float fetches a float value for key.
+// Returns def if key is not set
 func (cfg ExtensionConfig) Float(key string, def float64) float64 {
 	if val, ok := cfg[key]; ok {
 		switch f := val.(type) {
@@ -70,6 +80,8 @@ func (cfg ExtensionConfig) Float(key string, def float64) float64 {
 	return def
 }
 
+// List fetches a list value for key.
+// Returns def if key is not set
 func (cfg ExtensionConfig) List(key string, def []string) []string {
 	if val, ok := cfg[key]; ok {
 		if l, ok := val.([]string); ok {
