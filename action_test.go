@@ -16,7 +16,7 @@ func TestPerform(t *testing.T) {
 			act:  (&TextEditAction{}).Substitute("Foo", "Bar"),
 			msg:  NewMessage(slack.UserID{UserID: "123", TeamID: "abc"}, "Foo", "#channel", "0"),
 			mod:  true,
-			text: "Bar1",
+			text: "Bar",
 		},
 		{
 			act:  (&TextEditAction{}).Substitute("Your reality", "My own"),
