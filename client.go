@@ -33,11 +33,11 @@ func NewClient(cfg ClientConfig) *Client {
 		timeout: cfg.timeout,
 		Ready:   make(chan bool, 1),
 	}
-	if cfg.runner == nil {
-		cfg.runner = NewAsyncRunner()
+	if cl.runner == nil {
+		cl.runner = NewAsyncRunner()
 	}
-	if cfg.timeout == 0 {
-		cfg.timeout = time.Second * 2
+	if cl.timeout == 0 {
+		cl.timeout = time.Second * 2
 	}
 	return cl
 }
