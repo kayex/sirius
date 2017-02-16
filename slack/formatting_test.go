@@ -3,12 +3,20 @@ package slack
 import "testing"
 
 func TestFormattingItalic(t *testing.T) {
-	s := "Hello"
-	exp := "_Hello_"
-	act := Italic(s)
+	cases := []struct {
+		in  string
+		out string
+	}{
+		{"Hello", "_Hello_"},
+		{" Hello", "_Hello_"},
+	}
 
-	if act != exp {
-		t.Errorf("Expected Italic(%q) to be %q, got %q", s, exp, act)
+	for _, c := range cases {
+		act := Italic(c.in)
+
+		if act != c.out {
+			t.Errorf("Expected Italic(%q) to be %q, got %q", c.in, c.out, act)
+		}
 	}
 }
 

@@ -1,9 +1,12 @@
 package slack
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 func Italic(s string) string {
-	return fmt.Sprintf("_%s_", s)
+	return fmt.Sprintf("_%s_", strings.TrimSpace(s))
 }
 
 func Bold(s string) string {

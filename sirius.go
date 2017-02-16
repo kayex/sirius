@@ -90,7 +90,7 @@ func (s *Service) createClient(u *User) *CancelClient {
 func (s *Service) notify(u *User) {
 	cl := s.clients[u.ID.HashSum]
 
-	conf := EMOJI + slack.Italic(" Configuration loaded successfully.")
+	conf := EMOJI + " " + slack.Italic("Configuration loaded successfully.")
 
 	if len(u.Configurations) == 0 {
 		conf += slack.Quote("No extensions activated.")
