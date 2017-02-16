@@ -1,7 +1,6 @@
 package sirius
 
 import (
-	"fmt"
 	"github.com/kayex/sirius/slack"
 	api "github.com/nlopes/slack"
 	"golang.org/x/net/context"
@@ -90,7 +89,6 @@ func (conn *RTMConnection) handleIncomingEvent(ev api.RTMEvent) {
 		conn.handleIncomingMessage(msg)
 
 	case *api.RTMError:
-		fmt.Printf("Error: %s\n", msg.Error())
 		panic(msg)
 	}
 }
