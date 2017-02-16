@@ -1,10 +1,11 @@
 package sirius
 
 import (
+	"strings"
+
 	"github.com/kayex/sirius/mqtt"
 	"github.com/kayex/sirius/slack"
 	"golang.org/x/net/context"
-	"strings"
 )
 
 type SyncAction string

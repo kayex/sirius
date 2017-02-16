@@ -2,8 +2,9 @@ package sirius
 
 import (
 	"encoding/json"
-	"github.com/kayex/sirius/slack"
 	"net/http"
+
+	"github.com/kayex/sirius/slack"
 )
 
 type Remote struct {

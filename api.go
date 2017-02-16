@@ -1,10 +1,11 @@
 package sirius
 
 import (
+	"strings"
+
 	"github.com/kayex/sirius/slack"
 	api "github.com/nlopes/slack"
 	"golang.org/x/net/context"
-	"strings"
 )
 
 type Connection interface {

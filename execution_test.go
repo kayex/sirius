@@ -1,9 +1,10 @@
 package sirius
 
 import (
-	"github.com/kayex/sirius/slack"
 	"testing"
 	"time"
+
+	"github.com/kayex/sirius/slack"
 )
 
 type TestExtension struct {

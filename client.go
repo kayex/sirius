@@ -2,9 +2,10 @@ package sirius
 
 import (
 	"errors"
-	"golang.org/x/net/context"
 	"strings"
 	"time"
+
+	"golang.org/x/net/context"
 )
 
 type Client struct {

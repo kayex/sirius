@@ -1,8 +1,9 @@
 package sirius
 
 import (
-	"github.com/kayex/sirius/slack"
 	"testing"
+
+	"github.com/kayex/sirius/slack"
 )
 
 func TestMessage_Command(t *testing.T) {

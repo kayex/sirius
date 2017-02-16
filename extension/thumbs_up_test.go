@@ -1,10 +1,11 @@
 package extension
 
 import (
-	"github.com/kayex/sirius"
-	"github.com/kayex/sirius/slack"
 	"reflect"
 	"testing"
+
+	"github.com/kayex/sirius"
+	"github.com/kayex/sirius/slack"
 )
 
 func TestThumbsUp_Run(t *testing.T) {
