@@ -8,11 +8,12 @@ import (
 )
 
 type Connection interface {
-	Auth() chan slack.UserID
-	Messages() chan Message
 	Listen(context.Context)
+	Auth() <-chan slack.UserID
 	Send(*Message) error
 	Update(*Message) error
+	Messages() <-chan Message
+	SelfChan() string
 }
 
 type RTMConnection struct {
@@ -21,6 +22,7 @@ type RTMConnection struct {
 	client   *api.Client
 	auth     chan slack.UserID
 	messages chan Message
+	selfChan string
 }
 
 func NewRTMConnection(token string) *RTMConnection {
@@ -53,11 +55,15 @@ func (conn *RTMConnection) Listen(ctx context.Context) {
 	}
 }
 
-func (conn *RTMConnection) Auth() chan slack.UserID {
+func (conn *RTMConnection) SelfChan() string {
+	return conn.selfChan
+}
+
+func (conn *RTMConnection) Auth() <-chan slack.UserID {
 	return conn.auth
 }
 
-func (conn *RTMConnection) Messages() chan Message {
+func (conn *RTMConnection) Messages() <-chan Message {
 	return conn.messages
 }
 
@@ -74,9 +80,19 @@ func (conn *RTMConnection) Update(msg *Message) error {
 }
 
 func (conn *RTMConnection) authenticate(e *api.ConnectedEvent) {
-	info := e.Info
-	id := slack.UserID{info.User.ID, info.Team.ID}
+	id := slack.UserID{e.Info.User.ID, e.Info.Team.ID}
+	conn.selfChan = conn.getSelfChan(id, e)
 	conn.auth <- id
+}
+
+func (conn *RTMConnection) getSelfChan(id slack.UserID, e *api.ConnectedEvent) string {
+	for _, im := range e.Info.IMs {
+		if im.User == id.UserID {
+			return im.ID
+		}
+	}
+
+	panic("")
 }
 
 func (conn *RTMConnection) handleIncomingEvent(ev api.RTMEvent) {
