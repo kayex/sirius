@@ -82,14 +82,10 @@ func (act HttpMessageAction) ToMessageAction() MessageAction {
 
 		search, a := act["search"].(string)
 		sub, b := act["sub"].(string)
-
 		if !(a && b) {
 			return NoAction()
 		}
-
-		edit.Substitute(search, sub)
-
-		return edit
+		return edit.Substitute(search, sub)
 	case "append":
 		edit := &TextEditAction{}
 
@@ -97,7 +93,6 @@ func (act HttpMessageAction) ToMessageAction() MessageAction {
 		if !ok {
 			return NoAction()
 		}
-
 		return edit.Append(a)
 	case "prepend":
 		edit := &TextEditAction{}
@@ -106,7 +101,6 @@ func (act HttpMessageAction) ToMessageAction() MessageAction {
 		if !ok {
 			return NoAction()
 		}
-
 		return edit.Prepend(p)
 	case "replace_with":
 		edit := &TextEditAction{}
@@ -115,9 +109,7 @@ func (act HttpMessageAction) ToMessageAction() MessageAction {
 		if !ok {
 			return NoAction()
 		}
-
 		return edit.ReplaceWith(t)
 	}
-
 	return NoAction()
 }
