@@ -2,18 +2,18 @@ package slack
 
 import "fmt"
 
-func italic(s string) string {
-	return fmt.Sprintf("_%v_", s)
+func Italic(s string) string {
+	return fmt.Sprintf("_%s_", s)
 }
 
-func bold(s string) string {
-	return fmt.Sprintf("*%v*", s)
+func Bold(s string) string {
+	return fmt.Sprintf("*%s*", s)
 }
 
-func strike(s string) string {
-	return fmt.Sprintf("~%v~", s)
+func Strike(s string) string {
+	return fmt.Sprintf("~%s~", s)
 }
 
-func code(s string) string {
-	return fmt.Sprintf("`%v`", s)
+func Code(s string) string {
+	return fmt.Sprintf("`%s`", s)
 }

@@ -5,7 +5,7 @@ import "testing"
 func TestFormattingItalic(t *testing.T) {
 	s := "Hello"
 	exp := "_Hello_"
-	act := italic(s)
+	act := Italic(s)
 
 	if act != exp {
 		t.Fatalf("Expected italic(%s) to be (%s), got (%s)", s, exp, act)
@@ -15,7 +15,7 @@ func TestFormattingItalic(t *testing.T) {
 func TestFormattingBold(t *testing.T) {
 	s := "Hello"
 	exp := "*Hello*"
-	act := bold(s)
+	act := Bold(s)
 
 	if act != exp {
 		t.Fatalf("Expected bold(%s) to be (%s), got (%s)", s, exp, act)
@@ -25,7 +25,7 @@ func TestFormattingBold(t *testing.T) {
 func TestFormattingStrike(t *testing.T) {
 	s := "Hello"
 	exp := "~Hello~"
-	act := strike(s)
+	act := Strike(s)
 
 	if act != exp {
 		t.Fatalf("Expected strike(%s) to be (%s), got (%s)", s, exp, act)
@@ -35,7 +35,7 @@ func TestFormattingStrike(t *testing.T) {
 func TestFormattingCode(t *testing.T) {
 	s := "Hello"
 	exp := "`Hello`"
-	act := code(s)
+	act := Code(s)
 
 	if act != exp {
 		t.Fatalf("Expected code(%s) to be (%s), got (%s)", s, exp, act)
