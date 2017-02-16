@@ -44,11 +44,11 @@ func (r *AsyncRunner) Run(exe []Execution, res chan<- ExecutionResult, timeout t
 		r.execute(e, er)
 	}
 
-ActionReceive:
+Execution:
 	for range exe {
 		select {
 		case <-time.After(timeout):
-			break ActionReceive
+			break Execution
 		case res <- <-er:
 		}
 	}
