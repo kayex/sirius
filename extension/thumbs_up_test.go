@@ -32,7 +32,7 @@ func TestThumbsUp_Run(t *testing.T) {
 		}
 
 		if !reflect.DeepEqual(act, c.exp) {
-			t.Fatalf("Expected %s but got %s for message %q", c.exp, act, c.msg.Text)
+			t.Errorf("Expected %s but got %s for message %q", c.exp, act, c.msg.Text)
 		}
 	}
 }
