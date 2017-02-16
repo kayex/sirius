@@ -72,7 +72,7 @@ func TestMessage_Command(t *testing.T) {
 			actArg := cmd.Args[i]
 
 			if actArg != expArg {
-				t.Fatalf("Expected \"%s\" as argument number %v for message \"%v\", got \"%s\"", expArg, i, c.msg.Text, actArg)
+				t.Errorf("Expected Command(%q).Args[%d] to be %q, got %q", c.msg.Text, i, expArg, actArg)
 			}
 		}
 	}
