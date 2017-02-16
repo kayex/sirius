@@ -21,7 +21,7 @@ func testExtensionConfigAccessor(test ExtensionConfigAccessorTest) {
 
 		if match {
 			if a != e {
-				test.t.Fatalf("Expected (%s) to resolve into %v, got %v", field, e, a)
+				test.t.Errorf("Expected (%s) to resolve into %v, got %v", field, e, a)
 			}
 			return
 		}
