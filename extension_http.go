@@ -8,7 +8,7 @@ import (
 
 type HttpExtension struct {
 	client *http.Client
-	Host string
+	Host   string
 }
 
 type HttpExecutionResult struct {

@@ -18,9 +18,9 @@ type Client struct {
 }
 
 type ClientConfig struct {
-	user *User
-	loader ExtensionLoader
-	runner ExtensionRunner
+	user    *User
+	loader  ExtensionLoader
+	runner  ExtensionRunner
 	timeout time.Duration
 }
 

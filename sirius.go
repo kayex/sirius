@@ -85,7 +85,7 @@ func (s *Service) stopClient(id slack.ID) {
 
 func (s *Service) createClient(u *User) *CancelClient {
 	return NewClient(ClientConfig{
-		user: u,
+		user:   u,
 		loader: s.loader,
 	}).WithCancel(context.WithCancel(s.ctx))
 }
