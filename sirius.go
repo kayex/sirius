@@ -5,6 +5,8 @@ import (
 	"golang.org/x/net/context"
 )
 
+const EMOJI = "⚡" // The high voltage/lightning bolt emoji (:zap: in Slack)
+
 type Service struct {
 	loader  ExtensionLoader
 	clients map[string]*CancelClient
@@ -14,13 +16,19 @@ type Service struct {
 type CancelClient struct {
 	Client
 	Cancel context.CancelFunc
+	ctx    context.Context
 }
 
-func (c *Client) WithCancel(cancel context.CancelFunc) *CancelClient {
+func (c *Client) WithCancel(ctx context.Context, cancel context.CancelFunc) *CancelClient {
 	return &CancelClient{
 		Client: *c,
 		Cancel: cancel,
+		ctx:    ctx,
 	}
+}
+
+func (c *CancelClient) Start() {
+	c.Client.Start(c.ctx)
 }
 
 func NewService(l ExtensionLoader) *Service {
@@ -35,7 +43,10 @@ func (s *Service) Start(ctx context.Context, users []User) {
 
 	for _, u := range users {
 		u := u
-		s.startClient(&u)
+		cl := s.createClient(&u)
+		s.clients[u.ID.HashSum] = cl
+
+		go cl.Start()
 	}
 
 	select {
@@ -45,7 +56,15 @@ func (s *Service) Start(ctx context.Context, users []User) {
 }
 
 func (s *Service) AddUser(u *User) {
-	s.startClient(u)
+	s.DropUser(u.ID)
+
+	cl := s.createClient(u)
+	s.clients[u.ID.HashSum] = cl
+
+	go cl.Start()
+
+	<-cl.Ready
+	s.notifyUser(u)
 }
 
 func (s *Service) DropUser(id slack.SecureID) bool {
@@ -58,16 +77,12 @@ func (s *Service) DropUser(id slack.SecureID) bool {
 	return false
 }
 
-func (s *Service) startClient(u *User) {
-	// Make sure we stop any existing client for the same user
-	if ex, ok := s.clients[u.ID.HashSum]; ok {
+func (s *Service) stopClient(id slack.SecureID) {
+	if ex, ok := s.clients[id.HashSum]; ok {
 		ex.Cancel()
 	}
+}
 
-	ctx, cancel := context.WithCancel(s.ctx)
-	cl := NewClient(u, s.loader).WithCancel(cancel)
-
-	go cl.Start(ctx)
-
-	s.clients[u.ID.HashSum] = cl
+func (s *Service) createClient(u *User) *CancelClient {
+	return NewClient(u, s.loader).WithCancel(context.WithCancel(s.ctx))
 }
