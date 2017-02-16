@@ -4,13 +4,14 @@ import (
 	"fmt"
 	"github.com/kayex/sirius/slack"
 	api "github.com/nlopes/slack"
+	"golang.org/x/net/context"
 	"strings"
 )
 
 type Connection interface {
-	Listen()
 	Auth() chan slack.UserID
 	Messages() chan Message
+	Listen(context.Context)
 	Update(*Message) error
 }
 
@@ -38,11 +39,14 @@ func NewRTMConnection(token string) *RTMConnection {
 	}
 }
 
-func (conn *RTMConnection) Listen() {
+func (conn *RTMConnection) Listen(ctx context.Context) {
 	go conn.rtm.ManageConnection()
 
 	for {
 		select {
+		case <-ctx.Done():
+			conn.rtm.Disconnect()
+			return
 		case ev := <-conn.rtm.IncomingEvents:
 			conn.handleIncomingEvent(ev)
 		}
