@@ -13,6 +13,7 @@ type Client struct {
 	loader  ExtensionLoader
 	runner  ExtensionRunner
 	timeout time.Duration
+	Ready   chan bool
 }
 
 func NewClient(user *User, loader ExtensionLoader) *Client {
@@ -24,17 +25,20 @@ func NewClient(user *User, loader ExtensionLoader) *Client {
 		loader:  loader,
 		runner:  NewAsyncRunner(),
 		timeout: time.Second * 2,
+		Ready:   make(chan bool, 1),
 	}
 }
 
 func (c *Client) Start(ctx context.Context) {
-	go c.conn.Listen()
+	go c.conn.Listen(ctx)
 
 	err := c.authenticate()
 
 	if err != nil {
 		panic(err)
 	}
+
+	c.Ready <- true
 
 	for {
 		select {
@@ -47,17 +51,17 @@ func (c *Client) Start(ctx context.Context) {
 }
 
 func (c *Client) authenticate() error {
-	for c.user.ID.Incomplete() {
+	auth := c.conn.Auth()
+
+	for {
 		select {
-		case id := <-c.conn.Auth():
+		case id := <-auth:
 			c.user.ID = id.Secure()
 			return nil
 		case <-time.After(time.Second * 3):
-			return errors.New("Dynamic client authentication timed out (<-c.conn.Auth())")
+			return errors.New("Client authentication timed out (<-c.conn.Auth())")
 		}
 	}
-
-	return nil
 }
 
 func (c *Client) handleMessage(msg *Message) {
