@@ -64,7 +64,7 @@ func (s *Service) AddUser(u *User) {
 	go cl.Start()
 
 	<-cl.Ready
-	s.notifyUser(u)
+	s.notify(u)
 }
 
 func (s *Service) DropUser(id slack.SecureID) bool {
@@ -85,4 +85,23 @@ func (s *Service) stopClient(id slack.SecureID) {
 
 func (s *Service) createClient(u *User) *CancelClient {
 	return NewClient(u, s.loader).WithCancel(context.WithCancel(s.ctx))
+}
+
+func (s *Service) notify(u *User) {
+	cl := s.clients[u.ID.HashSum]
+
+	conf := EMOJI + slack.Italic(" Configuration loaded successfully.")
+
+	if len(u.Configurations) == 0 {
+		conf += slack.Quote("No extensions activated.")
+	} else {
+		for _, cfg := range u.Configurations {
+			conf += "\n" + slack.Quote(string(cfg.EID))
+		}
+	}
+
+	cl.conn.Send(&Message{
+		Text:    conf,
+		Channel: cl.conn.SelfChan(),
+	})
 }
