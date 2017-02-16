@@ -89,13 +89,13 @@ func (s *Service) createClient(u *User) *CancelClient {
 }
 
 func (c *Client) notify() {
-	conf := EMOJI + " " + slack.Italic("Configuration loaded successfully.")
+	conf := EMOJI + " Configuration loaded successfully."
 
 	if len(c.user.Configurations) == 0 {
-		conf += "\n" + slack.Quote("No extensions activated.")
+		conf += "\n" + slack.Quote(slack.Italic("No extensions activated."))
 	} else {
 		for _, cfg := range c.user.Configurations {
-			conf += "\n" + slack.Quote(string(cfg.EID))
+			conf += "\n" + slack.Quote(slack.Bold(string(cfg.EID)))
 		}
 	}
 
