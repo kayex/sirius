@@ -60,11 +60,9 @@ func (r *AsyncRunner) execute(e Execution, res chan<- ExecutionResult) {
 	go func() {
 		a, err := e.Ext.Run(e.Msg, e.Cfg)
 
-		r := ExecutionResult{
+		res <- ExecutionResult{
 			Err:    err,
 			Action: a,
 		}
-
-		res <- r
 	}()
 }
