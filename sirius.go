@@ -56,8 +56,6 @@ func (s *Service) Start(ctx context.Context, users []User) {
 }
 
 func (s *Service) AddUser(u *User) {
-	s.DropUser(u.ID)
-
 	cl := s.createClient(u)
 	s.clients[u.ID.String()] = cl
 
