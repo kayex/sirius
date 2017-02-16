@@ -7,6 +7,7 @@ import (
 )
 
 type HttpExtension struct {
+	client *http.Client
 	Host string
 }
 
@@ -24,27 +25,22 @@ type HttpExecution struct {
 }
 
 func (x *HttpExtension) Run(m Message, cfg ExtensionConfig) (MessageAction, error) {
-	exe := &HttpExecution{
+	res, err := runHttpExecution(&HttpExecution{
 		ext:     x,
 		Message: m.Text,
 		Config:  cfg,
-	}
-
-	res, err := runHttpExecution(exe)
+	})
 
 	if err != nil {
 		return nil, err
 	}
 
-	er := res.ExecutionResult()
-
-	return er.Action, nil
+	return res.ExecutionResult().Action, nil
 }
 
 func (her *HttpExecutionResult) ExecutionResult() *ExecutionResult {
 	er := &ExecutionResult{
-		Err:    her.Err,
-		Action: NoAction(),
+		Err: her.Err,
 	}
 
 	var edit TextEditAction
@@ -56,35 +52,27 @@ func (her *HttpExecutionResult) ExecutionResult() *ExecutionResult {
 			edit.mutations = append(edit.mutations, e.mutations...)
 		}
 	}
-
 	er.Action = &edit
 
+	if er.Action == nil {
+		er.Action = NoAction()
+	}
 	return er
 }
 
-func runHttpExecution(exe *HttpExecution) (*HttpExecutionResult, error) {
-	cl := &http.Client{}
-
+func runHttpExecution(exe *HttpExecution) (er *HttpExecutionResult, err error) {
 	pl := new(bytes.Buffer)
 	json.NewEncoder(pl).Encode(exe)
 
 	req, err := http.NewRequest("POST", exe.ext.Host, pl)
 	req.Header.Set("Content-Type", "application/json")
-
-	res, err := cl.Do(req)
-
+	res, err := exe.ext.client.Do(req)
 	if err != nil {
-		return nil, err
+		return
 	}
 	defer res.Body.Close()
 
-	var her HttpExecutionResult
-
-	if err = json.NewDecoder(res.Body).Decode(&her); err != nil {
-		return nil, err
-	}
-
-	return &her, nil
+	return er, json.NewDecoder(res.Body).Decode(&er)
 }
 
 func (act HttpMessageAction) ToMessageAction() MessageAction {
