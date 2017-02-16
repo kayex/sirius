@@ -17,24 +17,35 @@ type Client struct {
 	Ready   chan bool
 }
 
-func NewClient(user *User, loader ExtensionLoader) *Client {
-	conn := NewRTMConnection(user.Token)
+type ClientConfig struct {
+	user *User
+	loader ExtensionLoader
+	runner ExtensionRunner
+	timeout time.Duration
+}
 
-	return &Client{
-		conn:    conn,
-		user:    user,
-		loader:  loader,
-		runner:  NewAsyncRunner(),
-		timeout: time.Second * 2,
+func NewClient(cfg ClientConfig) *Client {
+	cl := &Client{
+		conn:    NewRTMConnection(cfg.user.Token),
+		user:    cfg.user,
+		loader:  cfg.loader,
+		runner:  cfg.runner,
+		timeout: cfg.timeout,
 		Ready:   make(chan bool, 1),
 	}
+	if cfg.runner == nil {
+		cfg.runner = NewAsyncRunner()
+	}
+	if cfg.timeout == 0 {
+		cfg.timeout = time.Second * 2
+	}
+	return cl
 }
 
 func (c *Client) Start(ctx context.Context) {
 	go c.conn.Listen(ctx)
 
 	err := c.authenticate()
-
 	if err != nil {
 		panic(err)
 	}
@@ -101,16 +112,13 @@ func (c *Client) run(m *Message) {
 		act = append(act, r.Action)
 	}
 
-	updated := performActions(act, m)
-
-	if updated {
+	if performActions(act, m) {
 		c.conn.Update(m)
 	}
 }
 
 func (c *Client) loadExecutions(m *Message) []Execution {
 	var exe []Execution
-
 	for _, cf := range c.user.Configurations {
 		x, err := c.loader.Load(cf.EID)
 
@@ -136,18 +144,16 @@ func trimEscape(text string) string {
 	return strings.TrimPrefix(text, `\`)
 }
 
-func performActions(act []MessageAction, msg *Message) bool {
-	var update bool
-
+func performActions(act []MessageAction, msg *Message) (modified bool) {
 	for _, a := range act {
-		err, modified := msg.perform(a)
+		err, mod := msg.perform(a)
 
 		if err != nil {
 			panic(err)
 		}
 
-		update = update || modified
+		modified = modified || mod
 	}
 
-	return update
+	return
 }
