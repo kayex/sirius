@@ -127,9 +127,11 @@ func TestExtensionConfig_Read(t *testing.T) {
 func TestExtensionConfig_List(t *testing.T) {
 	cfg := testingExtensionConfig()
 	cfg["list"] = []string{"Hit", "Me", "Up"}
+	cfg["list_interface"] = []interface{}{"Stop", "The", "World"}
 
 	match := map[string][]string{
-		"list": {"Hit", "Me", "Up"},
+		"list":           {"Hit", "Me", "Up"},
+		"list_interface": {"Stop", "The", "World"},
 	}
 
 	for field := range cfg {
