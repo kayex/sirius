@@ -8,7 +8,7 @@ import (
 )
 
 func TestThumbsUp_Run(t *testing.T) {
-	cases := []struct{
+	cases := []struct {
 		msg sirius.Message
 		exp sirius.MessageAction
 	}{
