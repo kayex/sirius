@@ -12,6 +12,7 @@ type Connection interface {
 	Auth() chan slack.UserID
 	Messages() chan Message
 	Listen(context.Context)
+	Send(*Message) error
 	Update(*Message) error
 }
 
@@ -61,9 +62,11 @@ func (conn *RTMConnection) Messages() chan Message {
 	return conn.messages
 }
 
-func (conn *RTMConnection) SendMessage(msg *Message) {
-	omsg := conn.rtm.NewOutgoingMessage(msg.Text, msg.Channel)
-	conn.rtm.SendMessage(omsg)
+func (conn *RTMConnection) Send(msg *Message) error {
+	oMsg := conn.rtm.NewOutgoingMessage(msg.Text, msg.Channel)
+	conn.rtm.SendMessage(oMsg)
+
+	return nil
 }
 
 func (conn *RTMConnection) Update(msg *Message) error {
