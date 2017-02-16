@@ -78,8 +78,18 @@ func (cfg ExtensionConfig) Float(key string, def float64) float64 {
 // List fetches a list value for key.
 // Returns an empty list if key is not set.
 func (cfg ExtensionConfig) List(key string) []string {
+	var list []string
+
 	if val, ok := cfg[key]; ok {
-		if l, ok := val.([]string); ok {
+		switch l := val.(type) {
+		case []interface{}:
+			for _, lv := range l {
+				if s, ok := lv.(string); ok {
+					list = append(list, s)
+				}
+			}
+			return list
+		case []string:
 			return l
 		}
 	}

@@ -33,13 +33,13 @@ func (ru *RemoteUser) ToUser() *User {
 
 	switch cfg := ru.Config.(type) {
 	case map[string]interface{}:
-		for eid, c := range cfg {
-			cfg := NewConfiguration(EID(eid))
+		for eid, settings := range cfg {
+			c := NewConfiguration(EID(eid))
 
-			if conf, ok := c.(map[string]interface{}); ok {
-				cfg.Cfg = conf
+			if conf, ok := settings.(map[string]interface{}); ok {
+				c.Cfg = ExtensionConfig(conf)
 			}
-			u.Configurations = append(u.Configurations, &cfg)
+			u.Configurations = append(u.Configurations, &c)
 		}
 	case []interface{}:
 		for eid := range cfg {
