@@ -92,7 +92,7 @@ func (c *Client) notify() {
 	conf := EMOJI + " " + slack.Italic("Configuration loaded successfully.")
 
 	if len(c.user.Configurations) == 0 {
-		conf += slack.Quote("No extensions activated.")
+		conf += "\n" + slack.Quote("No extensions activated.")
 	} else {
 		for _, cfg := range c.user.Configurations {
 			conf += "\n" + slack.Quote(string(cfg.EID))
