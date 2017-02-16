@@ -39,7 +39,6 @@ func (ru *RemoteUser) ToUser() *User {
 			if conf, ok := c.(map[string]interface{}); ok {
 				cfg.Cfg = conf
 			}
-
 			u.Configurations = append(u.Configurations, &cfg)
 		}
 	case []interface{}:
@@ -48,7 +47,6 @@ func (ru *RemoteUser) ToUser() *User {
 			u.Configurations = append(u.Configurations, &c)
 		}
 	}
-
 	return u
 }
 
@@ -62,7 +60,6 @@ func (r *Remote) GetUser(id slack.SecureID) (*User, error) {
 	var ru RemoteUser
 
 	res, err := r.request("/configs/" + id.HashSum)
-
 	if err != nil {
 		return nil, err
 	}
@@ -77,8 +74,8 @@ func (r *Remote) GetUser(id slack.SecureID) (*User, error) {
 
 func (r *Remote) GetUsers() ([]User, error) {
 	var ru []RemoteUser
-	res, err := r.request("/configs")
 
+	res, err := r.request("/configs")
 	if err != nil {
 		return nil, err
 	}
@@ -93,6 +90,5 @@ func (r *Remote) GetUsers() ([]User, error) {
 	for _, u := range ru {
 		users = append(users, *u.ToUser())
 	}
-
 	return users, nil
 }

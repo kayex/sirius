@@ -61,10 +61,8 @@ func (id UserID) Secure() SecureID {
 	}
 
 	concat := id.TeamID + "." + id.UserID
-
 	h := sha256.New()
 	h.Write([]byte(concat))
-
 	s := hex.EncodeToString(h.Sum(nil))
 
 	return SecureID{
@@ -84,7 +82,6 @@ func (id SecureID) Equals(o ID) bool {
 	case UserID:
 		return o.Secure().Equals(id)
 	}
-
 	return false
 }
 

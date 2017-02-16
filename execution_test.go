@@ -35,7 +35,6 @@ func TestAsyncRunner_Run_RespectsTimeout(t *testing.T) {
 		*NewExecution(fast, msg, nil),
 		*NewExecution(slow, msg, nil),
 	}
-
 	r := NewAsyncRunner()
 	res := make(chan ExecutionResult, 1)
 
