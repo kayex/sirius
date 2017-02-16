@@ -1,10 +1,10 @@
 package extension
 
 import (
-	"testing"
-	"reflect"
 	"github.com/kayex/sirius"
 	"github.com/kayex/sirius/slack"
+	"reflect"
+	"testing"
 )
 
 func TestThumbsUp_Run(t *testing.T) {
@@ -22,7 +22,6 @@ func TestThumbsUp_Run(t *testing.T) {
 		},
 	}
 
-
 	for _, c := range cases {
 		tu := &ThumbsUp{}
 
@@ -33,7 +32,7 @@ func TestThumbsUp_Run(t *testing.T) {
 		}
 
 		if !reflect.DeepEqual(act, c.exp) {
-			t.Fatalf("Expected %s but got %s for message \"%s\"", c.exp, act, c.msg.Text)
+			t.Fatalf("Expected %s but got %s for message %q", c.exp, act, c.msg.Text)
 		}
 	}
 }

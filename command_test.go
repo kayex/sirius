@@ -56,7 +56,7 @@ func TestMessage_Command(t *testing.T) {
 		cmd, match := c.msg.Command(c.search)
 
 		if match != c.match {
-			t.Fatalf("Expected Command(%v) for message \"%v\" to return (%#v, %v), got (%#v, %v)", c.search, c.msg.Text, c.cmd, c.match, cmd, match)
+			t.Fatalf("Expected Command(%q) to return (%#v, %v), got (%#v, %v)", c.msg.Text, c.cmd, c.match, cmd, match)
 		}
 
 		if c.cmd == nil {
@@ -64,7 +64,7 @@ func TestMessage_Command(t *testing.T) {
 		}
 
 		if len(cmd.Args) != len(c.cmd.Args) {
-			t.Fatalf("Expected %d arguments from Command(%v) for message \"%v\", got %d", len(c.cmd.Args), c.search, c.msg.Text, len(cmd.Args))
+			t.Fatalf("Expected len(Command(%q).Args) to be %d, got %d", c.msg.Text, len(c.cmd.Args), len(cmd.Args))
 		}
 
 		for i := 0; i < len(c.cmd.Args); i++ {

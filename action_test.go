@@ -47,11 +47,11 @@ func TestPerform(t *testing.T) {
 		}
 
 		if mod != c.mod {
-			t.Fatalf("Expected perform(Substitute(\"Foo\", \"Bar\")) to return (<nil>, true) for message \"%v\", got (%#v, %v)", c.msg.Text, err, mod)
+			t.Fatalf("Expected perform(Substitute(\"Foo\", \"Bar\")) to return (<nil>, true) for message %q, got (%#v, %v)", c.msg.Text, err, mod)
 		}
 
 		if c.msg.Text != c.text {
-			t.Fatalf("Expected perform(Substitute(\"Foo\", \"Bar\")) to mutate message \"%s\" into \"%s\", got \"%v\"", oText, c.text, c.msg.Text)
+			t.Fatalf("Expected perform(Substitute(\"Foo\", \"Bar\")) to mutate message %q into %q, got %q", oText, c.text, c.msg.Text)
 		}
 	}
 }

@@ -27,7 +27,7 @@ func testExtensionConfigAccessor(test ExtensionConfigAccessorTest) {
 		}
 
 		if a != test.def {
-			test.t.Fatalf("Expected default value '%v' for (%s), got %v", test.def, field, a)
+			test.t.Fatalf("Expected default value %#v for (%s), got %v", test.def, field, a)
 		}
 	}
 }
@@ -149,7 +149,7 @@ func TestExtensionConfig_List(t *testing.T) {
 
 		for i, e := range exp {
 			if a[i] != e {
-				t.Fatalf("Expected (%s) to resolve into %v, got %v", field, e, a)
+				t.Fatalf("Expected list item %d to be %q, got %q", i, e, a[i])
 			}
 		}
 	}
