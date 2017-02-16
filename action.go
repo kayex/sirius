@@ -20,7 +20,7 @@ func (*EmptyAction) Perform(*Message) error {
 }
 
 //perform applies a to m
-//Returns a bool indicating whether a actually modified m
+//Returns a bool indicating whether m was actually modified
 func (m *Message) perform(a MessageAction) (err error, mod bool) {
 	oldText := m.Text
 	err = a.Perform(m)
