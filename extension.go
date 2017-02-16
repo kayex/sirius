@@ -22,7 +22,7 @@ func (cfg ExtensionConfig) Read(key string, def interface{}) interface{} {
 }
 
 // String fetches a string value for key.
-// Returns def if key is not set
+// Returns def if key is not set.
 func (cfg ExtensionConfig) String(key string, def string) string {
 	if val, ok := cfg[key]; ok {
 		if s, ok := val.(string); ok {
@@ -34,7 +34,7 @@ func (cfg ExtensionConfig) String(key string, def string) string {
 }
 
 // Integer fetches an integer value for key.
-// Returns def if key is not set
+// Returns def if key is not set.
 func (cfg ExtensionConfig) Integer(key string, def int) int {
 	if val, ok := cfg[key]; ok {
 		if i, ok := val.(int); ok {
@@ -46,7 +46,7 @@ func (cfg ExtensionConfig) Integer(key string, def int) int {
 }
 
 // Boolean fetches a boolean value for key.
-// Returns false if key is not set
+// Returns false if key is not set.
 func (cfg ExtensionConfig) Boolean(key string) bool {
 	if val, ok := cfg[key]; ok {
 		switch b := val.(type) {
@@ -66,7 +66,7 @@ func (cfg ExtensionConfig) Boolean(key string) bool {
 }
 
 // Float fetches a float value for key.
-// Returns def if key is not set
+// Returns def if key is not set.
 func (cfg ExtensionConfig) Float(key string, def float64) float64 {
 	if val, ok := cfg[key]; ok {
 		switch f := val.(type) {
