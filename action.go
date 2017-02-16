@@ -1,10 +1,8 @@
 package sirius
 
-/*
-MessageAction represents an action that an extension
-wishes to perform on the current message after
-execution has finished.
-*/
+// MessageAction represents an action that an extension
+// wishes to perform on the current message after
+// execution has finished.
 type MessageAction interface {
 	Perform(*Message) error
 }
