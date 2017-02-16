@@ -62,7 +62,7 @@ func (s *Service) AddUser(u *User) {
 	go cl.Start()
 
 	<-cl.Ready
-	s.notify(u)
+	s.notify(cl)
 }
 
 func (s *Service) DropUser(id slack.ID) bool {
@@ -88,15 +88,13 @@ func (s *Service) createClient(u *User) *CancelClient {
 	}).WithCancel(context.WithCancel(s.ctx))
 }
 
-func (s *Service) notify(u *User) {
-	cl := s.clients[u.ID.String()]
-
+func (s *Service) notify(cl *CancelClient) {
 	conf := EMOJI + " " + slack.Italic("Configuration loaded successfully.")
 
-	if len(u.Configurations) == 0 {
+	if len(cl.user.Configurations) == 0 {
 		conf += slack.Quote("No extensions activated.")
 	} else {
-		for _, cfg := range u.Configurations {
+		for _, cfg := range cl.user.Configurations {
 			conf += "\n" + slack.Quote(string(cfg.EID))
 		}
 	}
