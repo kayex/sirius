@@ -17,3 +17,7 @@ func Strike(s string) string {
 func Code(s string) string {
 	return fmt.Sprintf("`%s`", s)
 }
+
+func Quote(s string) string {
+	return fmt.Sprintf(">%s", s)
+}

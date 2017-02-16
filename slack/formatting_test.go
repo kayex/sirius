@@ -41,3 +41,13 @@ func TestFormattingCode(t *testing.T) {
 		t.Errorf("Expected Code(%q) to be %q, got %q", s, exp, act)
 	}
 }
+
+func TestFormattingQuote(t *testing.T) {
+	s := "Hello"
+	exp := ">Hello"
+	act := Quote(s)
+
+	if act != exp {
+		t.Errorf("Expected Quote(%q) to be %q, got %q", s, exp, act)
+	}
+}
