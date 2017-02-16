@@ -8,7 +8,7 @@ func TestFormattingItalic(t *testing.T) {
 	act := Italic(s)
 
 	if act != exp {
-		t.Fatalf("Expected italic(%s) to be (%s), got (%s)", s, exp, act)
+		t.Errorf("Expected Italic(%q) to be %q, got %q", s, exp, act)
 	}
 }
 
@@ -18,7 +18,7 @@ func TestFormattingBold(t *testing.T) {
 	act := Bold(s)
 
 	if act != exp {
-		t.Fatalf("Expected bold(%s) to be (%s), got (%s)", s, exp, act)
+		t.Errorf("Expected Bold(%q) to be %q, got %q", s, exp, act)
 	}
 }
 
@@ -28,7 +28,7 @@ func TestFormattingStrike(t *testing.T) {
 	act := Strike(s)
 
 	if act != exp {
-		t.Fatalf("Expected strike(%s) to be (%s), got (%s)", s, exp, act)
+		t.Errorf("Expected Strike(%q) to be %q, got %q", s, exp, act)
 	}
 }
 
@@ -38,6 +38,6 @@ func TestFormattingCode(t *testing.T) {
 	act := Code(s)
 
 	if act != exp {
-		t.Fatalf("Expected code(%s) to be (%s), got (%s)", s, exp, act)
+		t.Errorf("Expected Code(%q) to be %q, got %q", s, exp, act)
 	}
 }
