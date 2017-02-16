@@ -5,62 +5,57 @@ import "testing"
 func TestUserID_Equals(t *testing.T) {
 	cases := []struct {
 		a   UserID
-		b   UserID
+		b   ID
 		exp bool
 	}{
 		{
-			a: UserID{
-				UserID: "123",
-				TeamID: "abc",
-			},
-			b: UserID{
-				UserID: "123",
-				TeamID: "abc",
-			},
+			a:   UserID{"123", "abc"},
+			b:   UserID{"123", "abc"},
 			exp: true,
 		},
 		{
-			a: UserID{
-				UserID: "456",
-				TeamID: "abc",
-			},
-			b: UserID{
-				UserID: "123",
-				TeamID: "abc",
-			},
+			a:   UserID{"456", "abc"},
+			b:   UserID{"123", "abc"},
 			exp: false,
 		},
 		{
-			a: UserID{
-				UserID: "123",
-				TeamID: "def",
-			},
-			b: UserID{
-				UserID: "123",
-				TeamID: "abc",
-			},
+			a:   UserID{"123", "def"},
+			b:   UserID{"123", "abc"},
 			exp: false,
 		},
 		{
-			a: UserID{
-				UserID: "",
-				TeamID: "",
-			},
-			b: UserID{
-				UserID: "123",
-				TeamID: "abc",
-			},
+			a:   UserID{"", ""},
+			b:   UserID{"123", "abc"},
 			exp: false,
 		},
 		{
-			a: UserID{
-				UserID: "",
-				TeamID: "",
-			},
-			b: UserID{
-				UserID: "",
-				TeamID: "",
-			},
+			a:   UserID{"", ""},
+			b:   UserID{"", ""},
+			exp: false,
+		},
+		{
+			a:   UserID{"123", "abc"},
+			b:   UserID{"123", "abc"}.Secure(),
+			exp: true,
+		},
+		{
+			a:   UserID{"456", "abc"},
+			b:   UserID{"123", "abc"}.Secure(),
+			exp: false,
+		},
+		{
+			a:   UserID{"123", "def"},
+			b:   UserID{"123", "abc"}.Secure(),
+			exp: false,
+		},
+		{
+			a:   UserID{"", ""},
+			b:   UserID{"123", "abc"}.Secure(),
+			exp: false,
+		},
+		{
+			a:   UserID{"", ""},
+			b:   UserID{"", ""}.Secure(),
 			exp: false,
 		},
 	}
@@ -82,31 +77,19 @@ func TestUserID_Incomplete(t *testing.T) {
 		exp bool
 	}{
 		{
-			id: UserID{
-				UserID: "",
-				TeamID: "",
-			},
+			id:  UserID{"", ""},
 			exp: true,
 		},
 		{
-			id: UserID{
-				UserID: "123",
-				TeamID: "",
-			},
+			id:  UserID{"123", ""},
 			exp: true,
 		},
 		{
-			id: UserID{
-				UserID: "",
-				TeamID: "abc",
-			},
+			id:  UserID{"", "abc"},
 			exp: true,
 		},
 		{
-			id: UserID{
-				UserID: "123",
-				TeamID: "abc",
-			},
+			id:  UserID{"123", "abc"},
 			exp: false,
 		},
 	}
@@ -134,38 +117,32 @@ func TestUserID_String(t *testing.T) {
 
 func TestUserID_Secure(t *testing.T) {
 	cases := []struct {
-		id UserID
+		id  UserID
+		exp bool
 	}{
 		{
-			id: UserID{
-				UserID: "123",
-				TeamID: "abc",
-			},
+			id:  UserID{"123", "abc"},
+			exp: true,
 		},
 		{
-			id: UserID{
-				UserID: "",
-				TeamID: "abc",
-			},
+			id:  UserID{"", "abc"},
+			exp: false,
 		},
 		{
-			id: UserID{
-				UserID: "123",
-				TeamID: "",
-			},
+			id:  UserID{"123", ""},
+			exp: false,
 		},
 		{
-			id: UserID{
-				UserID: "",
-				TeamID: "",
-			},
+			id:  UserID{"", ""},
+			exp: false,
 		},
 	}
 
 	for _, c := range cases {
 		sid := c.id.Secure()
+		valid := !sid.Incomplete()
 
-		if sid.Incomplete() {
+		if valid != c.exp {
 			t.Fatalf("UserID (%v) secures into (%v), which is not a valid SecureID", c.id.String(), sid.String())
 		}
 	}
@@ -197,27 +174,52 @@ func TestSecureID_Incomplete(t *testing.T) {
 func TestSecureID_Equals(t *testing.T) {
 	cases := []struct {
 		a   SecureID
-		b   SecureID
+		b   ID
 		exp bool
 	}{
 		{
-			a:   SecureID{"Han Solo"},
-			b:   SecureID{"Han Solo"},
+			a:   UserID{"123", "abc"}.Secure(),
+			b:   UserID{"123", "abc"}.Secure(),
 			exp: true,
 		},
 		{
-			a:   SecureID{"Han Solo"},
-			b:   SecureID{"Darth Vader"},
+			a:   UserID{"123", "abc"}.Secure(),
+			b:   UserID{"456", "abc"}.Secure(),
 			exp: false,
 		},
 		{
-			a:   SecureID{},
-			b:   SecureID{"Darth Vader"},
+			a:   UserID{"123", "abc"}.Secure(),
+			b:   UserID{"123", "def"}.Secure(),
 			exp: false,
 		},
 		{
-			a:   SecureID{},
-			b:   SecureID{},
+			a:   UserID{}.Secure(),
+			b:   UserID{}.Secure(),
+			exp: false,
+		},
+		{
+			a:   UserID{"123", "abc"}.Secure(),
+			b:   UserID{"123", "abc"},
+			exp: true,
+		},
+		{
+			a:   UserID{"123", "abc"}.Secure(),
+			b:   UserID{"456", "abc"},
+			exp: false,
+		},
+		{
+			a:   UserID{"123", "abc"}.Secure(),
+			b:   UserID{"123", "def"},
+			exp: false,
+		},
+		{
+			a:   UserID{"123", "abc"}.Secure(),
+			b:   UserID{"", ""},
+			exp: false,
+		},
+		{
+			a:   UserID{"", ""}.Secure(),
+			b:   UserID{"", ""},
 			exp: false,
 		},
 	}

@@ -57,7 +57,7 @@ func (c *Client) authenticate() error {
 	for {
 		select {
 		case id := <-auth:
-			c.user.ID = id.Secure()
+			c.user.ID = id
 			return nil
 		case <-time.After(time.Second * 3):
 			return errors.New("Client authentication timed out (<-c.conn.Auth())")
@@ -125,7 +125,7 @@ func (c *Client) loadExecutions(m *Message) []Execution {
 }
 
 func (m *Message) sentBy(u *User) bool {
-	return u.ID.Equals(m.UserID.Secure())
+	return u.ID.Equals(m.UserID)
 }
 
 func (m *Message) escaped() bool {

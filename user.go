@@ -5,7 +5,7 @@ import (
 )
 
 type User struct {
-	ID             slack.SecureID
+	ID             slack.ID
 	Token          string
 	Configurations []*Configuration
 }

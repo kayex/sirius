@@ -44,7 +44,7 @@ func (s *Service) Start(ctx context.Context, users []User) {
 	for _, u := range users {
 		u := u
 		cl := s.createClient(&u)
-		s.clients[u.ID.HashSum] = cl
+		s.clients[u.ID.String()] = cl
 
 		go cl.Start()
 	}
@@ -59,7 +59,7 @@ func (s *Service) AddUser(u *User) {
 	s.DropUser(u.ID)
 
 	cl := s.createClient(u)
-	s.clients[u.ID.HashSum] = cl
+	s.clients[u.ID.String()] = cl
 
 	go cl.Start()
 
@@ -67,8 +67,8 @@ func (s *Service) AddUser(u *User) {
 	s.notify(u)
 }
 
-func (s *Service) DropUser(id slack.SecureID) bool {
-	if cl, ok := s.clients[id.HashSum]; ok {
+func (s *Service) DropUser(id slack.ID) bool {
+	if cl, ok := s.clients[id.String()]; ok {
 		cl.Cancel()
 
 		return true
@@ -77,8 +77,8 @@ func (s *Service) DropUser(id slack.SecureID) bool {
 	return false
 }
 
-func (s *Service) stopClient(id slack.SecureID) {
-	if ex, ok := s.clients[id.HashSum]; ok {
+func (s *Service) stopClient(id slack.ID) {
+	if ex, ok := s.clients[id.String()]; ok {
 		ex.Cancel()
 	}
 }
@@ -88,7 +88,7 @@ func (s *Service) createClient(u *User) *CancelClient {
 }
 
 func (s *Service) notify(u *User) {
-	cl := s.clients[u.ID.HashSum]
+	cl := s.clients[u.ID.String()]
 
 	conf := EMOJI + " " + slack.Italic("Configuration loaded successfully.")
 
