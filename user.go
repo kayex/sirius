@@ -12,6 +12,7 @@ type User struct {
 
 func NewUser(token string) *User {
 	return &User{
+		ID:    slack.SecureID{},
 		Token: token,
 	}
 }

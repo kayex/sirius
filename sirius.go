@@ -1,6 +1,8 @@
 package sirius
 
 import (
+	"errors"
+
 	"github.com/kayex/sirius/slack"
 	"golang.org/x/net/context"
 )
@@ -44,7 +46,7 @@ func (s *Service) Start(ctx context.Context, users []User) {
 	for _, u := range users {
 		u := u
 		cl := s.createClient(&u)
-		s.clients[u.ID.String()] = cl
+		s.addClient(cl)
 
 		go cl.Start()
 	}
@@ -57,7 +59,7 @@ func (s *Service) Start(ctx context.Context, users []User) {
 
 func (s *Service) AddUser(u *User) {
 	cl := s.createClient(u)
-	s.clients[u.ID.String()] = cl
+	s.addClient(cl)
 
 	go cl.Start()
 
@@ -81,6 +83,26 @@ func (s *Service) stopClient(id slack.ID) {
 	}
 }
 
+func (s *Service) addClient(cl *CancelClient) {
+	u := cl.user
+
+	if !u.ID.Valid() {
+		id, err := cl.conn.GetUserID(cl.user.Token)
+
+		if err != nil {
+			panic(err)
+		}
+
+		u.ID = id
+	}
+
+	if _, exists := s.clients[cl.user.ID.String()]; exists {
+		errors.New("Client with ID %v is already registered with service.")
+	}
+
+	s.clients[cl.user.ID.String()] = cl
+}
+
 func (s *Service) createClient(u *User) *CancelClient {
 	return NewClient(ClientConfig{
 		user:   u,
@@ -101,6 +123,6 @@ func (c *Client) notify() {
 
 	c.conn.Send(&Message{
 		Text:    conf,
-		Channel: c.conn.SelfChan(),
+		Channel: c.conn.Details().SelfChan,
 	})
 }
