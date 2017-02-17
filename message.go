@@ -23,11 +23,11 @@ func NewMessage(userID slack.UserID, text, channel, timestamp string) Message {
 }
 
 type MessageQuery interface {
-	Query(*Message) bool
+	Do(*Message) bool
 }
 
 func (m *Message) Query(q MessageQuery) bool {
-	return q.Query(m)
+	return q.Do(m)
 }
 
 // WholeWordQuery matches only complete words, i.e. strings that
@@ -36,7 +36,7 @@ type FullWordQuery struct {
 	W string
 }
 
-func (q FullWordQuery) Query(m *Message) bool {
+func (q FullWordQuery) Do(m *Message) bool {
 	if m.Text == q.W {
 		return true
 	}
