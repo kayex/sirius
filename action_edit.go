@@ -39,6 +39,15 @@ func (edit *TextEditAction) Substitute(search string, sub string) *TextEditActio
 	return edit
 }
 
+func (edit *TextEditAction) SubstituteWord(search string, sub string) *TextEditAction {
+	edit.add(&SubWordMutation{
+		Search: search,
+		Sub:    sub,
+	})
+
+	return edit
+}
+
 func (edit *TextEditAction) Append(app string) *TextEditAction {
 	edit.add(&AppendMutation{
 		Appendix: app,
@@ -72,6 +81,11 @@ type SubMutation struct {
 	Sub    string
 }
 
+type SubWordMutation struct {
+	Search string
+	Sub    string
+}
+
 type AppendMutation struct {
 	Appendix string
 }
@@ -86,6 +100,22 @@ func (rm *ReplaceMutation) Apply(text string) string {
 
 func (sm *SubMutation) Apply(text string) string {
 	return strings.Replace(text, sm.Search, sm.Sub, -1)
+}
+
+func (sm *SubWordMutation) Apply(text string) string {
+	if text == sm.Search {
+		return strings.Replace(text, sm.Search, sm.Sub, -1)
+	}
+
+	if strings.HasPrefix(text, sm.Search+" ") {
+		text = sm.Sub + text[len(sm.Search):]
+	}
+
+	if strings.HasSuffix(text, " "+sm.Search) {
+		text = text[:len(text)-len(sm.Search)] + sm.Sub
+	}
+
+	return text
 }
 
 func (am *AppendMutation) Apply(text string) string {
