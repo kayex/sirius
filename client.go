@@ -9,12 +9,12 @@ import (
 )
 
 type Client struct {
+	Ready   chan bool
 	user    *User
 	conn    Connection
 	loader  ExtensionLoader
 	runner  ExtensionRunner
 	timeout time.Duration
-	Ready   chan bool
 }
 
 type ClientConfig struct {
