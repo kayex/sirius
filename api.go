@@ -8,13 +8,27 @@ import (
 	"golang.org/x/net/context"
 )
 
-type Connection interface {
-	Listen(context.Context)
-	Auth() <-chan slack.UserID
+type API interface {
+	GetUserID(token string) (slack.ID, error)
+}
+
+type MessageBroker interface {
 	Send(*Message) error
 	Update(*Message) error
 	Messages() <-chan Message
-	SelfChan() string
+}
+
+type Connection interface {
+	API
+	MessageBroker
+	Listen(context.Context)
+	Auth() <-chan slack.UserID
+	Details() ConnectionDetails
+}
+
+type ConnectionDetails struct {
+	UserID   slack.UserID
+	SelfChan string
 }
 
 type RTMConnection struct {
@@ -23,22 +37,18 @@ type RTMConnection struct {
 	client   *api.Client
 	auth     chan slack.UserID
 	messages chan Message
-	selfChan string
+	details  ConnectionDetails
 }
 
 func NewRTMConnection(token string) *RTMConnection {
 	client := api.New(token)
 
-	rtm := client.NewRTM()
-	auth := make(chan slack.UserID, 1)
-	msg := make(chan Message)
-
 	return &RTMConnection{
-		rtm:      rtm,
-		auth:     auth,
-		messages: msg,
-		client:   client,
 		token:    token,
+		rtm:      client.NewRTM(),
+		client:   client,
+		auth:     make(chan slack.UserID, 1),
+		messages: make(chan Message),
 	}
 }
 
@@ -56,12 +66,12 @@ func (conn *RTMConnection) Listen(ctx context.Context) {
 	}
 }
 
-func (conn *RTMConnection) SelfChan() string {
-	return conn.selfChan
-}
-
 func (conn *RTMConnection) Auth() <-chan slack.UserID {
 	return conn.auth
+}
+
+func (conn *RTMConnection) Details() ConnectionDetails {
+	return conn.details
 }
 
 func (conn *RTMConnection) Messages() <-chan Message {
@@ -80,9 +90,26 @@ func (conn *RTMConnection) Update(msg *Message) error {
 	return err
 }
 
+func (conn *RTMConnection) GetUserID(token string) (slack.ID, error) {
+	res, err := conn.client.AuthTest()
+
+	if err != nil {
+		return nil, err
+	}
+
+	id := &slack.UserID{
+		UserID: res.UserID,
+		TeamID: res.TeamID,
+	}
+	conn.details.UserID = *id
+
+	return id, nil
+}
+
 func (conn *RTMConnection) authenticate(e *api.ConnectedEvent) {
 	id := slack.UserID{e.Info.User.ID, e.Info.Team.ID}
-	conn.selfChan = conn.getSelfChan(id, e)
+	conn.details.SelfChan = conn.getSelfChan(id, e)
+	conn.details.UserID = id
 	conn.auth <- id
 }
 
