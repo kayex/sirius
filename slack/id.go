@@ -8,6 +8,7 @@ import (
 type ID interface {
 	String() string
 	Equals(ID) bool
+	Valid() bool
 }
 
 type UserID struct {
@@ -29,7 +30,7 @@ type SecureID struct {
 func (id UserID) Equals(o ID) bool {
 	switch o := o.(type) {
 	case UserID:
-		if id.Incomplete() || o.Incomplete() {
+		if !(id.Valid() && o.Valid()) {
 			return false
 		}
 
@@ -45,9 +46,8 @@ func (id UserID) Equals(o ID) bool {
 	return false
 }
 
-// Incomplete indicates if id has been populated properly.
-func (id UserID) Incomplete() bool {
-	return id.UserID == "" || id.TeamID == ""
+func (id UserID) Valid() bool {
+	return id.UserID != "" && id.TeamID != ""
 }
 
 func (id UserID) String() string {
@@ -56,7 +56,7 @@ func (id UserID) String() string {
 
 // Secure converts id into a SecureID.
 func (id UserID) Secure() SecureID {
-	if id.Incomplete() {
+	if !id.Valid() {
 		return SecureID{}
 	}
 
@@ -74,7 +74,7 @@ func (id UserID) Secure() SecureID {
 func (id SecureID) Equals(o ID) bool {
 	switch o := o.(type) {
 	case SecureID:
-		if id.Incomplete() || o.Incomplete() {
+		if !(id.Valid() && o.Valid()) {
 			return false
 		}
 
@@ -85,9 +85,8 @@ func (id SecureID) Equals(o ID) bool {
 	return false
 }
 
-// Incomplete indicates if id has been populated properly.
-func (id *SecureID) Incomplete() bool {
-	return id.HashSum == ""
+func (id SecureID) Valid() bool {
+	return id.HashSum != ""
 }
 
 func (id SecureID) String() string {

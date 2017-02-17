@@ -71,32 +71,34 @@ func TestUserID_Equals(t *testing.T) {
 	}
 }
 
-func TestUserID_Incomplete(t *testing.T) {
+func TestUserID_Valid(t *testing.T) {
 	cases := []struct {
 		id  UserID
 		exp bool
 	}{
 		{
 			id:  UserID{"", ""},
-			exp: true,
+			exp: false,
 		},
 		{
 			id:  UserID{"123", ""},
-			exp: true,
+			exp: false,
 		},
 		{
 			id:  UserID{"", "abc"},
-			exp: true,
+			exp: false,
 		},
 		{
 			id:  UserID{"123", "abc"},
-			exp: false,
+			exp: true,
 		},
 	}
 
 	for _, c := range cases {
-		if c.id.Incomplete() != c.exp {
-			t.Fatalf("Expected UserID (%v) to count as Incomplete()", c.id.String())
+		v := c.id.Valid()
+
+		if v != c.exp {
+			t.Fatalf("Expected UserID(%v).Valid() to be %v, got %v", c.id.String(), c.exp, v)
 		}
 	}
 
@@ -140,32 +142,32 @@ func TestUserID_Secure(t *testing.T) {
 
 	for _, c := range cases {
 		sid := c.id.Secure()
-		valid := !sid.Incomplete()
 
-		if valid != c.exp {
+		if sid.Valid() != c.exp {
 			t.Fatalf("UserID (%v) secures into (%v), which is not a valid SecureID", c.id.String(), sid.String())
 		}
 	}
 }
 
-func TestSecureID_Incomplete(t *testing.T) {
+func TestSecureID_Valid(t *testing.T) {
 	cases := []struct {
 		id  SecureID
 		exp bool
 	}{
 		{
 			id:  SecureID{"test-id"},
-			exp: false,
+			exp: true,
 		},
 		{
 			id:  SecureID{},
-			exp: true,
+			exp: false,
 		},
 	}
 
 	for _, c := range cases {
-		if c.id.Incomplete() != c.exp {
-			t.Fatalf("Expected SecureID (%v) to count as Incomplete()", c.id.String())
+		v := c.id.Valid()
+		if v != c.exp {
+			t.Fatalf("Expected SecureID(%v).Valid() to be %v, got %v", c.id.String(), c.exp, v)
 		}
 	}
 
