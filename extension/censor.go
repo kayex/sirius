@@ -3,6 +3,7 @@ package extension
 import (
 	"github.com/kayex/sirius"
 	"github.com/kayex/sirius/slack"
+	"github.com/kayex/sirius/text"
 )
 
 type Censor struct{}
@@ -14,7 +15,7 @@ func (*Censor) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.Message
 	edit := m.EditText()
 
 	for _, p := range phrases {
-		if !m.Query(sirius.FullWordQuery{p}) {
+		if !m.Query(text.Word{p}) {
 			continue
 		}
 

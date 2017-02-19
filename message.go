@@ -1,9 +1,8 @@
 package sirius
 
 import (
-	"strings"
-
 	"github.com/kayex/sirius/slack"
+	"github.com/kayex/sirius/text"
 )
 
 type Message struct {
@@ -22,39 +21,6 @@ func NewMessage(userID slack.UserID, text, channel, timestamp string) Message {
 	}
 }
 
-type MessageQuery interface {
-	Do(*Message) bool
-}
-
-func (m *Message) Query(q MessageQuery) bool {
-	return q.Do(m)
-}
-
-// WholeWordQuery matches only complete words, i.e. strings that
-// are not sub-strings of other words.
-type FullWordQuery struct {
-	W string
-}
-
-func (q FullWordQuery) Do(m *Message) bool {
-	if m.Text == q.W {
-		return true
-	}
-	// "W lorem ipsum"
-	//  ^^
-	if strings.HasPrefix(m.Text, q.W+" ") {
-		return true
-	}
-	// "lorem ipsum W"
-	//             ^^
-	if strings.HasSuffix(m.Text, " "+q.W) {
-		return true
-	}
-	// "lorem W ipsum"
-	//       ^^^
-	if strings.Contains(m.Text, " "+q.W+" ") {
-		return true
-	}
-
-	return false
+func (m *Message) Query(q text.Query) bool {
+	return q.Match(m.Text)
 }

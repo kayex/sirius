@@ -2,33 +2,34 @@ package sirius
 
 import (
 	"github.com/kayex/sirius/slack"
+	"github.com/kayex/sirius/text"
 	"testing"
 )
 
 func TestFullWordQuery_Query(t *testing.T) {
 	cases := []struct {
 		msg Message
-		q   MessageQuery
+		q   text.Query
 		exp bool
 	}{
 		{
 			msg: NewMessage(slack.UserID{"123", "abc"}, "Alligators eat mattresses", "#channel", "0"),
-			q:   FullWordQuery{"Alligators"},
+			q:   text.Word{"Alligators"},
 			exp: true,
 		},
 		{
 			msg: NewMessage(slack.UserID{"123", "abc"}, "Alligators eat mattresses", "#channel", "0"),
-			q:   FullWordQuery{"mattresses"},
+			q:   text.Word{"mattresses"},
 			exp: true,
 		},
 		{
 			msg: NewMessage(slack.UserID{"123", "abc"}, "Alligators eat mattresses", "#channel", "0"),
-			q:   FullWordQuery{"gators"},
+			q:   text.Word{"gators"},
 			exp: false,
 		},
 		{
 			msg: NewMessage(slack.UserID{"123", "abc"}, "Alligators eat meat", "#channel", "0"),
-			q:   FullWordQuery{"eat"},
+			q:   text.Word{"eat"},
 			exp: true,
 		},
 	}
