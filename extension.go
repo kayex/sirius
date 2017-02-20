@@ -51,9 +51,10 @@ func (cfg ExtensionConfig) Boolean(key string) bool {
 			return b
 		case int:
 			// Require explicit 0 or 1
-			if b == 0 {
+			switch b {
+			case 0:
 				return false
-			} else if b == 1 {
+			case 1:
 				return true
 			}
 		}
