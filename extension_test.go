@@ -115,6 +115,7 @@ func TestExtensionConfig_Read(t *testing.T) {
 		exp: valueMatches{
 			"int_0":        0,
 			"int_1":        1,
+			"int_2":        2,
 			"float_0.0":    0.0,
 			"float_1.1":    1.1,
 			"bool_true":    true,
