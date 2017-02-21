@@ -14,7 +14,7 @@ type Geocode struct {
 func (x *Geocode) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.MessageAction, error) {
 	cmd, match := m.Command("address")
 
-	if !match {
+	if !match || len(cmd.Args) == 0 {
 		return sirius.NoAction(), nil
 	}
 

@@ -1,11 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"github.com/kayex/sirius"
 	"github.com/kayex/sirius/config"
 	"github.com/kayex/sirius/extension"
 	"golang.org/x/net/context"
-	"fmt"
 )
 
 func main() {
@@ -40,6 +40,6 @@ func printRunInfo(users []sirius.User, cfg config.AppConfig) {
 			}
 			tks += string(c.EID)
 		}
-		fmt.Printf("[%v] %v (%v)\n", u.ID.HashSum, len(u.Configurations), tks)
+		fmt.Printf("[%v] %v (%v)\n", u.ID.String(), len(u.Configurations), tks)
 	}
 }

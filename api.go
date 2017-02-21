@@ -1,17 +1,34 @@
 package sirius
 
 import (
-	"fmt"
+	"strings"
+
 	"github.com/kayex/sirius/slack"
 	api "github.com/nlopes/slack"
-	"strings"
+	"golang.org/x/net/context"
 )
 
-type Connection interface {
-	Listen()
-	Auth() chan slack.UserID
-	Messages() chan Message
+type API interface {
+	GetUserID(token string) (slack.ID, error)
+}
+
+type MessageBroker interface {
+	Send(*Message) error
 	Update(*Message) error
+	Messages() <-chan Message
+}
+
+type Connection interface {
+	API
+	MessageBroker
+	Listen(context.Context)
+	Auth() <-chan slack.UserID
+	Details() ConnectionDetails
+}
+
+type ConnectionDetails struct {
+	UserID   slack.UserID
+	SelfChan string
 }
 
 type RTMConnection struct {
@@ -20,46 +37,52 @@ type RTMConnection struct {
 	client   *api.Client
 	auth     chan slack.UserID
 	messages chan Message
+	details  ConnectionDetails
 }
 
 func NewRTMConnection(token string) *RTMConnection {
 	client := api.New(token)
 
-	rtm := client.NewRTM()
-	auth := make(chan slack.UserID, 1)
-	msg := make(chan Message)
-
 	return &RTMConnection{
-		rtm:      rtm,
-		auth:     auth,
-		messages: msg,
-		client:   client,
 		token:    token,
+		rtm:      client.NewRTM(),
+		client:   client,
+		auth:     make(chan slack.UserID, 1),
+		messages: make(chan Message),
 	}
 }
 
-func (conn *RTMConnection) Listen() {
+func (conn *RTMConnection) Listen(ctx context.Context) {
 	go conn.rtm.ManageConnection()
 
 	for {
 		select {
+		case <-ctx.Done():
+			conn.rtm.Disconnect()
+			return
 		case ev := <-conn.rtm.IncomingEvents:
 			conn.handleIncomingEvent(ev)
 		}
 	}
 }
 
-func (conn *RTMConnection) Auth() chan slack.UserID {
+func (conn *RTMConnection) Auth() <-chan slack.UserID {
 	return conn.auth
 }
 
-func (conn *RTMConnection) Messages() chan Message {
+func (conn *RTMConnection) Details() ConnectionDetails {
+	return conn.details
+}
+
+func (conn *RTMConnection) Messages() <-chan Message {
 	return conn.messages
 }
 
-func (conn *RTMConnection) SendMessage(msg *Message) {
-	omsg := conn.rtm.NewOutgoingMessage(msg.Text, msg.Channel)
-	conn.rtm.SendMessage(omsg)
+func (conn *RTMConnection) Send(msg *Message) error {
+	oMsg := conn.rtm.NewOutgoingMessage(msg.Text, msg.Channel)
+	conn.rtm.SendMessage(oMsg)
+
+	return nil
 }
 
 func (conn *RTMConnection) Update(msg *Message) error {
@@ -67,10 +90,37 @@ func (conn *RTMConnection) Update(msg *Message) error {
 	return err
 }
 
+func (conn *RTMConnection) GetUserID(token string) (slack.ID, error) {
+	res, err := conn.client.AuthTest()
+
+	if err != nil {
+		return nil, err
+	}
+
+	id := &slack.UserID{
+		UserID: res.UserID,
+		TeamID: res.TeamID,
+	}
+	conn.details.UserID = *id
+
+	return id, nil
+}
+
 func (conn *RTMConnection) authenticate(e *api.ConnectedEvent) {
-	info := e.Info
-	id := slack.UserID{info.User.ID, info.Team.ID}
+	id := slack.UserID{e.Info.User.ID, e.Info.Team.ID}
+	conn.details.SelfChan = conn.getSelfChan(id, e)
+	conn.details.UserID = id
 	conn.auth <- id
+}
+
+func (conn *RTMConnection) getSelfChan(id slack.UserID, e *api.ConnectedEvent) string {
+	for _, im := range e.Info.IMs {
+		if im.User == id.UserID {
+			return im.ID
+		}
+	}
+
+	panic("")
 }
 
 func (conn *RTMConnection) handleIncomingEvent(ev api.RTMEvent) {
@@ -83,7 +133,6 @@ func (conn *RTMConnection) handleIncomingEvent(ev api.RTMEvent) {
 		conn.handleIncomingMessage(msg)
 
 	case *api.RTMError:
-		fmt.Printf("Error: %s\n", msg.Error())
 		panic(msg)
 	}
 }

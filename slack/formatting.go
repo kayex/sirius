@@ -1,19 +1,41 @@
 package slack
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
-func italic(s string) string {
-	return fmt.Sprintf("_%v_", s)
+func Italic(s string) string {
+	if s == "" {
+		return s
+	}
+	return fmt.Sprintf("_%s_", strings.TrimSpace(s))
 }
 
-func bold(s string) string {
-	return fmt.Sprintf("*%v*", s)
+func Bold(s string) string {
+	if s == "" {
+		return s
+	}
+	return fmt.Sprintf("*%s*", strings.TrimSpace(s))
 }
 
-func strike(s string) string {
-	return fmt.Sprintf("~%v~", s)
+func Strike(s string) string {
+	if s == "" {
+		return s
+	}
+	return fmt.Sprintf("~%s~", strings.TrimSpace(s))
 }
 
-func code(s string) string {
-	return fmt.Sprintf("`%v`", s)
+func Code(s string) string {
+	if s == "" {
+		return s
+	}
+	return fmt.Sprintf("`%s`", strings.TrimSpace(s))
+}
+
+func Quote(s string) string {
+	if s == "" {
+		return s
+	}
+	return fmt.Sprintf(">%s", s)
 }

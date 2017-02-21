@@ -10,11 +10,15 @@ type Command struct {
 }
 
 func (m *Message) Command(name string) (*Command, bool) {
-	cmd := prefix + name + " "
+	cmd := prefix + name
 
 	if strings.HasPrefix(m.Text, cmd) {
-		trim := strings.TrimPrefix(m.Text, cmd)
-		args := strings.Split(trim, " ")
+		var args []string
+		inv := strings.Split(m.Text, " ")
+
+		if len(inv) >= 2 {
+			args = append(args, inv[1:]...)
+		}
 
 		return &Command{
 			Name: name,

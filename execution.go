@@ -38,18 +38,18 @@ func NewAsyncRunner() *AsyncRunner {
 }
 
 func (r *AsyncRunner) Run(exe []Execution, res chan<- ExecutionResult, timeout time.Duration) {
-	act := make(chan ExecutionResult, len(exe))
+	er := make(chan ExecutionResult, len(exe))
 
 	for _, e := range exe {
-		r.execute(e, act)
+		r.execute(e, er)
 	}
 
-ActionReceive:
+Execution:
 	for range exe {
 		select {
-		case res <- <-act:
 		case <-time.After(timeout):
-			break ActionReceive
+			break Execution
+		case res <- <-er:
 		}
 	}
 
@@ -60,11 +60,9 @@ func (r *AsyncRunner) execute(e Execution, res chan<- ExecutionResult) {
 	go func() {
 		a, err := e.Ext.Run(e.Msg, e.Cfg)
 
-		r := ExecutionResult{
+		res <- ExecutionResult{
 			Err:    err,
 			Action: a,
 		}
-
-		res <- r
 	}()
 }

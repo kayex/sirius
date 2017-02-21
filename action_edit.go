@@ -4,24 +4,8 @@ import (
 	"strings"
 )
 
-/*
-TextEditAction represents a series of
-edits to the message Text property
-
-Usage:
-
-msg := Message{
-	Text: "foo bar",
-}
-
-edit := msg.EditText()
-edit.Substitute("foo", "bar")
-edit.Append(" baz")
-
-fmt.Println(msg.Text) // "bar bar baz"
-
-*/
-
+// TextEditAction represents a series of
+// modifications to the message Text property
 type TextEditAction struct {
 	mutations []TextMutation
 }
@@ -55,9 +39,26 @@ func (edit *TextEditAction) Substitute(search string, sub string) *TextEditActio
 	return edit
 }
 
+func (edit *TextEditAction) SubstituteWord(search string, sub string) *TextEditAction {
+	edit.add(&SubWordMutation{
+		Search: search,
+		Sub:    sub,
+	})
+
+	return edit
+}
+
 func (edit *TextEditAction) Append(app string) *TextEditAction {
 	edit.add(&AppendMutation{
 		Appendix: app,
+	})
+
+	return edit
+}
+
+func (edit *TextEditAction) Prepend(pre string) *TextEditAction {
+	edit.add(&PrependMutation{
+		Prefix: pre,
 	})
 
 	return edit
@@ -80,8 +81,17 @@ type SubMutation struct {
 	Sub    string
 }
 
+type SubWordMutation struct {
+	Search string
+	Sub    string
+}
+
 type AppendMutation struct {
 	Appendix string
+}
+
+type PrependMutation struct {
+	Prefix string
 }
 
 func (rm *ReplaceMutation) Apply(text string) string {
@@ -92,10 +102,34 @@ func (sm *SubMutation) Apply(text string) string {
 	return strings.Replace(text, sm.Search, sm.Sub, -1)
 }
 
+func (sm *SubWordMutation) Apply(text string) string {
+	if text == sm.Search {
+		return strings.Replace(text, sm.Search, sm.Sub, -1)
+	}
+
+	if strings.HasPrefix(text, sm.Search+" ") {
+		text = sm.Sub + text[len(sm.Search):]
+	}
+
+	if strings.HasSuffix(text, " "+sm.Search) {
+		text = text[:len(text)-len(sm.Search)] + sm.Sub
+	}
+
+	return text
+}
+
 func (am *AppendMutation) Apply(text string) string {
 	if len(am.Appendix) == 0 {
 		return text
 	}
 
 	return text + am.Appendix
+}
+
+func (pm *PrependMutation) Apply(text string) string {
+	if len(pm.Prefix) == 0 {
+		return text
+	}
+
+	return pm.Prefix + text
 }

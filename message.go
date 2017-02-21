@@ -1,6 +1,9 @@
 package sirius
 
-import "github.com/kayex/sirius/slack"
+import (
+	"github.com/kayex/sirius/slack"
+	"github.com/kayex/sirius/text"
+)
 
 type Message struct {
 	Text      string
@@ -16,4 +19,8 @@ func NewMessage(userID slack.UserID, text, channel, timestamp string) Message {
 		Channel:   channel,
 		Timestamp: timestamp,
 	}
+}
+
+func (m *Message) Query(q text.Query) bool {
+	return q.Match(m.Text)
 }

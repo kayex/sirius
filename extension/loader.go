@@ -8,12 +8,12 @@ import (
 )
 
 type StaticLoader struct {
-	config config.AppConfig
+	cfg config.AppConfig
 }
 
 func NewStaticLoader(cfg config.AppConfig) *StaticLoader {
 	return &StaticLoader{
-		config: cfg,
+		cfg: cfg,
 	}
 }
 
@@ -29,9 +29,11 @@ func (l *StaticLoader) Load(eid sirius.EID) (sirius.Extension, error) {
 		return &Quotes{}, nil
 	case "ip_lookup":
 		return &IPLookup{}, nil
+	case "censor":
+		return &Censor{}, nil
 	case "geocode":
 		return &Geocode{
-			APIKey: l.config.Maps.APIKey,
+			APIKey: l.cfg.Maps.APIKey,
 		}, nil
 	}
 

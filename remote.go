@@ -2,8 +2,9 @@ package sirius
 
 import (
 	"encoding/json"
-	"github.com/kayex/sirius/slack"
 	"net/http"
+
+	"github.com/kayex/sirius/slack"
 )
 
 type Remote struct {
@@ -13,7 +14,7 @@ type Remote struct {
 }
 
 type RemoteUser struct {
-	IDHash string      `json:"id_hash_sha256"`
+	IDHash string      `json:"sirius_id"`
 	Token  string      `json:"slack_token"`
 	Config interface{} `json:"config"`
 }
@@ -32,14 +33,13 @@ func (ru *RemoteUser) ToUser() *User {
 
 	switch cfg := ru.Config.(type) {
 	case map[string]interface{}:
-		for eid, c := range cfg {
-			cfg := NewConfiguration(EID(eid))
+		for eid, settings := range cfg {
+			c := NewConfiguration(EID(eid))
 
-			if conf, ok := c.(map[string]interface{}); ok {
-				cfg.Cfg = conf
+			if conf, ok := settings.(map[string]interface{}); ok {
+				c.Cfg = ExtensionConfig(conf)
 			}
-
-			u.Configurations = append(u.Configurations, &cfg)
+			u.Configurations = append(u.Configurations, &c)
 		}
 	case []interface{}:
 		for eid := range cfg {
@@ -47,7 +47,6 @@ func (ru *RemoteUser) ToUser() *User {
 			u.Configurations = append(u.Configurations, &c)
 		}
 	}
-
 	return u
 }
 
@@ -57,11 +56,10 @@ func (r *Remote) request(endpoint string) (*http.Response, error) {
 	return r.client.Get(url)
 }
 
-func (r *Remote) GetUser(token string) (*User, error) {
+func (r *Remote) GetUser(id slack.SecureID) (*User, error) {
 	var ru RemoteUser
 
-	res, err := r.request("/configs/" + token)
-
+	res, err := r.request("/configs/" + id.HashSum)
 	if err != nil {
 		return nil, err
 	}
@@ -76,8 +74,8 @@ func (r *Remote) GetUser(token string) (*User, error) {
 
 func (r *Remote) GetUsers() ([]User, error) {
 	var ru []RemoteUser
-	res, err := r.request("/configs")
 
+	res, err := r.request("/configs")
 	if err != nil {
 		return nil, err
 	}
@@ -92,6 +90,5 @@ func (r *Remote) GetUsers() ([]User, error) {
 	for _, u := range ru {
 		users = append(users, *u.ToUser())
 	}
-
 	return users, nil
 }
