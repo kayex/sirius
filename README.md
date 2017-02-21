@@ -67,6 +67,17 @@ Avoids breaking blockquotes that contain newlines.
 
 --
 
+### Censor
+Helps you avoid using inappropriate language.
+
+>**kayex:** I messed up. Fuck.
+
+⚡
+
+>**kayex:** I messed up. `CENSORED`
+
+--
+
 ## Getting started
 Sirius is available as a free, hosted service at http://adsa.se/sirius.
 
