@@ -4,10 +4,6 @@ import (
 	"time"
 )
 
-type ExtensionRunner interface {
-	Run([]Execution, chan<- ExecutionResult, time.Duration)
-}
-
 type Execution struct {
 	Ext Extension
 	Msg Message
@@ -19,9 +15,11 @@ type ExecutionResult struct {
 	Action MessageAction
 }
 
-type AsyncRunner struct {
-	Actions chan MessageAction
+type ExtensionRunner interface {
+	Run([]Execution, chan<- ExecutionResult, time.Duration)
 }
+
+type AsyncRunner struct{}
 
 func NewExecution(x Extension, m Message, cfg ExtensionConfig) *Execution {
 	return &Execution{
@@ -32,16 +30,23 @@ func NewExecution(x Extension, m Message, cfg ExtensionConfig) *Execution {
 }
 
 func NewAsyncRunner() *AsyncRunner {
-	return &AsyncRunner{
-		Actions: make(chan MessageAction),
-	}
+	return &AsyncRunner{}
 }
 
+// Run executes all extensions in exe, and returns all ExecutionResults that
+// are received before timeout has elapsed.
 func (r *AsyncRunner) Run(exe []Execution, res chan<- ExecutionResult, timeout time.Duration) {
 	er := make(chan ExecutionResult, len(exe))
 
 	for _, e := range exe {
-		r.execute(e, er)
+		go func() {
+			a, err := e.Ext.Run(e.Msg, e.Cfg)
+
+			er <- ExecutionResult{
+				Err:    err,
+				Action: a,
+			}
+		}()
 	}
 
 Execution:
@@ -54,15 +59,4 @@ Execution:
 	}
 
 	close(res)
-}
-
-func (r *AsyncRunner) execute(e Execution, res chan<- ExecutionResult) {
-	go func() {
-		a, err := e.Ext.Run(e.Msg, e.Cfg)
-
-		res <- ExecutionResult{
-			Err:    err,
-			Action: a,
-		}
-	}()
 }
