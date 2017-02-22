@@ -47,7 +47,10 @@ func TestWord_Match(t *testing.T) {
 }
 
 func BenchmarkWord_Match(b *testing.B) {
+	w := Word{"foo bar baz biz boz bem boos bick dale biz buul hum dirk hass tukk murr"}
+	b.ResetTimer()
+
 	for n := 0; n < b.N; n++ {
-		Word{"foo bar baz biz boz bem boos bick dale biz buul hum dirk hass tukk murr"}.Match("biz")
+		w.Match("biz")
 	}
 }
