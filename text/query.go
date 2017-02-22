@@ -28,11 +28,9 @@ func (q Word) Match(s string) bool {
 	var nMatch int
 
 	for i := 0; i < len(sr); i++ {
-		if nMatch < len(qr) {
-			if sr[i] != qr[nMatch] {
-				nMatch = 0
-				continue
-			}
+		if nMatch < len(qr) && sr[i] != qr[nMatch] {
+			nMatch = 0
+			continue
 		}
 
 		nMatch++
