@@ -10,6 +10,17 @@ type User struct {
 	Configurations []*Configuration
 }
 
+type Configuration struct {
+	EID EID
+	Cfg ExtensionConfig
+}
+
+func NewConfiguration(eid EID) Configuration {
+	return Configuration{
+		EID: eid,
+	}
+}
+
 func NewUser(token string) *User {
 	return &User{
 		ID:    slack.SecureID{},
