@@ -39,14 +39,14 @@ func (r *AsyncRunner) Run(exe []Execution, res chan<- ExecutionResult, timeout t
 	er := make(chan ExecutionResult, len(exe))
 
 	for _, e := range exe {
-		go func() {
+		go func(r chan<- ExecutionResult) {
 			a, err := e.Ext.Run(e.Msg, e.Cfg)
 
 			er <- ExecutionResult{
 				Err:    err,
 				Action: a,
 			}
-		}()
+		}(er)
 	}
 
 Execution:
