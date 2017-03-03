@@ -42,7 +42,7 @@ func (r *AsyncRunner) Run(exe []Execution, res chan<- ExecutionResult, timeout t
 		go func(r chan<- ExecutionResult) {
 			a, err := e.Ext.Run(e.Msg, e.Cfg)
 
-			er <- ExecutionResult{
+			r <- ExecutionResult{
 				Err:    err,
 				Action: a,
 			}
