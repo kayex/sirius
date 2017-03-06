@@ -3,7 +3,7 @@ package text
 import "unicode"
 
 type Query interface {
-	Match(string) bool
+	Match(string) int
 }
 
 // Word matches complete words only.
@@ -13,16 +13,16 @@ type Word struct {
 	W string
 }
 
-func (q Word) Match(s string) bool {
+func (q Word) Match(s string) int {
 	if s == q.W {
-		return true
+		return 0
 	}
 
 	sr := []rune(s)
 	qr := []rune(q.W)
 
 	if len(sr) < len(qr) {
-		return false
+		return -1
 	}
 
 	var nMatch int
@@ -49,9 +49,9 @@ func (q Word) Match(s string) bool {
 				continue
 			}
 
-			return true
+			return i
 		}
 	}
 
-	return false
+	return -1
 }

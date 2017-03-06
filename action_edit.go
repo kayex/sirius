@@ -1,6 +1,7 @@
 package sirius
 
 import (
+	"github.com/kayex/sirius/text"
 	"strings"
 )
 
@@ -41,7 +42,7 @@ func (edit *TextEditAction) Substitute(search string, sub string) *TextEditActio
 
 func (edit *TextEditAction) SubstituteWord(search string, sub string) *TextEditAction {
 	edit.add(&SubWordMutation{
-		Search: search,
+		Search: text.Word{search},
 		Sub:    sub,
 	})
 
@@ -82,7 +83,7 @@ type SubMutation struct {
 }
 
 type SubWordMutation struct {
-	Search string
+	Search text.Word
 	Sub    string
 }
 
@@ -103,19 +104,22 @@ func (sm *SubMutation) Apply(text string) string {
 }
 
 func (sm *SubWordMutation) Apply(text string) string {
-	if text == sm.Search {
+	if text == sm.Search.W {
 		return sm.Sub
 	}
 
-	if strings.HasPrefix(text, sm.Search+" ") {
-		text = sm.Sub + text[len(sm.Search):]
+	tr := []rune(text)
+	for {
+		str := string(tr)
+		i := sm.Search.Match(str)
+
+		if i < 0 {
+			return str
+		}
+
+		tr = tr[i+len(sm.Search.W):]
 	}
 
-	if strings.HasSuffix(text, " "+sm.Search) {
-		text = text[:len(text)-len(sm.Search)] + sm.Sub
-	}
-
-	return strings.Replace(text, " "+sm.Search+" ", sm.Sub, -1)
 }
 
 func (am *AppendMutation) Apply(text string) string {
