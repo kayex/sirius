@@ -11,6 +11,12 @@ type HttpExtension struct {
 	Host   string
 }
 
+func NewHttpExtension(host string) *HttpExtension {
+	return &HttpExtension{
+		Host: host,
+	}
+}
+
 type HttpExecutionResult struct {
 	Err     error
 	Actions []HttpMessageAction

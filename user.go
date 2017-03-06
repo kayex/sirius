@@ -11,6 +11,7 @@ type User struct {
 }
 
 type Configuration struct {
+	URL string
 	EID EID
 	Cfg ExtensionConfig
 }
@@ -18,6 +19,12 @@ type Configuration struct {
 func NewConfiguration(eid EID) Configuration {
 	return Configuration{
 		EID: eid,
+	}
+}
+
+func NewHTTPConfiguration(url string) Configuration {
+	return Configuration{
+		URL: url,
 	}
 }
 

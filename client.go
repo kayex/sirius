@@ -119,14 +119,22 @@ func (c *Client) run(m *Message) {
 
 func (c *Client) loadExecutions(m *Message) []Execution {
 	var exe []Execution
-	for _, cf := range c.user.Configurations {
-		x, err := c.loader.Load(cf.EID)
+	for _, cfg := range c.user.Configurations {
+		var x Extension
 
-		if err != nil {
-			panic(err)
+		// Check for HTTP extensions
+		if cfg.URL != "" {
+			x = NewHttpExtension(cfg.URL)
+		} else {
+			var err error
+			x, err = c.loader.Load(cfg.EID)
+
+			if err != nil {
+				panic(err)
+			}
 		}
 
-		exe = append(exe, *NewExecution(x, *m, cf.Cfg))
+		exe = append(exe, *NewExecution(x, *m, cfg.Cfg))
 	}
 
 	return exe

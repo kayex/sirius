@@ -3,6 +3,7 @@ package sirius
 import (
 	"encoding/json"
 	"net/http"
+	"net/url"
 
 	"github.com/kayex/sirius/slack"
 )
@@ -14,9 +15,10 @@ type Remote struct {
 }
 
 type RemoteUser struct {
-	IDHash     string      `json:"sirius_id"`
-	Token      string      `json:"slack_token"`
-	Extensions interface{} `json:"extensions"`
+	IDHash         string      `json:"sirius_id"`
+	Token          string      `json:"slack_token"`
+	Extensions     interface{} `json:"extensions"`
+	HttpExtensions interface{} `json:"http_extensions"`
 }
 
 func NewRemote(host, token string) *Remote {
@@ -31,23 +33,41 @@ func (ru *RemoteUser) ToUser() *User {
 	u := NewUser(ru.Token)
 	u.ID = slack.SecureID{ru.IDHash}
 
-	switch cfg := ru.Extensions.(type) {
+	u.Configurations = append(u.Configurations, ru.parseExtensionList(ru.Extensions)...)
+	u.Configurations = append(u.Configurations, ru.parseExtensionList(ru.HttpExtensions)...)
+
+	return u
+}
+
+func (ru *RemoteUser) parseExtensionList(extl interface{}) []*Configuration {
+	var cfgs []*Configuration
+
+	switch ext := extl.(type) {
 	case map[string]interface{}:
-		for eid, settings := range cfg {
-			c := NewConfiguration(EID(eid))
+		for eid, settings := range ext {
+			var c Configuration
+
+			// Check for HTTP extensions
+			_, err := url.ParseRequestURI(eid)
+			if err == nil {
+				c = NewHTTPConfiguration(eid)
+			} else {
+				c = NewConfiguration(EID(eid))
+			}
 
 			if conf, ok := settings.(map[string]interface{}); ok {
 				c.Cfg = ExtensionConfig(conf)
 			}
-			u.Configurations = append(u.Configurations, &c)
+			cfgs = append(cfgs, &c)
 		}
 	case []interface{}:
-		for eid := range cfg {
+		for eid := range ext {
 			c := NewConfiguration(EID(eid))
-			u.Configurations = append(u.Configurations, &c)
+			cfgs = append(cfgs, &c)
 		}
 	}
-	return u
+
+	return cfgs
 }
 
 func (r *Remote) request(endpoint string) (*http.Response, error) {
