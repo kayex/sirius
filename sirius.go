@@ -84,7 +84,7 @@ func (s *Service) stopClient(id slack.ID) {
 	}
 }
 
-func (s *Service) addClient(cl *CancelClient) {
+func (s *Service) addClient(cl *CancelClient) error {
 	u := cl.user
 
 	if !u.ID.Valid() {
@@ -98,10 +98,12 @@ func (s *Service) addClient(cl *CancelClient) {
 	}
 
 	if _, exists := s.clients[cl.user.ID.String()]; exists {
-		errors.New("Client with ID %v is already registered with service.")
+		return errors.New("Client with ID %v is already registered with service.")
 	}
 
 	s.clients[cl.user.ID.String()] = cl
+
+	return nil
 }
 
 func (s *Service) createClient(u *User) *CancelClient {
