@@ -20,12 +20,14 @@ func (x *Geocode) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.Mess
 
 	c, err := maps.NewClient(maps.WithAPIKey(x.APIKey))
 
-	if err != nil {
+	address := cmd.Arg(0)
+
+	if err != nil || address == "" {
 		return nil, err
 	}
 
 	r := &maps.GeocodingRequest{
-		Address: cmd.Args[0],
+		Address: address,
 	}
 
 	res, err := c.Geocode(context.Background(), r)
