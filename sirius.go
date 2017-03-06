@@ -80,6 +80,7 @@ func (s *Service) DropUser(id slack.ID) bool {
 func (s *Service) stopClient(id slack.ID) {
 	if ex, ok := s.clients[id.String()]; ok {
 		ex.Cancel()
+		delete(s.clients, id.String())
 	}
 }
 
