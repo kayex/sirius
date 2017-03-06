@@ -9,6 +9,16 @@ type Command struct {
 	Args []string
 }
 
+// Arg returns argument number a, or nil if there is no argument in that
+// position.
+func (c *Command) Arg(a int) string {
+	if len(c.Args) > a {
+		return c.Args[a]
+	}
+
+	return ""
+}
+
 func (m *Message) Command(name string) (*Command, bool) {
 	cmd := prefix + name
 
