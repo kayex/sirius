@@ -74,7 +74,7 @@ func (id UserID) Secure() SecureID {
 func (id SecureID) Equals(o ID) bool {
 	switch o := o.(type) {
 	case SecureID:
-		if !(id.Valid() && o.Valid()) {
+		if !id.Valid() || !o.Valid() {
 			return false
 		}
 
