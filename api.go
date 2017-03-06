@@ -3,9 +3,9 @@ package sirius
 import (
 	"strings"
 
+	"context"
 	"github.com/kayex/sirius/slack"
 	api "github.com/nlopes/slack"
-	"context"
 )
 
 type API interface {

@@ -1,9 +1,9 @@
 package extension
 
 import (
+	"context"
 	"fmt"
 	"github.com/kayex/sirius"
-	"context"
 	"googlemaps.github.io/maps"
 )
 

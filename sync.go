@@ -3,9 +3,9 @@ package sirius
 import (
 	"strings"
 
+	"context"
 	"github.com/kayex/sirius/mqtt"
 	"github.com/kayex/sirius/slack"
-	"context"
 )
 
 type SyncAction string

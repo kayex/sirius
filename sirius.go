@@ -3,8 +3,8 @@ package sirius
 import (
 	"errors"
 
-	"github.com/kayex/sirius/slack"
 	"context"
+	"github.com/kayex/sirius/slack"
 )
 
 const EMOJI = "⚡" // The high voltage/lightning bolt emoji (:zap: in Slack)
