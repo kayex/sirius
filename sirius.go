@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/kayex/sirius/slack"
-	"golang.org/x/net/context"
+	"context"
 )
 
 const EMOJI = "⚡" // The high voltage/lightning bolt emoji (:zap: in Slack)

@@ -5,7 +5,7 @@ import (
 
 	"github.com/kayex/sirius/mqtt"
 	"github.com/kayex/sirius/slack"
-	"golang.org/x/net/context"
+	"context"
 )
 
 type SyncAction string

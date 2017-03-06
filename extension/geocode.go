@@ -3,7 +3,7 @@ package extension
 import (
 	"fmt"
 	"github.com/kayex/sirius"
-	"golang.org/x/net/context"
+	"context"
 	"googlemaps.github.io/maps"
 )
 

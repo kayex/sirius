@@ -4,7 +4,7 @@ import (
 	"bytes"
 	proto "github.com/huin/mqtt"
 	"github.com/jeffallen/mqtt"
-	"golang.org/x/net/context"
+	"context"
 	"net"
 )
 

@@ -5,7 +5,7 @@ import (
 
 	"github.com/kayex/sirius/slack"
 	api "github.com/nlopes/slack"
-	"golang.org/x/net/context"
+	"context"
 )
 
 type API interface {
