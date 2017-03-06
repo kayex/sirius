@@ -49,7 +49,7 @@ func (q Word) Match(s string) int {
 				continue
 			}
 
-			return i
+			return i - nMatch + 1
 		}
 	}
 
