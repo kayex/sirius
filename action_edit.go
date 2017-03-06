@@ -104,7 +104,7 @@ func (sm *SubMutation) Apply(text string) string {
 
 func (sm *SubWordMutation) Apply(text string) string {
 	if text == sm.Search {
-		return strings.Replace(text, sm.Search, sm.Sub, -1)
+		return sm.Sub
 	}
 
 	if strings.HasPrefix(text, sm.Search+" ") {
@@ -115,7 +115,7 @@ func (sm *SubWordMutation) Apply(text string) string {
 		text = text[:len(text)-len(sm.Search)] + sm.Sub
 	}
 
-	return text
+	return strings.Replace(text, " "+sm.Search+" ", sm.Sub, -1)
 }
 
 func (am *AppendMutation) Apply(text string) string {
