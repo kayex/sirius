@@ -108,16 +108,17 @@ func (sm *SubWordMutation) Apply(text string) string {
 		return sm.Sub
 	}
 
-	tr := []rune(text)
 	for {
-		str := string(tr)
-		i := sm.Search.Match(str)
+		i := sm.Search.Match(text)
 
 		if i < 0 {
-			return str
+			return text
 		}
 
-		tr = tr[i+len(sm.Search.W):]
+		beginning := text[:i]
+		end := text[i+len(sm.Search.W):]
+
+		text = beginning + sm.Sub + end
 	}
 
 }
