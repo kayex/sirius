@@ -87,7 +87,7 @@ func (s *Service) stopClient(id slack.ID) {
 func (s *Service) addClient(cl *CancelClient) error {
 	u := cl.user
 
-	if !u.ID.Valid() {
+	if u.ID == nil {
 		id, err := cl.conn.GetUserID(cl.user.Token)
 
 		if err != nil {

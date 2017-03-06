@@ -23,7 +23,7 @@ func NewConfiguration(eid EID) Configuration {
 
 func NewUser(token string) *User {
 	return &User{
-		ID:    slack.SecureID{},
+		ID:    nil,
 		Token: token,
 	}
 }
