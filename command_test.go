@@ -94,6 +94,12 @@ func TestCommand_Arg(t *testing.T) {
 		},
 		{
 			cmd: "foo",
+			arg: 0,
+			exp: "bar",
+			msg: NewMessage(slack.UserID{UserID: "123", TeamID: "abc"}, "!foo bar baz", "#channel", "0"),
+		},
+		{
+			cmd: "foo",
 			arg: 1,
 			exp: "",
 			msg: NewMessage(slack.UserID{UserID: "123", TeamID: "abc"}, "!foo bar", "#channel", "0"),
