@@ -44,7 +44,7 @@ func (q Word) Match(s string) int {
 			hasNext := len(sr) > next
 			hasPrev := i-nMatch >= 0
 
-			if hasNext && (!unicode.IsSpace(sr[next]) || sr[next] != ',') || hasPrev && !unicode.IsSpace(sr[prev]) {
+			if hasNext && !unicode.IsSpace(sr[next]) || sr[next] != ',' || hasPrev && !unicode.IsSpace(sr[prev]) {
 				nMatch = 0
 				continue
 			}
