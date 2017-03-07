@@ -16,7 +16,7 @@ type ExecutionResult struct {
 }
 
 type ExtensionRunner interface {
-	Run([]Execution, chan<- ExecutionResult, time.Duration)
+	Run(exe []Execution, res chan<- ExecutionResult, timeout time.Duration)
 }
 
 type AsyncRunner struct{}
