@@ -23,6 +23,11 @@ func TestSubWord_Apply(t *testing.T) {
 			sw:  SubWord{Word{"åäö"}, "bar"},
 			exp: "foo bar",
 		},
+		{
+			str: "foo barbaz",
+			sw:  SubWord{Word{"foo"}, "long replacement"},
+			exp: "long replacement barbaz",
+		},
 	}
 
 	for _, c := range cases {
