@@ -56,18 +56,18 @@ func (s *SubWord) Apply(text string) string {
 
 }
 
-func (am *Append) Apply(text string) string {
-	if len(am.Appendix) == 0 {
+func (a *Append) Apply(text string) string {
+	if len(a.Appendix) == 0 {
 		return text
 	}
 
-	return text + am.Appendix
+	return text + a.Appendix
 }
 
-func (pm *Prepend) Apply(text string) string {
-	if len(pm.Prefix) == 0 {
+func (p *Prepend) Apply(text string) string {
+	if len(p.Prefix) == 0 {
 		return text
 	}
 
-	return pm.Prefix + text
+	return p.Prefix + text
 }
