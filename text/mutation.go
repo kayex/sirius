@@ -43,7 +43,6 @@ func (s *SubWord) Apply(text string) string {
 		return s.Sub
 	}
 
-	var subr []rune
 	var sr []rune
 	for {
 		i := s.Search.Match(text)
@@ -54,13 +53,9 @@ func (s *SubWord) Apply(text string) string {
 
 		sr = []rune(text)
 		beginning := sr[:i]
-		end := sr[i+len(s.Search.W):]
+		end := sr[i+len([]rune(s.Search.W)):]
 
-		if subr == nil {
-			subr = []rune(s.Sub)
-		}
-
-		sr = append(append(beginning, subr...), end...)
+		sr = append(append(beginning, []rune(s.Sub)...), end...)
 
 		text = string(sr)
 	}
