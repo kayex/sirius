@@ -52,6 +52,10 @@ func (s *SubWord) Apply(text string) string {
 			return text
 		}
 
+		if sr == nil {
+			sr = []rune(text)
+		}
+
 		beginning := sr[:i]
 		end := sr[i+utf8.RuneCountInString(s.Search.W):]
 
