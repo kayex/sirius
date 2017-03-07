@@ -16,9 +16,9 @@ type UserID struct {
 	TeamID string
 }
 
-// SecureID is an opaque representation of a Slack user identity
-// which can be used in place of UserID to lower the risk of
-// accidentally printing/logging real (and confidential) Slack IDs.
+// SecureID is an opaque, deterministic representation of a Slack user identity
+// which can be used in place of UserID to minimize the consequences
+// of accidentally logging or otherwise compromising a user's ID.
 //
 // A SecureID can be constructed from a UserID
 // by calling UserID.Secure()
@@ -26,7 +26,7 @@ type SecureID struct {
 	HashSum string
 }
 
-// Equals indicates if id can be considered to be the same user identity as o.
+// Equals indicates if id and o represents the same user identity.
 func (id UserID) Equals(o ID) bool {
 	switch o := o.(type) {
 	case UserID:
@@ -70,11 +70,11 @@ func (id UserID) Secure() SecureID {
 	}
 }
 
-// Equals indicates if id can be considered to be the same user identity as o.
+// Equals indicates if id and o represents the same user identity.
 func (id SecureID) Equals(o ID) bool {
 	switch o := o.(type) {
 	case SecureID:
-		if !(id.Valid() && o.Valid()) {
+		if !id.Valid() || !o.Valid() {
 			return false
 		}
 

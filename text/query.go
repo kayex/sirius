@@ -1,9 +1,13 @@
 package text
 
-import "unicode"
+import (
+	"strings"
+	"unicode"
+	"unicode/utf8"
+)
 
 type Query interface {
-	Match(string) bool
+	Match(string) int
 }
 
 // Word matches complete words only.
@@ -13,45 +17,35 @@ type Word struct {
 	W string
 }
 
-func (q Word) Match(s string) bool {
-	if s == q.W {
-		return true
+func (q Word) Match(s string) int {
+	if s == q.W || len(s) == 0 {
+		return 0
 	}
 
-	sr := []rune(s)
-	qr := []rune(q.W)
-
-	if len(sr) < len(qr) {
-		return false
-	}
-
-	var nMatch int
-
-	for i := 0; i < len(sr); i++ {
-		if nMatch < len(qr) && sr[i] != qr[nMatch] {
-			nMatch = 0
-			continue
-		}
-
-		nMatch++
-
-		if nMatch == len(qr) {
-			// Check that any immediately preceding or following
-			// characters are spaces.
-
-			next := i + 1
-			prev := i - nMatch
-			hasNext := len(sr) > next
-			hasPrev := i-nMatch >= 0
-
-			if hasNext && !unicode.IsSpace(sr[next]) || hasPrev && !unicode.IsSpace(sr[prev]) {
-				nMatch = 0
-				continue
-			}
-
+	sp := strings.FieldsFunc(s, func(r rune) bool {
+		if unicode.IsSpace(r) {
 			return true
 		}
+
+		switch r {
+		case ',', '\n':
+			return true
+		default:
+			return false
+		}
+	})
+
+	var rCount int
+	for i, w := range sp {
+		if w == q.W {
+			return rCount + i
+		}
+		rCount += utf8.RuneCountInString(w)
 	}
 
-	return false
+	return -1
+}
+
+func (q Word) Length() int {
+	return utf8.RuneCountInString(q.W)
 }

@@ -22,5 +22,5 @@ func NewMessage(userID slack.UserID, text, channel, timestamp string) Message {
 }
 
 func (m *Message) Query(q text.Query) bool {
-	return q.Match(m.Text)
+	return q.Match(m.Text) >= 0
 }

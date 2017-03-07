@@ -106,11 +106,7 @@ func parseSyncMessage(msg string) (*SyncMessage, bool) {
 	id := slack.SecureID{split[1]}
 
 	switch msgType {
-	case NEW:
-		fallthrough
-	case UPDATE:
-		fallthrough
-	case DELETE:
+	case NEW, UPDATE, DELETE:
 		return &SyncMessage{
 			Type: msgType,
 			ID:   id,

@@ -8,32 +8,32 @@ func TestWord_Match(t *testing.T) {
 	cases := []struct {
 		s   string
 		q   Word
-		exp bool
+		exp int
 	}{
 		{
 			s:   "Alligators eat mattresses",
 			q:   Word{"Alligators"},
-			exp: true,
+			exp: 0,
 		},
 		{
 			s:   "Alligators eat mattresses",
 			q:   Word{"mattresses"},
-			exp: true,
+			exp: 15,
 		},
 		{
 			s:   "Alligators eat mattresses",
 			q:   Word{"gators"},
-			exp: false,
+			exp: -1,
 		},
 		{
 			s:   "Alli\ngators eat mattresses",
 			q:   Word{"gators"},
-			exp: true,
+			exp: 5,
 		},
 		{
 			s:   "Alligators eat meat",
 			q:   Word{"eat"},
-			exp: true,
+			exp: 11,
 		},
 	}
 

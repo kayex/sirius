@@ -2,7 +2,6 @@ package extension
 
 import (
 	"github.com/kayex/sirius"
-	"github.com/kayex/sirius/slack"
 	"github.com/kayex/sirius/text"
 )
 
@@ -20,10 +19,11 @@ func (*Censor) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.Message
 		}
 
 		if strict {
-			return edit.ReplaceWith(slack.Code("CENSORED")), nil
+			edit.ReplaceWith(text.Code("CENSORED"))
+			break
 		}
 
-		edit.SubstituteWord(p, slack.Code("CENSORED"))
+		edit.SubstituteWord(p, text.Code("CENSORED"))
 	}
 
 	return edit, nil

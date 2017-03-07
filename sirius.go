@@ -5,6 +5,7 @@ import (
 
 	"context"
 	"github.com/kayex/sirius/slack"
+	"github.com/kayex/sirius/text"
 )
 
 const EMOJI = "⚡" // The high voltage/lightning bolt emoji (:zap: in Slack)
@@ -117,10 +118,10 @@ func (c *Client) notify() {
 	conf := EMOJI + " Configuration loaded successfully."
 
 	if len(c.user.Configurations) == 0 {
-		conf += "\n" + slack.Quote(slack.Italic("No extensions activated."))
+		conf += "\n" + text.Quote(text.Italic("No extensions activated."))
 	} else {
 		for _, cfg := range c.user.Configurations {
-			conf += "\n" + slack.Quote(slack.Bold(string(cfg.EID)))
+			conf += "\n" + text.Quote(text.Bold(string(cfg.EID)))
 		}
 	}
 
