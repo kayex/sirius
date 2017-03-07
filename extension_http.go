@@ -11,10 +11,17 @@ type HttpExtension struct {
 	Host   string
 }
 
-func NewHttpExtension(host string) *HttpExtension {
-	return &HttpExtension{
-		Host: host,
+func NewHttpExtension(host string, client *http.Client) *HttpExtension {
+	x := &HttpExtension{
+		Host:   host,
+		client: client,
 	}
+
+	if x.client == nil {
+		x.client = &http.Client{}
+	}
+
+	return x
 }
 
 type HttpExecutionResult struct {

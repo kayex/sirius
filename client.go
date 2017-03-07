@@ -129,7 +129,7 @@ func (c *Client) loadExecutions(m *Message) []Execution {
 
 		// Check for HTTP extensions
 		if cfg.URL != "" {
-			x = NewHttpExtension(cfg.URL)
+			x = NewHttpExtension(cfg.URL, nil)
 		} else {
 			var err error
 			x, err = c.loader.Load(cfg.EID)
