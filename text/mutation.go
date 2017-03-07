@@ -2,6 +2,7 @@ package text
 
 import (
 	"strings"
+	"unicode/utf8"
 )
 
 type Mutation interface {
@@ -53,7 +54,7 @@ func (s *SubWord) Apply(text string) string {
 
 		sr = []rune(text)
 		beginning := sr[:i]
-		end := sr[i+len([]rune(s.Search.W)):]
+		end := sr[i+utf8.RuneCountInString(s.Search.W):]
 
 		sr = append(append(beginning, []rune(s.Sub)...), end...)
 
