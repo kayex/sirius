@@ -144,8 +144,8 @@ func (conn *RTMConnection) handleIncomingMessage(ev *api.MessageEvent) {
 		return
 	}
 
-	text := removeEscapeCharacters(ev.Text)
-	msg := NewMessage(slack.UserID{ev.User, ev.Team}, text, ev.Channel, ev.Timestamp)
+	text := stripEscapeCharacters(ev.Text)
+	msg := NewMessage(id, text, ev.Channel, ev.Timestamp)
 
 	conn.messages <- msg
 }
@@ -156,7 +156,7 @@ var escapeCharacters map[string]string = map[string]string{
 	"&amp;": "&",
 }
 
-func removeEscapeCharacters(msg string) string {
+func stripEscapeCharacters(msg string) string {
 	for html, unicode := range escapeCharacters {
 		msg = strings.Replace(msg, html, unicode, -1)
 	}
