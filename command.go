@@ -24,10 +24,10 @@ func (m *Message) Command(name string) (*Command, bool) {
 
 	if strings.HasPrefix(m.Text, cmd) {
 		var args []string
-		inv := strings.Split(m.Text, " ")
+		pieces := strings.Split(m.Text, " ")
 
-		if len(inv) >= 2 {
-			args = append(args, inv[1:]...)
+		if len(pieces) >= 2 {
+			args = append(args, pieces[1:]...)
 		}
 
 		return &Command{
