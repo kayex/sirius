@@ -1,6 +1,8 @@
 package text
 
-import "strings"
+import (
+	"strings"
+)
 
 type Mutation interface {
 	Apply(text string) string
@@ -48,10 +50,12 @@ func (s *SubWord) Apply(text string) string {
 			return text
 		}
 
-		beginning := text[:i]
-		end := text[i+len(s.Search.W):]
+		sr := []rune(text)
 
-		text = beginning + s.Sub + end
+		beginning := sr[:i]
+		end := sr[i+len(s.Search.W):]
+
+		text = string(append(append(beginning, []rune(s.Sub)...), end...))
 	}
 
 }
