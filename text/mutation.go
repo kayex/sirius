@@ -42,9 +42,9 @@ func (s *SubWord) Apply(text string) string {
 	if text == s.Search.W {
 		return s.Sub
 	}
+
 	var subr []rune
 	var sr []rune
-
 	for {
 		i := s.Search.Match(text)
 
