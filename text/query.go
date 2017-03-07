@@ -35,12 +35,12 @@ func (q Word) Match(s string) int {
 		}
 	})
 
-	var rCount int
+	var len int
 	for i, w := range sp {
 		if w == q.W {
-			return rCount + i
+			return len + i
 		}
-		rCount += utf8.RuneCountInString(w)
+		len += utf8.RuneCountInString(w)
 	}
 
 	return -1
