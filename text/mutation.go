@@ -2,7 +2,6 @@ package text
 
 import (
 	"strings"
-	"unicode/utf8"
 )
 
 type Mutation interface {
@@ -44,7 +43,8 @@ func (s *SubWord) Apply(text string) string {
 		return s.Sub
 	}
 
-	var sr []rune
+	var tr []rune
+
 	for {
 		i := s.Search.Match(text)
 
@@ -52,16 +52,16 @@ func (s *SubWord) Apply(text string) string {
 			return text
 		}
 
-		if sr == nil {
-			sr = []rune(text)
+		if tr == nil {
+			tr = []rune(text)
 		}
 
-		beginning := sr[:i]
-		end := sr[i+utf8.RuneCountInString(s.Search.W):]
+		beginning := tr[:i]
+		end := tr[i+s.Search.Length():]
 
-		sr = append(append(beginning, []rune(s.Sub)...), end...)
+		tr = append(append(beginning, []rune(s.Sub)...), end...)
 
-		text = string(sr)
+		text = string(tr)
 	}
 
 }

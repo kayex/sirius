@@ -45,3 +45,7 @@ func (q Word) Match(s string) int {
 
 	return -1
 }
+
+func (q Word) Length() int {
+	return utf8.RuneCountInString(q.W)
+}
