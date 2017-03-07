@@ -1,7 +1,9 @@
 package text
 
 import (
+	"strings"
 	"unicode"
+	"unicode/utf8"
 )
 
 type Query interface {
@@ -16,44 +18,29 @@ type Word struct {
 }
 
 func (q Word) Match(s string) int {
-	if s == q.W {
+	if s == q.W || len(s) == 0 {
 		return 0
 	}
 
-	sr := []rune(s)
-	qr := []rune(q.W)
-
-	if len(sr) < len(qr) {
-		return -1
-	}
-
-	var nMatch int
-
-	for i := 0; i < len(sr); i++ {
-		if nMatch < len(qr) && sr[i] != qr[nMatch] {
-			nMatch = 0
-			continue
+	sp := strings.FieldsFunc(s, func(r rune) bool {
+		if unicode.IsSpace(r) {
+			return true
 		}
 
-		nMatch++
-
-		if nMatch == len(qr) {
-			// Check that any immediately preceding or following
-			// characters are spaces.
-
-			next := i + 1
-			prev := i - nMatch
-			hasNext := len(sr) > next
-			hasPrev := i-nMatch >= 0
-
-			if hasNext && !(unicode.IsSpace(sr[next]) || sr[next] == ',') ||
-				hasPrev && !(unicode.IsSpace(sr[prev]) || sr[prev] == '\n') {
-				nMatch = 0
-				continue
-			}
-
-			return i - nMatch + 1
+		switch r {
+		case ',', '\n':
+			return true
+		default:
+			return false
 		}
+	})
+
+	var rCount int
+	for i, w := range sp {
+		if w == q.W {
+			return rCount + i
+		}
+		rCount += utf8.RuneCountInString(w)
 	}
 
 	return -1
