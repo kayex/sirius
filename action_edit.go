@@ -2,13 +2,12 @@ package sirius
 
 import (
 	"github.com/kayex/sirius/text"
-	"strings"
 )
 
 // TextEditAction represents a series of
 // modifications to the message Text property
 type TextEditAction struct {
-	mutations []TextMutation
+	mutations []text.Mutation
 }
 
 func (*Message) EditText() *TextEditAction {
@@ -24,7 +23,7 @@ func (edit *TextEditAction) Perform(msg *Message) error {
 }
 
 func (edit *TextEditAction) ReplaceWith(replacement string) *TextEditAction {
-	edit.add(&ReplaceMutation{
+	edit.add(&text.Replace{
 		Replacement: replacement,
 	})
 
@@ -32,7 +31,7 @@ func (edit *TextEditAction) ReplaceWith(replacement string) *TextEditAction {
 }
 
 func (edit *TextEditAction) Substitute(search string, sub string) *TextEditAction {
-	edit.add(&SubMutation{
+	edit.add(&text.Sub{
 		Search: search,
 		Sub:    sub,
 	})
@@ -41,7 +40,7 @@ func (edit *TextEditAction) Substitute(search string, sub string) *TextEditActio
 }
 
 func (edit *TextEditAction) SubstituteWord(search string, sub string) *TextEditAction {
-	edit.add(&SubWordMutation{
+	edit.add(&text.SubWord{
 		Search: text.Word{search},
 		Sub:    sub,
 	})
@@ -50,7 +49,7 @@ func (edit *TextEditAction) SubstituteWord(search string, sub string) *TextEditA
 }
 
 func (edit *TextEditAction) Append(app string) *TextEditAction {
-	edit.add(&AppendMutation{
+	edit.add(&text.Append{
 		Appendix: app,
 	})
 
@@ -58,83 +57,13 @@ func (edit *TextEditAction) Append(app string) *TextEditAction {
 }
 
 func (edit *TextEditAction) Prepend(pre string) *TextEditAction {
-	edit.add(&PrependMutation{
+	edit.add(&text.Prepend{
 		Prefix: pre,
 	})
 
 	return edit
 }
 
-func (edit *TextEditAction) add(m TextMutation) {
+func (edit *TextEditAction) add(m text.Mutation) {
 	edit.mutations = append(edit.mutations, m)
-}
-
-type TextMutation interface {
-	Apply(text string) string
-}
-
-type ReplaceMutation struct {
-	Replacement string
-}
-
-type SubMutation struct {
-	Search string
-	Sub    string
-}
-
-type SubWordMutation struct {
-	Search text.Word
-	Sub    string
-}
-
-type AppendMutation struct {
-	Appendix string
-}
-
-type PrependMutation struct {
-	Prefix string
-}
-
-func (rm *ReplaceMutation) Apply(text string) string {
-	return rm.Replacement
-}
-
-func (sm *SubMutation) Apply(text string) string {
-	return strings.Replace(text, sm.Search, sm.Sub, -1)
-}
-
-func (sm *SubWordMutation) Apply(text string) string {
-	if text == sm.Search.W {
-		return sm.Sub
-	}
-
-	for {
-		i := sm.Search.Match(text)
-
-		if i < 0 {
-			return text
-		}
-
-		beginning := text[:i]
-		end := text[i+len(sm.Search.W):]
-
-		text = beginning + sm.Sub + end
-	}
-
-}
-
-func (am *AppendMutation) Apply(text string) string {
-	if len(am.Appendix) == 0 {
-		return text
-	}
-
-	return text + am.Appendix
-}
-
-func (pm *PrependMutation) Apply(text string) string {
-	if len(pm.Prefix) == 0 {
-		return text
-	}
-
-	return pm.Prefix + text
 }
