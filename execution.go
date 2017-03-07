@@ -33,7 +33,7 @@ func NewAsyncRunner() *AsyncRunner {
 	return &AsyncRunner{}
 }
 
-// Run executes all extensions in exe, and returns all ExecutionResults that
+// Run executes all extensions in exe and returns all ExecutionResults that
 // are received before timeout has elapsed.
 func (r *AsyncRunner) Run(exe []Execution, res chan<- ExecutionResult, timeout time.Duration) {
 	er := make(chan ExecutionResult, len(exe))
