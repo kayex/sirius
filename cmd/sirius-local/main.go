@@ -1,12 +1,12 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/kayex/sirius"
 	"github.com/kayex/sirius/config"
 	"github.com/kayex/sirius/extension"
-	"context"
 	"io/ioutil"
 )
 
