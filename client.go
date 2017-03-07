@@ -93,9 +93,16 @@ func (c *Client) handleMessage(msg *Message) {
 }
 
 func (c *Client) run(m *Message) {
-	var act []MessageAction
-
 	exe := c.loadExecutions(m)
+	act := c.runExecutions(exe)
+
+	if performActions(act, m) {
+		c.conn.Update(m)
+	}
+}
+
+func (c *Client) runExecutions(exe []Execution) []MessageAction {
+	var act []MessageAction
 	res := make(chan ExecutionResult, len(c.user.Configurations))
 
 	c.runner.Run(exe, res, c.timeout)
@@ -112,9 +119,7 @@ func (c *Client) run(m *Message) {
 		act = append(act, r.Action)
 	}
 
-	if performActions(act, m) {
-		c.conn.Update(m)
-	}
+	return act
 }
 
 func (c *Client) loadExecutions(m *Message) []Execution {
