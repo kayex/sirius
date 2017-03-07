@@ -3,7 +3,6 @@ package sirius
 import (
 	"encoding/json"
 	"net/http"
-	"net/url"
 
 	"github.com/kayex/sirius/slack"
 )
@@ -39,32 +38,22 @@ func (ru *RemoteUser) ToUser() *User {
 	return u
 }
 
-func (ru *RemoteUser) parseExtensionList(extl interface{}) []*Configuration {
-	var cfgs []*Configuration
+func (ru *RemoteUser) parseExtensionList(extl interface{}) []Configuration {
+	var cfgs []Configuration
 
 	switch ext := extl.(type) {
 	case map[string]interface{}:
-		for eid, settings := range ext {
-			var c Configuration
-
-			// Check for HTTP extensions
-			_, err := url.ParseRequestURI(eid)
-			if err == nil {
-				c = NewHTTPConfiguration(eid)
-			} else {
-				c = NewConfiguration(EID(eid))
-			}
-
-			if conf, ok := settings.(map[string]interface{}); ok {
-				c.Cfg = ExtensionConfig(conf)
-			}
-			cfgs = append(cfgs, &c)
-		}
+		cfgs = FromConfigurationMap(ext)
 	case []interface{}:
-		for eid := range ext {
-			c := NewConfiguration(EID(eid))
-			cfgs = append(cfgs, &c)
+		var m map[string]interface{}
+
+		for _, v := range ext {
+			if k, ok := v.(string); ok {
+				m[k] = nil
+			}
 		}
+
+		cfgs = FromConfigurationMap(m)
 	}
 
 	return cfgs

@@ -43,10 +43,13 @@ func createUsers(tokens []string) []sirius.User {
 }
 
 func configure(u *sirius.User) {
+	var m map[string]interface{}
+
 	for _, eid := range extensions {
-		c := sirius.NewConfiguration(sirius.EID(eid))
-		u.Configurations = append(u.Configurations, &c)
+		m[eid] = nil
 	}
+
+	u.Configurations = append(u.Configurations, sirius.FromConfigurationMap(m)...)
 }
 
 func getTokensFromJSON() []string {
