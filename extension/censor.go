@@ -20,7 +20,8 @@ func (*Censor) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.Message
 		}
 
 		if strict {
-			return edit.ReplaceWith(slack.Code("CENSORED")), nil
+			edit.ReplaceWith(slack.Code("CENSORED"))
+			break
 		}
 
 		edit.SubstituteWord(p, slack.Code("CENSORED"))
