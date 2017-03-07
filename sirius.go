@@ -3,8 +3,9 @@ package sirius
 import (
 	"errors"
 
+	"context"
 	"github.com/kayex/sirius/slack"
-	"golang.org/x/net/context"
+	"github.com/kayex/sirius/text"
 )
 
 const EMOJI = "⚡" // The high voltage/lightning bolt emoji (:zap: in Slack)
@@ -80,13 +81,14 @@ func (s *Service) DropUser(id slack.ID) bool {
 func (s *Service) stopClient(id slack.ID) {
 	if ex, ok := s.clients[id.String()]; ok {
 		ex.Cancel()
+		delete(s.clients, id.String())
 	}
 }
 
-func (s *Service) addClient(cl *CancelClient) {
+func (s *Service) addClient(cl *CancelClient) error {
 	u := cl.user
 
-	if !u.ID.Valid() {
+	if u.ID == nil {
 		id, err := cl.conn.GetUserID(cl.user.Token)
 
 		if err != nil {
@@ -97,10 +99,12 @@ func (s *Service) addClient(cl *CancelClient) {
 	}
 
 	if _, exists := s.clients[cl.user.ID.String()]; exists {
-		errors.New("Client with ID %v is already registered with service.")
+		return errors.New("Client with ID %v is already registered with service.")
 	}
 
 	s.clients[cl.user.ID.String()] = cl
+
+	return nil
 }
 
 func (s *Service) createClient(u *User) *CancelClient {
@@ -114,10 +118,10 @@ func (c *Client) notify() {
 	conf := EMOJI + " Configuration loaded successfully."
 
 	if len(c.user.Configurations) == 0 {
-		conf += "\n" + slack.Quote(slack.Italic("No extensions activated."))
+		conf += "\n" + text.Quote(text.Italic("No extensions activated."))
 	} else {
 		for _, cfg := range c.user.Configurations {
-			conf += "\n" + slack.Quote(slack.Bold(string(cfg.EID)))
+			conf += "\n" + text.Quote(text.Bold(string(cfg.EID)))
 		}
 	}
 

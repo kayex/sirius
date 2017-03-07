@@ -2,9 +2,9 @@ package mqtt
 
 import (
 	"bytes"
+	"context"
 	proto "github.com/huin/mqtt"
 	"github.com/jeffallen/mqtt"
-	"golang.org/x/net/context"
 	"net"
 )
 

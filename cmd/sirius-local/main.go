@@ -1,12 +1,12 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/kayex/sirius"
 	"github.com/kayex/sirius/config"
 	"github.com/kayex/sirius/extension"
-	"golang.org/x/net/context"
 	"io/ioutil"
 )
 
@@ -43,10 +43,13 @@ func createUsers(tokens []string) []sirius.User {
 }
 
 func configure(u *sirius.User) {
+	m := make(map[string]interface{})
+
 	for _, eid := range extensions {
-		c := sirius.NewConfiguration(sirius.EID(eid))
-		u.Configurations = append(u.Configurations, &c)
+		m[eid] = nil
 	}
+
+	u.Configurations = append(u.Configurations, sirius.FromConfigurationMap(m)...)
 }
 
 func getTokensFromJSON() []string {

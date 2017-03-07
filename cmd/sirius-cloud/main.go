@@ -1,11 +1,12 @@
 package main
 
 import (
+	"context"
 	"fmt"
+
 	"github.com/kayex/sirius"
 	"github.com/kayex/sirius/config"
 	"github.com/kayex/sirius/extension"
-	"golang.org/x/net/context"
 )
 
 func main() {

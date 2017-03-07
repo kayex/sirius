@@ -141,6 +141,6 @@ func (*ThumbsUp) Run(m Message, cfg ExtensionConfig) (MessageAction, error) {
 	edit.Substitute("(y)", ":+1:")
 	edit.Substitute("(Y)", ":+1:")
 
-	return nil, edit
+	return edit, nil
 }
 ```

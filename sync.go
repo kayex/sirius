@@ -3,9 +3,9 @@ package sirius
 import (
 	"strings"
 
+	"context"
 	"github.com/kayex/sirius/mqtt"
 	"github.com/kayex/sirius/slack"
-	"golang.org/x/net/context"
 )
 
 type SyncAction string
@@ -106,11 +106,7 @@ func parseSyncMessage(msg string) (*SyncMessage, bool) {
 	id := slack.SecureID{split[1]}
 
 	switch msgType {
-	case NEW:
-		fallthrough
-	case UPDATE:
-		fallthrough
-	case DELETE:
+	case NEW, UPDATE, DELETE:
 		return &SyncMessage{
 			Type: msgType,
 			ID:   id,

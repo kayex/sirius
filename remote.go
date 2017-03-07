@@ -14,9 +14,10 @@ type Remote struct {
 }
 
 type RemoteUser struct {
-	IDHash string      `json:"sirius_id"`
-	Token  string      `json:"slack_token"`
-	Config interface{} `json:"config"`
+	IDHash         string      `json:"sirius_id"`
+	Token          string      `json:"slack_token"`
+	Extensions     interface{} `json:"extensions"`
+	HttpExtensions interface{} `json:"http_extensions"`
 }
 
 func NewRemote(host, token string) *Remote {
@@ -31,23 +32,31 @@ func (ru *RemoteUser) ToUser() *User {
 	u := NewUser(ru.Token)
 	u.ID = slack.SecureID{ru.IDHash}
 
-	switch cfg := ru.Config.(type) {
-	case map[string]interface{}:
-		for eid, settings := range cfg {
-			c := NewConfiguration(EID(eid))
+	u.Configurations = append(u.Configurations, ru.parseExtensionList(ru.Extensions)...)
+	u.Configurations = append(u.Configurations, ru.parseExtensionList(ru.HttpExtensions)...)
 
-			if conf, ok := settings.(map[string]interface{}); ok {
-				c.Cfg = ExtensionConfig(conf)
-			}
-			u.Configurations = append(u.Configurations, &c)
-		}
-	case []interface{}:
-		for eid := range cfg {
-			c := NewConfiguration(EID(eid))
-			u.Configurations = append(u.Configurations, &c)
-		}
-	}
 	return u
+}
+
+func (ru *RemoteUser) parseExtensionList(extl interface{}) []Configuration {
+	var cfgs []Configuration
+
+	switch ext := extl.(type) {
+	case map[string]interface{}:
+		cfgs = FromConfigurationMap(ext)
+	case []interface{}:
+		var m map[string]interface{}
+
+		for _, v := range ext {
+			if k, ok := v.(string); ok {
+				m[k] = nil
+			}
+		}
+
+		cfgs = FromConfigurationMap(m)
+	}
+
+	return cfgs
 }
 
 func (r *Remote) request(endpoint string) (*http.Response, error) {

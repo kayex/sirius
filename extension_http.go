@@ -11,6 +11,19 @@ type HttpExtension struct {
 	Host   string
 }
 
+func NewHttpExtension(host string, client *http.Client) *HttpExtension {
+	x := &HttpExtension{
+		Host:   host,
+		client: client,
+	}
+
+	if x.client == nil {
+		x.client = &http.Client{}
+	}
+
+	return x
+}
+
 type HttpExecutionResult struct {
 	Err     error
 	Actions []HttpMessageAction
@@ -109,7 +122,7 @@ func (act HttpMessageAction) ToMessageAction() MessageAction {
 		if !ok {
 			return NoAction()
 		}
-		return edit.ReplaceWith(t)
+		return edit.Set(t)
 	}
 	return NoAction()
 }

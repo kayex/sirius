@@ -53,18 +53,3 @@ func TestAsyncRunner_Run_RespectsTimeout(t *testing.T) {
 		t.Fatal("Expected 1 ExecutionResult but received none")
 	}
 }
-
-func TestAsyncRunner_execute(t *testing.T) {
-	msg := NewMessage(slack.UserID{TeamID: "abc", UserID: "123"}, "Test message.", "#1337", "0")
-	exe := NewExecution(&TestExtension{duration: 0}, msg, nil)
-	res := make(chan ExecutionResult, 1)
-
-	r := NewAsyncRunner()
-	r.execute(*exe, res)
-
-	er := <-res
-
-	if er.Action == nil {
-		t.Fatal("ExecutionResult.Action not set")
-	}
-}

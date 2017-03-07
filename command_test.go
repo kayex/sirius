@@ -78,3 +78,41 @@ func TestMessage_Command(t *testing.T) {
 		}
 	}
 }
+
+func TestCommand_Arg(t *testing.T) {
+	cases := []struct {
+		cmd string
+		arg int
+		exp string
+		msg Message
+	}{
+		{
+			cmd: "foo",
+			arg: 0,
+			exp: "bar",
+			msg: NewMessage(slack.UserID{UserID: "123", TeamID: "abc"}, "!foo bar", "#channel", "0"),
+		},
+		{
+			cmd: "foo",
+			arg: 0,
+			exp: "bar",
+			msg: NewMessage(slack.UserID{UserID: "123", TeamID: "abc"}, "!foo bar baz", "#channel", "0"),
+		},
+		{
+			cmd: "foo",
+			arg: 1,
+			exp: "",
+			msg: NewMessage(slack.UserID{UserID: "123", TeamID: "abc"}, "!foo bar", "#channel", "0"),
+		},
+	}
+
+	for _, c := range cases {
+		cmd, _ := c.msg.Command(c.cmd)
+
+		act := cmd.Arg(c.arg)
+
+		if act != c.exp {
+			t.Errorf("Expected Command(%q).Arg(%d) to be %q, got %v", c.msg.Text, c.arg, c.exp, act)
+		}
+	}
+}

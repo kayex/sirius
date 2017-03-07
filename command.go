@@ -9,15 +9,25 @@ type Command struct {
 	Args []string
 }
 
+// Arg returns argument number a, or "" if there is
+// no argument in that position.
+func (c *Command) Arg(a int) string {
+	if len(c.Args) > a {
+		return c.Args[a]
+	}
+
+	return ""
+}
+
 func (m *Message) Command(name string) (*Command, bool) {
 	cmd := prefix + name
 
 	if strings.HasPrefix(m.Text, cmd) {
 		var args []string
-		inv := strings.Split(m.Text, " ")
+		pieces := strings.Split(m.Text, " ")
 
-		if len(inv) >= 2 {
-			args = append(args, inv[1:]...)
+		if len(pieces) > 1 {
+			args = append(args, pieces[1:]...)
 		}
 
 		return &Command{

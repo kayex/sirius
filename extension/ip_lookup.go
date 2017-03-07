@@ -17,7 +17,11 @@ func (ipl *IPLookup) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.M
 		return sirius.NoAction(), nil
 	}
 
-	ip := cmd.Args[0]
+	ip := cmd.Arg(0)
+
+	if ip == "" {
+		return sirius.NoAction(), nil
+	}
 
 	var lookup map[string]interface{}
 
@@ -40,7 +44,7 @@ func (ipl *IPLookup) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.M
 		lookup["country"],
 		lookup["countryCode"],
 		lookup["isp"])
-	edit := m.EditText().ReplaceWith(output)
+	edit := m.EditText().Set(output)
 
 	return edit, nil
 }

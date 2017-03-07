@@ -1,9 +1,9 @@
 package extension
 
 import (
+	"context"
 	"fmt"
 	"github.com/kayex/sirius"
-	"golang.org/x/net/context"
 	"googlemaps.github.io/maps"
 )
 
@@ -20,12 +20,14 @@ func (x *Geocode) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.Mess
 
 	c, err := maps.NewClient(maps.WithAPIKey(x.APIKey))
 
-	if err != nil {
+	address := cmd.Arg(0)
+
+	if err != nil || address == "" {
 		return nil, err
 	}
 
 	r := &maps.GeocodingRequest{
-		Address: cmd.Args[0],
+		Address: address,
 	}
 
 	res, err := c.Geocode(context.Background(), r)
@@ -38,7 +40,7 @@ func (x *Geocode) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.Mess
 	location := pos.Geometry.Location
 	formatted := fmt.Sprintf("*%v*\n`(%.6f, %.6f)`", pos.FormattedAddress, location.Lat, location.Lng)
 
-	edit := m.EditText().ReplaceWith(formatted)
+	edit := m.EditText().Set(formatted)
 
 	return edit, nil
 }

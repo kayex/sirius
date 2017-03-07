@@ -8,32 +8,32 @@ func TestWord_Match(t *testing.T) {
 	cases := []struct {
 		s   string
 		q   Word
-		exp bool
+		exp int
 	}{
 		{
 			s:   "Alligators eat mattresses",
 			q:   Word{"Alligators"},
-			exp: true,
+			exp: 0,
 		},
 		{
 			s:   "Alligators eat mattresses",
 			q:   Word{"mattresses"},
-			exp: true,
+			exp: 15,
 		},
 		{
 			s:   "Alligators eat mattresses",
 			q:   Word{"gators"},
-			exp: false,
+			exp: -1,
 		},
 		{
 			s:   "Alli\ngators eat mattresses",
 			q:   Word{"gators"},
-			exp: true,
+			exp: 5,
 		},
 		{
 			s:   "Alligators eat meat",
 			q:   Word{"eat"},
-			exp: true,
+			exp: 11,
 		},
 	}
 
@@ -47,7 +47,10 @@ func TestWord_Match(t *testing.T) {
 }
 
 func BenchmarkWord_Match(b *testing.B) {
+	w := Word{"foo bar baz biz boz bem boos bick dale biz buul hum dirk hass tukk murr"}
+	b.ResetTimer()
+
 	for n := 0; n < b.N; n++ {
-		Word{"foo bar baz biz boz bem boos bick dale biz buul hum dirk hass tukk murr"}.Match("biz")
+		w.Match("biz")
 	}
 }

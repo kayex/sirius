@@ -28,7 +28,7 @@ func TestCensor_Run(t *testing.T) {
 				"phrases": []string{"Voldemort"},
 				"strict":  true,
 			},
-			exp: (&sirius.TextEditAction{}).ReplaceWith("`CENSORED`"),
+			exp: (&sirius.TextEditAction{}).Set("`CENSORED`"),
 		},
 		{
 			msg: sirius.NewMessage(slack.UserID{"123", "abc"}, "Rainbows", "#channel", "0"),

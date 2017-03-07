@@ -3,9 +3,9 @@ package sirius
 import (
 	"strings"
 
+	"context"
 	"github.com/kayex/sirius/slack"
 	api "github.com/nlopes/slack"
-	"golang.org/x/net/context"
 )
 
 type API interface {
@@ -138,13 +138,14 @@ func (conn *RTMConnection) handleIncomingEvent(ev api.RTMEvent) {
 }
 
 func (conn *RTMConnection) handleIncomingMessage(ev *api.MessageEvent) {
-	// Drop messages with incomplete data
-	if ev.User == "" || ev.Team == "" {
+	id := slack.UserID{ev.User, ev.Team}
+
+	if !id.Valid() {
 		return
 	}
 
-	text := removeEscapeCharacters(ev.Text)
-	msg := NewMessage(slack.UserID{ev.User, ev.Team}, text, ev.Channel, ev.Timestamp)
+	text := stripEscapeCharacters(ev.Text)
+	msg := NewMessage(id, text, ev.Channel, ev.Timestamp)
 
 	conn.messages <- msg
 }
@@ -155,7 +156,7 @@ var escapeCharacters map[string]string = map[string]string{
 	"&amp;": "&",
 }
 
-func removeEscapeCharacters(msg string) string {
+func stripEscapeCharacters(msg string) string {
 	for html, unicode := range escapeCharacters {
 		msg = strings.Replace(msg, html, unicode, -1)
 	}
