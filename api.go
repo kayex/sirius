@@ -138,8 +138,9 @@ func (conn *RTMConnection) handleIncomingEvent(ev api.RTMEvent) {
 }
 
 func (conn *RTMConnection) handleIncomingMessage(ev *api.MessageEvent) {
-	// Drop messages with incomplete data
-	if ev.User == "" || ev.Team == "" {
+	id := slack.UserID{ev.User, ev.Team}
+
+	if !id.Valid() {
 		return
 	}
 
