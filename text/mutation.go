@@ -53,7 +53,6 @@ func (s *SubWord) Apply(text string) string {
 		}
 
 		sr = []rune(text)
-
 		beginning := sr[:i]
 		end := sr[i+len(s.Search.W):]
 
