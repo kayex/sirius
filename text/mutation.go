@@ -8,8 +8,8 @@ type Mutation interface {
 	Apply(text string) string
 }
 
-type Replace struct {
-	Replacement string
+type Set struct {
+	Text string
 }
 
 type Sub struct {
@@ -30,8 +30,8 @@ type Prepend struct {
 	Prefix string
 }
 
-func (r *Replace) Apply(text string) string {
-	return r.Replacement
+func (r *Set) Apply(text string) string {
+	return r.Text
 }
 
 func (s *Sub) Apply(text string) string {
@@ -44,7 +44,13 @@ func (s *SubWord) Apply(text string) string {
 	}
 
 	var tr []rune
-	for i := s.Search.Match(text); i >= 0; i = s.Search.Match(text) {
+	for {
+		i := s.Search.Match(text)
+
+		if i < 0 {
+			break
+		}
+
 		if tr == nil {
 			tr = []rune(text)
 		}

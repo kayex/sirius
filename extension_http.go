@@ -109,7 +109,7 @@ func (act HttpMessageAction) ToMessageAction() MessageAction {
 		if !ok {
 			return NoAction()
 		}
-		return edit.ReplaceWith(t)
+		return edit.Set(t)
 	}
 	return NoAction()
 }

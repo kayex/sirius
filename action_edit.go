@@ -22,9 +22,9 @@ func (edit *TextEditAction) Perform(msg *Message) error {
 	return nil
 }
 
-func (edit *TextEditAction) ReplaceWith(replacement string) *TextEditAction {
-	edit.add(&text.Replace{
-		Replacement: replacement,
+func (edit *TextEditAction) Set(txt string) *TextEditAction {
+	edit.add(&text.Set{
+		Text: txt,
 	})
 
 	return edit

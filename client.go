@@ -82,7 +82,7 @@ func (c *Client) handleMessage(msg *Message) {
 	}
 
 	if msg.escaped() {
-		edit := msg.EditText().ReplaceWith(trimEscape(msg.Text))
+		edit := msg.EditText().Set(trimEscape(msg.Text))
 		msg.perform(edit)
 
 		c.conn.Update(msg)

@@ -40,7 +40,7 @@ func (x *Geocode) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.Mess
 	location := pos.Geometry.Location
 	formatted := fmt.Sprintf("*%v*\n`(%.6f, %.6f)`", pos.FormattedAddress, location.Lat, location.Lng)
 
-	edit := m.EditText().ReplaceWith(formatted)
+	edit := m.EditText().Set(formatted)
 
 	return edit, nil
 }

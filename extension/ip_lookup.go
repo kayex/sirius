@@ -44,7 +44,7 @@ func (ipl *IPLookup) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.M
 		lookup["country"],
 		lookup["countryCode"],
 		lookup["isp"])
-	edit := m.EditText().ReplaceWith(output)
+	edit := m.EditText().Set(output)
 
 	return edit, nil
 }
