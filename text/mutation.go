@@ -1,6 +1,7 @@
 package text
 
 import (
+	"bytes"
 	"strings"
 )
 
@@ -45,16 +46,18 @@ func (s *SubWord) Apply(text string) string {
 
 	var tr []rune
 	for i := s.Search.Match(text); i >= 0; i = s.Search.Match(text) {
-		if tr == nil {
-			tr = []rune(text)
-		}
+		tr = []rune(text)
 
 		beginning := tr[:i]
 		end := tr[i+s.Search.Length():]
 
-		tr = append(append(beginning, []rune(s.Sub)...), end...)
+		var buf bytes.Buffer
 
-		text = string(tr)
+		buf.WriteString(string(beginning))
+		buf.WriteString(s.Sub)
+		buf.WriteString(string(end))
+
+		text = buf.String()
 	}
 
 	return text
