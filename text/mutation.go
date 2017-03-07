@@ -44,14 +44,7 @@ func (s *SubWord) Apply(text string) string {
 	}
 
 	var tr []rune
-
-	for {
-		i := s.Search.Match(text)
-
-		if i < 0 {
-			return text
-		}
-
+	for i := s.Search.Match(text); i >= 0; i = s.Search.Match(text) {
 		if tr == nil {
 			tr = []rune(text)
 		}
@@ -64,6 +57,7 @@ func (s *SubWord) Apply(text string) string {
 		text = string(tr)
 	}
 
+	return text
 }
 
 func (a *Append) Apply(text string) string {
