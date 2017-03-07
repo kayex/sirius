@@ -26,7 +26,7 @@ func (m *Message) Command(name string) (*Command, bool) {
 		var args []string
 		pieces := strings.Split(m.Text, " ")
 
-		if len(pieces) >= 2 {
+		if len(pieces) > 1 {
 			args = append(args, pieces[1:]...)
 		}
 
