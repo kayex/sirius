@@ -43,7 +43,7 @@ func createUsers(tokens []string) []sirius.User {
 }
 
 func configure(u *sirius.User) {
-	var m map[string]interface{}
+	m := make(map[string]interface{})
 
 	for _, eid := range extensions {
 		m[eid] = nil
