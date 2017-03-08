@@ -2,6 +2,7 @@ package text
 
 import (
 	"strings"
+	"unicode"
 	"unicode/utf8"
 )
 
@@ -54,13 +55,15 @@ func (q word) Length() int {
 	return utf8.RuneCountInString(q.W)
 }
 
+// isWordSurroundRune indicates if r is a rune which may surround a Word.
 func isWordSurroundRune(r rune) bool {
-	surr := []rune{'\t', '\n', '\v', '\f', '\r', ' ', ',', '.'}
+	if unicode.IsSpace(r) {
+		return true
+	}
 
-	for _, v := range surr {
-		if r == v {
-			return true
-		}
+	switch r {
+	case ',', '.':
+		return true
 	}
 
 	return false
