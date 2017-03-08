@@ -12,20 +12,23 @@ type Google struct{}
 func (*Google) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.MessageAction, error) {
 	cmd, match := m.Command("g")
 
-	if !match {
+	if !match || len(cmd.Args) == 0 {
 		return sirius.NoAction(), nil
 	}
 
-	q := cmd.Arg(0)
+	var qbuf bytes.Buffer
 
-	if q == "" {
-		return sirius.NoAction(), nil
+	for i, a := range cmd.Args {
+		if i != 0 {
+			qbuf.WriteRune(' ')
+		}
+		qbuf.WriteString(a)
 	}
 
 	var urlb bytes.Buffer
 
 	urlb.WriteString("https://www.google.com/search?q=")
-	urlb.WriteString(url.QueryEscape(q))
+	urlb.WriteString(url.QueryEscape(qbuf.String()))
 
 	edit := m.EditText().Set(urlb.String())
 
