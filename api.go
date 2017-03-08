@@ -162,8 +162,8 @@ var escapeCharacters map[string]string = map[string]string{
 }
 
 func stripEscapeCharacters(msg string) string {
-	for html, unicode := range escapeCharacters {
-		msg = strings.Replace(msg, html, unicode, -1)
+	for ec, unicode := range escapeCharacters {
+		msg = strings.Replace(msg, ec, unicode, -1)
 	}
 
 	return msg
