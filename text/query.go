@@ -40,7 +40,7 @@ func (q word) Match(s string) int {
 	}
 
 	sr := []rune(s)
-	ir := len(sr[:i])
+	ir := utf8.RuneCountInString(s[:i])
 
 	// Make sure that any preceding or following characters are valid
 	// word delimiters.

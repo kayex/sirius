@@ -65,6 +65,11 @@ func TestWord_Match(t *testing.T) {
 			q:   Word("bar"),
 			exp: 4,
 		},
+		{
+			s:   "å bar",
+			q:   Word("bar"),
+			exp: 2,
+		},
 	}
 
 	for _, c := range cases {
