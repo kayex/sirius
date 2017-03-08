@@ -9,7 +9,7 @@ type Query interface {
 	Match(string) int
 }
 
-// Word matches complete words only.
+// word matches complete words only.
 type word struct {
 	W string
 }
