@@ -16,19 +16,10 @@ func (*Google) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.Message
 		return sirius.NoAction(), nil
 	}
 
-	var qbuf bytes.Buffer
-
-	for i, a := range cmd.Args {
-		if i != 0 {
-			qbuf.WriteRune(' ')
-		}
-		qbuf.WriteString(a)
-	}
-
+	q := cmd.CollapseArgs()
 	var urlb bytes.Buffer
-
 	urlb.WriteString("https://www.google.com/search?q=")
-	urlb.WriteString(url.QueryEscape(qbuf.String()))
+	urlb.WriteString(url.QueryEscape(q))
 
 	edit := m.EditText().Set(urlb.String())
 
