@@ -16,7 +16,7 @@ type Remote struct {
 type RemoteUser struct {
 	IDHash         string      `json:"sirius_id"`
 	Token          string      `json:"slack_token"`
-	Extensions     interface{} `json:"extensions"`
+	Extensions     interface{} `json:"config"`
 	HttpExtensions interface{} `json:"http_extensions"`
 }
 
