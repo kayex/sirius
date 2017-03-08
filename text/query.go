@@ -10,7 +10,7 @@ type Query interface {
 	Match(string) int
 }
 
-// word matches complete words only.
+// word matches a complete word.
 type word struct {
 	W string
 }
@@ -40,11 +40,12 @@ func (q word) Match(s string) int {
 	sr := []rune(s)
 	ir := len(sr[:i])
 
-	// Check for any disallowed surrounding characters
+	// Make sure that any preceding or following characters are valid
+	// word delimiters.
 	prev := ir - 1
 	next := ir + q.Length()
-	if prev > 0 && !isWordSurroundRune(sr[prev]) ||
-		next <= len(sr)-1 && !isWordSurroundRune(sr[next]) {
+	if prev > 0 && !isWordDelimiter(sr[prev]) ||
+		next <= len(sr)-1 && !isWordDelimiter(sr[next]) {
 		return -1
 	}
 
@@ -55,8 +56,9 @@ func (q word) Length() int {
 	return utf8.RuneCountInString(q.W)
 }
 
-// isWordSurroundRune indicates if r is a rune which may surround a Word.
-func isWordSurroundRune(r rune) bool {
+// isWordSurroundRune indicates if r is a rune that may act as a delimiter
+// between Words.
+func isWordDelimiter(r rune) bool {
 	if unicode.IsSpace(r) {
 		return true
 	}
