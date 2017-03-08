@@ -2,7 +2,6 @@ package text
 
 import (
 	"strings"
-	"unicode"
 	"unicode/utf8"
 )
 
@@ -11,41 +10,46 @@ type Query interface {
 }
 
 // Word matches complete words only.
-// The "complete words" of a string s is defined as the result of
-// splitting the string on every single Unicode whitespace character.
 type Word struct {
 	W string
 }
 
 func (q Word) Match(s string) int {
-	if s == q.W || len(s) == 0 {
+	if len(s) == 0 {
+		return -1
+	} else if s == q.W {
 		return 0
 	}
 
-	sp := strings.FieldsFunc(s, func(r rune) bool {
-		if unicode.IsSpace(r) {
-			return true
-		}
-
-		switch r {
-		case ',', '\n':
-			return true
-		default:
-			return false
-		}
-	})
-
-	var len int
-	for i, w := range sp {
-		if w == q.W {
-			return len + i
-		}
-		len += utf8.RuneCountInString(w)
+	i := strings.Index(s, q.W)
+	if i < 0 {
+		return -1
 	}
 
-	return -1
+	sr := []rune(s)
+	ir := len(sr[:i])
+
+	// Check for any disallowed surrounding characters
+	if (ir > 0 && !isWordSurroundRune(sr[ir-1])) ||
+		(i+len(q.W) <= len(s)-1 && !isWordSurroundRune(sr[ir+utf8.RuneCountInString(q.W)])) {
+		return -1
+	}
+
+	return ir
 }
 
 func (q Word) Length() int {
 	return utf8.RuneCountInString(q.W)
+}
+
+func isWordSurroundRune(r rune) bool {
+	surr := []rune{'\t', '\n', '\v', '\f', '\r', ' ', ',', '.'}
+
+	for _, v := range surr {
+		if r == v {
+			return true
+		}
+	}
+
+	return false
 }
