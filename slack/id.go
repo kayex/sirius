@@ -26,7 +26,7 @@ type SecureID struct {
 	HashSum string
 }
 
-// Equals indicates if id and o represents the same user identity.
+// Equals indicates if id and o represent the same user identity.
 func (id UserID) Equals(o ID) bool {
 	switch o := o.(type) {
 	case UserID:
@@ -34,8 +34,8 @@ func (id UserID) Equals(o ID) bool {
 			return false
 		}
 
-		// Notice that user IDs are not guaranteed to be globally unique across all Slack users.
-		// The combination of user ID and team ID, on the other hand, is guaranteed to be globally unique.
+		// > Notice that user IDs are not guaranteed to be globally unique across all Slack users.
+		// > The combination of user ID and team ID, on the other hand, is guaranteed to be globally unique.
 		//
 		// - Slack API documentation
 		return id.UserID == o.UserID && id.TeamID == o.TeamID
@@ -70,7 +70,7 @@ func (id UserID) Secure() SecureID {
 	}
 }
 
-// Equals indicates if id and o represents the same user identity.
+// Equals indicates if id and o represent the same user identity.
 func (id SecureID) Equals(o ID) bool {
 	switch o := o.(type) {
 	case SecureID:
