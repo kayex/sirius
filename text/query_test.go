@@ -46,11 +46,36 @@ func TestWord_Match(t *testing.T) {
 	}
 }
 
-func BenchmarkWord_Match(b *testing.B) {
-	w := Word("foo bar baz biz boz bem boos bick dale biz buul hum dirk hass tukk murr")
+func BenchmarkWord_MatchExist(b *testing.B) {
+	w := Word("foobar")
+
+	txt := `Lorem ipsum dolor sit amet, an cum vero soleat concludaturque, te purto vero reprimique vis.
+	Ignota mediocritatem ut sea. Cetero deserunt pericula te vel. Omnis legendos no per.
+	Sale illum pertinax no sed, est posse putent minimum foobar no. Pri et vitae mentitum eligendi,
+	no ius reque fugit libris, eos ad quaeque pericula mediocrem. Habemus corpora an mea,
+	inermis partiendo per et, at nemore dolorem iudicabit eos. At est mucius docendi. Sed et nisl facilisi.
+	Idque suavitate argumentum eu eam, vis putant insolens dissentiunt id. Dictas labitur in mei, duo omnium assentior scripserit cu.`
+
 	b.ResetTimer()
 
 	for n := 0; n < b.N; n++ {
-		w.Match("biz")
+		w.Match(txt)
+	}
+}
+
+func BenchmarkWord_MatchNotExist(b *testing.B) {
+	w := Word("foobar")
+
+	txt := `Lorem ipsum dolor sit amet, an cum vero soleat concludaturque, te purto vero reprimique vis.
+	Ignota mediocritatem ut sea. Cetero deserunt pericula te vel. Omnis legendos no per.
+	Sale illum pertinax no sed, est posse putent minimum no. Pri et vitae mentitum eligendi,
+	no ius reque fugit libris, eos ad quaeque pericula mediocrem. Habemus corpora an mea,
+	inermis partiendo per et, at nemore dolorem iudicabit eos. At est mucius docendi. Sed et nisl facilisi.
+	Idque suavitate argumentum eu eam, vis putant insolens dissentiunt id. Dictas labitur in mei, duo omnium assentior scripserit cu.`
+
+	b.ResetTimer()
+
+	for n := 0; n < b.N; n++ {
+		w.Match(txt)
 	}
 }
