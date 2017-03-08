@@ -10,11 +10,19 @@ type Query interface {
 }
 
 // Word matches complete words only.
-type Word struct {
+type word struct {
 	W string
 }
 
-func (q Word) Match(s string) int {
+func Word(w string) word {
+	if len(w) == 0 {
+		panic("Cannot create word of length 0")
+	}
+
+	return word{w}
+}
+
+func (q word) Match(s string) int {
 	if len(s) == 0 {
 		return -1
 	} else if s == q.W {
@@ -38,7 +46,7 @@ func (q Word) Match(s string) int {
 	return ir
 }
 
-func (q Word) Length() int {
+func (q word) Length() int {
 	return utf8.RuneCountInString(q.W)
 }
 

@@ -10,22 +10,22 @@ func TestSubWord_Apply(t *testing.T) {
 	}{
 		{
 			str: "foo bar",
-			sw:  SubWord{Word{"bar"}, "boo"},
+			sw:  SubWord{Word("bar"), "boo"},
 			exp: "foo boo",
 		},
 		{
 			str: "foo åäö",
-			sw:  SubWord{Word{"foo"}, "bar"},
+			sw:  SubWord{Word("foo"), "bar"},
 			exp: "bar åäö",
 		},
 		{
 			str: "foo åäö",
-			sw:  SubWord{Word{"åäö"}, "bar"},
+			sw:  SubWord{Word("åäö"), "bar"},
 			exp: "foo bar",
 		},
 		{
 			str: "foo barbaz",
-			sw:  SubWord{Word{"foo"}, "long replacement"},
+			sw:  SubWord{Word("foo"), "long replacement"},
 			exp: "long replacement barbaz",
 		},
 	}

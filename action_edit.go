@@ -41,7 +41,7 @@ func (edit *TextEditAction) Substitute(search string, sub string) *TextEditActio
 
 func (edit *TextEditAction) SubstituteWord(search string, sub string) *TextEditAction {
 	edit.add(&text.SubWord{
-		Search: text.Word{search},
+		Search: text.Word(search),
 		Sub:    sub,
 	})
 

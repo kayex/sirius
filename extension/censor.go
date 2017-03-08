@@ -14,7 +14,7 @@ func (*Censor) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.Message
 	edit := m.EditText()
 
 	for _, p := range phrases {
-		if !m.Query(text.Word{p}) {
+		if !m.Query(text.Word(p)) {
 			continue
 		}
 

@@ -14,22 +14,22 @@ func TestMessage_Query(t *testing.T) {
 	}{
 		{
 			msg: NewMessage(slack.UserID{"123", "abc"}, "Alligators eat mattresses", "#channel", "0"),
-			q:   text.Word{"Alligators"},
+			q:   text.Word("Alligators"),
 			exp: true,
 		},
 		{
 			msg: NewMessage(slack.UserID{"123", "abc"}, "Alligators eat mattresses", "#channel", "0"),
-			q:   text.Word{"mattresses"},
+			q:   text.Word("mattresses"),
 			exp: true,
 		},
 		{
 			msg: NewMessage(slack.UserID{"123", "abc"}, "Alligators eat mattresses", "#channel", "0"),
-			q:   text.Word{"gators"},
+			q:   text.Word("gators"),
 			exp: false,
 		},
 		{
 			msg: NewMessage(slack.UserID{"123", "abc"}, "Alligators eat meat", "#channel", "0"),
-			q:   text.Word{"eat"},
+			q:   text.Word("eat"),
 			exp: true,
 		},
 	}
