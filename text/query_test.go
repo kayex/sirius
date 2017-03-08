@@ -77,8 +77,8 @@ func TestWord_Match(t *testing.T) {
 }
 
 // BenchmarkWord_MatchNotExist6_587 benchmarks a single Word query of length
-// 6 against a search text of length 587, where the sought string is at the
-// very end of the search text.
+// 6 against a search text of length 587, where the sought string does not
+// exist in the search text.
 //
 // This benchmark gives a good indication of the average performance of an
 // unsuccessful search.
