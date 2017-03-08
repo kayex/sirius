@@ -60,8 +60,8 @@ func (id UserID) Secure() SecureID {
 	if !id.Valid() {
 		return SecureID{}
 	}
-	var buf bytes.Buffer
 
+	var buf bytes.Buffer
 	buf.WriteString(id.TeamID)
 	buf.WriteRune('.')
 	buf.WriteString(id.UserID)
