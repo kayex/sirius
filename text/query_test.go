@@ -11,29 +11,59 @@ func TestWord_Match(t *testing.T) {
 		exp int
 	}{
 		{
-			s:   "Alligators eat mattresses",
-			q:   Word("Alligators"),
+			s:   "foo",
+			q:   Word("foo"),
 			exp: 0,
 		},
 		{
-			s:   "Alligators eat mattresses",
-			q:   Word("mattresses"),
-			exp: 15,
+			s:   "foo bar",
+			q:   Word("bar"),
+			exp: 4,
 		},
 		{
-			s:   "Alligators eat mattresses",
-			q:   Word("gators"),
+			s:   "foo barbaz",
+			q:   Word("bar"),
 			exp: -1,
 		},
 		{
-			s:   "Alli\ngators eat mattresses",
-			q:   Word("gators"),
-			exp: 5,
+			s:   "foobar baz",
+			q:   Word("bar"),
+			exp: -1,
 		},
 		{
-			s:   "Alligators eat meat",
-			q:   Word("eat"),
-			exp: 11,
+			s:   "foo bar",
+			q:   Word("FOO"),
+			exp: -1,
+		},
+		{
+			s:   "FOO BAR",
+			q:   Word("foo"),
+			exp: -1,
+		},
+		{
+			s:   "foo\tbar",
+			q:   Word("bar"),
+			exp: 4,
+		},
+		{
+			s:   "foo\nbar",
+			q:   Word("bar"),
+			exp: 4,
+		},
+		{
+			s:   "foo\vbar",
+			q:   Word("bar"),
+			exp: 4,
+		},
+		{
+			s:   "foo\fbar",
+			q:   Word("bar"),
+			exp: 4,
+		},
+		{
+			s:   "foo\rbar",
+			q:   Word("bar"),
+			exp: 4,
 		},
 	}
 
