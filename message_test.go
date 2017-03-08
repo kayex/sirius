@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestFullWordQuery_Query(t *testing.T) {
+func TestMessage_Query(t *testing.T) {
 	cases := []struct {
 		msg Message
 		q   text.Query
@@ -38,7 +38,7 @@ func TestFullWordQuery_Query(t *testing.T) {
 		act := c.msg.Query(c.q)
 
 		if act != c.exp {
-			t.Errorf("Expected FullWordQuery(%q) for message %q to return %v, got %v", c.q, c.msg.Text, c.exp, act)
+			t.Errorf("Expected Message.Query(%#v) for message %q to return %v, got %v", c.q, c.msg.Text, c.exp, act)
 		}
 	}
 }
