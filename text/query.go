@@ -56,8 +56,7 @@ func (q word) Length() int {
 	return utf8.RuneCountInString(q.W)
 }
 
-// isWordSurroundRune indicates if r is a rune that may act as a delimiter
-// between Words.
+// isWordSurroundRune indicates if r is a word delimiter.
 func isWordDelimiter(r rune) bool {
 	if unicode.IsSpace(r) {
 		return true
