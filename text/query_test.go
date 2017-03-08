@@ -46,7 +46,9 @@ func TestWord_Match(t *testing.T) {
 	}
 }
 
-func BenchmarkWord_MatchExist(b *testing.B) {
+// BenchmarkWord_MatchExist6_587 benchmarks a single Word query of length
+// 6 against a search text of length 587.
+func BenchmarkWord_MatchExist6_587(b *testing.B) {
 	w := Word("foobar")
 
 	txt := `Lorem ipsum dolor sit amet, an cum vero soleat concludaturque, te purto vero reprimique vis.
@@ -54,7 +56,7 @@ func BenchmarkWord_MatchExist(b *testing.B) {
 	Sale illum pertinax no sed, est posse putent minimum foobar no. Pri et vitae mentitum eligendi,
 	no ius reque fugit libris, eos ad quaeque pericula mediocrem. Habemus corpora an mea,
 	inermis partiendo per et, at nemore dolorem iudicabit eos. At est mucius docendi. Sed et nisl facilisi.
-	Idque suavitate argumentum eu eam, vis putant insolens dissentiunt id. Dictas labitur in mei, duo omnium assentior scripserit cu.`
+	Idque suavitate argumentum eu eam, vis putant insolens dissentiunt id. Dictas labitur in mei, duo omnium assentior scripserit cu`
 
 	b.ResetTimer()
 
@@ -63,7 +65,38 @@ func BenchmarkWord_MatchExist(b *testing.B) {
 	}
 }
 
-func BenchmarkWord_MatchNotExist(b *testing.B) {
+// BenchmarkWord_MatchPartials5_587 benchmarks a single Word query of length
+// 6 against a search text of length 587 with 5 length partials.
+//
+// This benchmark gives a good indication of the worst case performance
+// of an unsuccessful search.
+func BenchmarkWord_MatchPartials5_587(b *testing.B) {
+	w := Word("foobar")
+
+	txt := `fooba fooba fooba fooba fooba fooba fooba fooba fooba fooba
+		fooba fooba fooba fooba fooba fooba fooba fooba fooba fooba
+		fooba fooba fooba fooba fooba fooba fooba fooba fooba fooba
+		fooba fooba fooba fooba fooba fooba fooba fooba fooba fooba
+		fooba fooba fooba fooba fooba fooba fooba fooba fooba fooba
+		fooba fooba fooba fooba fooba fooba fooba fooba fooba fooba
+		fooba fooba fooba fooba fooba fooba fooba fooba fooba fooba
+		fooba fooba fooba fooba fooba fooba fooba fooba fooba fooba
+		fooba fooba fooba fooba fooba fooba fooba fooba fooba fooba
+		fooba fooba fooba fooba fooba fooba fooba fooba`
+
+	b.ResetTimer()
+
+	for n := 0; n < b.N; n++ {
+		w.Match(txt)
+	}
+}
+
+// BenchmarkWord_MatchNotExist6_587 benchmarks a single Word query of length
+// 6 against a search text of length 587.
+//
+// This benchmark gives a good indication of the average performance of an
+// unsuccessful search.
+func BenchmarkWord_MatchNotExist6_587(b *testing.B) {
 	w := Word("foobar")
 
 	txt := `Lorem ipsum dolor sit amet, an cum vero soleat concludaturque, te purto vero reprimique vis.
@@ -71,7 +104,7 @@ func BenchmarkWord_MatchNotExist(b *testing.B) {
 	Sale illum pertinax no sed, est posse putent minimum no. Pri et vitae mentitum eligendi,
 	no ius reque fugit libris, eos ad quaeque pericula mediocrem. Habemus corpora an mea,
 	inermis partiendo per et, at nemore dolorem iudicabit eos. At est mucius docendi. Sed et nisl facilisi.
-	Idque suavitate argumentum eu eam, vis putant insolens dissentiunt id. Dictas labitur in mei, duo omnium assentior scripserit cu.`
+	Idque suavitate argumentum eu eam, vis putant insolens dissentiunt id. Dictas labitur in mei, duo omnium assentior scripserit cu`
 
 	b.ResetTimer()
 
