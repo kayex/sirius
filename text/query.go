@@ -38,8 +38,10 @@ func (q word) Match(s string) int {
 	ir := len(sr[:i])
 
 	// Check for any disallowed surrounding characters
-	if (ir > 0 && !isWordSurroundRune(sr[ir-1])) ||
-		(i+len(q.W) <= len(s)-1 && !isWordSurroundRune(sr[ir+utf8.RuneCountInString(q.W)])) {
+	prev := ir - 1
+	next := ir + q.Length()
+	if prev > 0 && !isWordSurroundRune(sr[prev]) ||
+		next <= len(sr)-1 && !isWordSurroundRune(sr[next]) {
 		return -1
 	}
 
