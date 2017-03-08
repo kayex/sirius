@@ -10,13 +10,13 @@ type Query interface {
 	Match(string) int
 }
 
-// word matches the first occurrence of W in a search text, where W is a string
-// not immediately preceded or followed by any characters that do not satisfy
-// isWordDelimiter.
 type word struct {
 	W string
 }
 
+// Word returns a query that matches the first occurrence of w in a search text
+// where it is not immediately preceded or followed by any characters that do not satisfy
+// isWordDelimiter.
 func Word(w string) word {
 	if len(w) == 0 {
 		panic("Cannot create word of length 0")
