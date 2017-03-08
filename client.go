@@ -57,7 +57,7 @@ func (c *Client) Start(ctx context.Context) {
 		case <-ctx.Done():
 			return
 		case msg := <-c.conn.Messages():
-			c.handleMessage(&msg)
+			c.handle(&msg)
 		}
 	}
 }
@@ -76,7 +76,7 @@ func (c *Client) authenticate() error {
 	}
 }
 
-func (c *Client) handleMessage(msg *Message) {
+func (c *Client) handle(msg *Message) {
 	if !msg.sentBy(c.user) {
 		return
 	}
