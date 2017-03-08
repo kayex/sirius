@@ -10,7 +10,9 @@ type Query interface {
 	Match(string) int
 }
 
-// word matches a complete word.
+// word matches the first occurrence of W in a search text, where W is a string
+// not immediately preceded or followed by any characters that do not satisfy
+// isWordDelimiter.
 type word struct {
 	W string
 }
@@ -56,7 +58,7 @@ func (q word) Length() int {
 	return utf8.RuneCountInString(q.W)
 }
 
-// isWordSurroundRune indicates if r is a word delimiter.
+// isWordDelimiter indicates if r is a word delimiter.
 func isWordDelimiter(r rune) bool {
 	if unicode.IsSpace(r) {
 		return true
