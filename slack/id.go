@@ -7,9 +7,9 @@ import (
 )
 
 type ID interface {
-	String() string
 	Equals(ID) bool
 	Valid() bool
+	String() string
 }
 
 type UserID struct {
