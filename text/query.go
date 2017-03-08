@@ -25,7 +25,9 @@ func Word(w string) word {
 func (q word) Match(s string) int {
 	if len(s) == 0 {
 		return -1
-	} else if s == q.W {
+	}
+
+	if s == q.W {
 		return 0
 	}
 
