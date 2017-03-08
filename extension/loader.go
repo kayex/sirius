@@ -31,6 +31,8 @@ func (l *StaticLoader) Load(eid sirius.EID) (sirius.Extension, error) {
 		return &IPLookup{}, nil
 	case "censor":
 		return &Censor{}, nil
+	case "google":
+		return &Google{}, nil
 	case "geocode":
 		return &Geocode{
 			APIKey: l.cfg.Maps.APIKey,
