@@ -15,7 +15,7 @@ type word struct {
 }
 
 // Word returns a query that matches the first occurrence of w in a search text
-// where it is not immediately preceded or followed by any characters that do not satisfy
+// where w is not immediately preceded or followed by any characters that do not satisfy
 // isWordDelimiter.
 func Word(w string) word {
 	if len(w) == 0 {
