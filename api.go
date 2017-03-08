@@ -1,6 +1,8 @@
 package sirius
 
 import (
+	"errors"
+	"fmt"
 	"strings"
 
 	"context"
@@ -108,19 +110,23 @@ func (conn *RTMConnection) GetUserID(token string) (slack.ID, error) {
 
 func (conn *RTMConnection) authenticate(e *api.ConnectedEvent) {
 	id := slack.UserID{e.Info.User.ID, e.Info.Team.ID}
-	conn.details.SelfChan = conn.getSelfChan(id, e)
+	selfChan, err := conn.getSelfChan(id, e)
+	if err != nil {
+		panic(err)
+	}
+	conn.details.SelfChan = selfChan
 	conn.details.UserID = id
 	conn.auth <- id
 }
 
-func (conn *RTMConnection) getSelfChan(id slack.UserID, e *api.ConnectedEvent) string {
+func (conn *RTMConnection) getSelfChan(id slack.UserID, e *api.ConnectedEvent) (string, error) {
 	for _, im := range e.Info.IMs {
 		if im.User == id.UserID {
-			return im.ID
+			return im.ID, nil
 		}
 	}
 
-	panic("")
+	return "", errors.New(fmt.Sprintf("Could not find self-channel for User(%v)", id.String()))
 }
 
 func (conn *RTMConnection) handleIncomingEvent(ev api.RTMEvent) {
@@ -139,7 +145,6 @@ func (conn *RTMConnection) handleIncomingEvent(ev api.RTMEvent) {
 
 func (conn *RTMConnection) handleIncomingMessage(ev *api.MessageEvent) {
 	id := slack.UserID{ev.User, ev.Team}
-
 	if !id.Valid() {
 		return
 	}
