@@ -1,9 +1,11 @@
 package sirius
 
 import (
+	"context"
+	"errors"
+	"fmt"
 	"strings"
 
-	"context"
 	"github.com/kayex/sirius/mqtt"
 	"github.com/kayex/sirius/slack"
 )
@@ -71,9 +73,9 @@ func (m *MQTTSync) Sync(s *Service) {
 
 func (m *MQTTSync) start() {
 	for msg := range m.mqtt.Messages {
-		msg, ok := parseSyncMessage(msg.Msg)
+		msg, err := parseSyncMessage(msg.Msg)
 
-		if !ok {
+		if err != nil {
 			continue
 		}
 
@@ -95,11 +97,11 @@ func (m *MQTTSync) start() {
 	}
 }
 
-func parseSyncMessage(msg string) (*SyncMessage, bool) {
+func parseSyncMessage(msg string) (*SyncMessage, error) {
 	split := strings.Split(msg, ":")
 
 	if len(split) != 2 {
-		return nil, false
+		return nil, errors.New(fmt.Sprintf("Invalid sync message %q", msg))
 	}
 
 	msgType := SyncAction(split[0])
@@ -110,8 +112,8 @@ func parseSyncMessage(msg string) (*SyncMessage, bool) {
 		return &SyncMessage{
 			Type: msgType,
 			ID:   id,
-		}, true
+		}, nil
 	default:
-		return nil, false
+		return nil, errors.New(fmt.Sprintf("Unknown sync message type %q", msgType))
 	}
 }
