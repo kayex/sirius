@@ -66,9 +66,9 @@ func TestWord_Match(t *testing.T) {
 			exp: 4,
 		},
 		{
-			s:   "å bar",
+			s:   "åäö bar",
 			q:   Word("bar"),
-			exp: 2,
+			exp: 4,
 		},
 	}
 
