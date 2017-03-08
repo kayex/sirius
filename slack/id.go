@@ -1,6 +1,7 @@
 package slack
 
 import (
+	"bytes"
 	"crypto/sha256"
 	"encoding/hex"
 )
@@ -59,10 +60,14 @@ func (id UserID) Secure() SecureID {
 	if !id.Valid() {
 		return SecureID{}
 	}
+	var buf bytes.Buffer
 
-	concat := id.TeamID + "." + id.UserID
+	buf.WriteString(id.TeamID)
+	buf.WriteRune('.')
+	buf.WriteString(id.UserID)
+
 	h := sha256.New()
-	h.Write([]byte(concat))
+	h.Write(buf.Bytes())
 	s := hex.EncodeToString(h.Sum(nil))
 
 	return SecureID{
