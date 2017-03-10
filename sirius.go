@@ -53,10 +53,6 @@ func (s *Service) AddUser(u *User) {
 }
 
 func (s *Service) DropUser(id slack.ID) {
-	s.stopClient(id)
-}
-
-func (s *Service) stopClient(id slack.ID) {
 	if cl, ok := s.clients[id.String()]; ok {
 		cl.Stop()
 		delete(s.clients, id.String())
@@ -93,13 +89,13 @@ func (s *Service) createClient(u *User) *Client {
 }
 
 func (c *Client) notify() {
-	conf := EMOJI + " Configuration loaded successfully."
+	conf := EMOJI + " " + text.Bold("Configuration loaded successfully.")
 
 	if len(c.user.Configurations) == 0 {
 		conf += "\n" + text.Quote(text.Italic("No extensions activated."))
 	} else {
 		for _, cfg := range c.user.Configurations {
-			conf += "\n" + text.Quote(text.Bold(string(cfg.EID)))
+			conf += "\n" + text.Quote(string(cfg.EID))
 		}
 	}
 
