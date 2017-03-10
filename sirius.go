@@ -1,9 +1,11 @@
 package sirius
 
 import (
-	"errors"
-
 	"context"
+	"errors"
+	"fmt"
+	"time"
+
 	"github.com/kayex/sirius/slack"
 	"github.com/kayex/sirius/text"
 )
@@ -43,13 +45,14 @@ func (s *Service) Start(ctx context.Context, users []User) {
 }
 
 func (s *Service) AddUser(u *User) {
+	stt := time.Now()
 	cl := s.createClient(u)
 	s.addClient(cl)
 
 	go cl.Start()
 
 	<-cl.Ready
-	cl.notify()
+	cl.notify(stt)
 }
 
 func (s *Service) DropUser(id slack.ID) {
@@ -88,8 +91,11 @@ func (s *Service) createClient(u *User) *Client {
 	})
 }
 
-func (c *Client) notify() {
-	conf := EMOJI + " " + text.Bold("Configuration loaded successfully.")
+func (c *Client) notify(st time.Time) {
+	et := time.Now()
+	tt := et.Sub(st)
+
+	conf := EMOJI + " " + text.Bold(fmt.Sprintf("Extensions loaded in %.3f seconds.", float64(tt.Nanoseconds())/float64(1e9)))
 
 	if len(c.user.Configurations) == 0 {
 		conf += "\n" + text.Quote(text.Italic("No extensions activated."))
