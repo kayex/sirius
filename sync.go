@@ -24,7 +24,7 @@ type SyncMessage struct {
 }
 
 type Sync interface {
-	Sync(s *Service)
+	Sync(context.Context, *Service)
 }
 
 type SyncedService struct {
@@ -34,7 +34,7 @@ type SyncedService struct {
 
 func (s *SyncedService) Start(ctx context.Context, u []User) {
 	go s.service.Start(ctx, u)
-	s.sync.Sync(s.service)
+	s.sync.Sync(ctx, s.service)
 }
 
 type MQTTSync struct {
@@ -59,41 +59,48 @@ func NewMQTTSync(rmt *Remote, cfg mqtt.Config, topic string) *MQTTSync {
 	}
 }
 
-func (m *MQTTSync) Sync(s *Service) {
+func (m *MQTTSync) Sync(ctx context.Context, s *Service) {
 	m.service = s
-	err := m.mqtt.Connect(context.TODO())
+	err := m.mqtt.Connect()
 
 	if err != nil {
 		panic(err)
 	}
 
 	m.mqtt.Subscribe(m.topic)
-	m.start()
+	m.start(ctx)
 }
 
-func (m *MQTTSync) start() {
-	for msg := range m.mqtt.Messages {
-		msg, err := parseSyncMessage(msg.Msg)
-
-		if err != nil {
-			continue
-		}
-
-		switch msg.Type {
-		case UPDATE:
-			m.service.DropUser(msg.ID)
-			fallthrough
-		case NEW:
-			u, err := m.rmt.GetUser(msg.ID)
+func (m *MQTTSync) start(ctx context.Context) {
+	for {
+		select {
+		case <-ctx.Done():
+			m.mqtt.Disconnect()
+			return
+		case sm := <-m.mqtt.Messages:
+			msg, err := parseSyncMessage(sm.Msg)
 
 			if err != nil {
-				break
+				continue
 			}
 
-			m.service.AddUser(u)
-		case DELETE:
-			m.service.DropUser(msg.ID)
+			switch msg.Type {
+			case UPDATE:
+				m.service.DropUser(msg.ID)
+				fallthrough
+			case NEW:
+				u, err := m.rmt.GetUser(msg.ID)
+
+				if err != nil {
+					break
+				}
+
+				m.service.AddUser(u)
+			case DELETE:
+				m.service.DropUser(msg.ID)
+			}
 		}
+
 	}
 }
 

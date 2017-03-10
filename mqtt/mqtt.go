@@ -2,7 +2,6 @@ package mqtt
 
 import (
 	"bytes"
-	"context"
 	proto "github.com/huin/mqtt"
 	"github.com/jeffallen/mqtt"
 	"net"
@@ -20,6 +19,7 @@ type MQTT struct {
 	Config
 	Messages chan Publish
 	cl       *mqtt.ClientConn
+	done     chan bool
 }
 
 type Publish struct {
@@ -32,10 +32,11 @@ func New(cfg Config) *MQTT {
 	return &MQTT{
 		Config:   cfg,
 		Messages: make(chan Publish),
+		done:     make(chan bool),
 	}
 }
 
-func (m *MQTT) Connect(ctx context.Context) error {
+func (m *MQTT) Connect() error {
 	conn, err := net.Dial("tcp", m.Host+":"+m.Port)
 
 	if err != nil {
@@ -51,9 +52,13 @@ func (m *MQTT) Connect(ctx context.Context) error {
 		return err
 	}
 
-	go m.listen(ctx)
+	go m.listen()
 
 	return nil
+}
+
+func (m *MQTT) Disconnect() {
+	m.done <- true
 }
 
 func (m *MQTT) Subscribe(topic string) {
@@ -71,11 +76,11 @@ func (m *MQTT) Subscribe(topic string) {
 	m.cl.Subscribe(sub)
 }
 
-func (m *MQTT) listen(ctx context.Context) {
+func (m *MQTT) listen() {
 Listen:
 	for {
 		select {
-		case <-ctx.Done():
+		case <-m.done:
 			break Listen
 		case p := <-m.cl.Incoming:
 			m.receive(p)

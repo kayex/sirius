@@ -12,32 +12,14 @@ const EMOJI = "⚡" // The high voltage/lightning bolt emoji (:zap: in Slack)
 
 type Service struct {
 	loader  ExtensionLoader
-	clients map[string]*CancelClient
+	clients map[string]*Client
 	ctx     context.Context
-}
-
-type CancelClient struct {
-	Client
-	Cancel context.CancelFunc
-	ctx    context.Context
-}
-
-func (c *Client) WithCancel(ctx context.Context, cancel context.CancelFunc) *CancelClient {
-	return &CancelClient{
-		Client: *c,
-		Cancel: cancel,
-		ctx:    ctx,
-	}
-}
-
-func (c *CancelClient) Start() {
-	c.Client.Start(c.ctx)
 }
 
 func NewService(l ExtensionLoader) *Service {
 	return &Service{
 		loader:  l,
-		clients: make(map[string]*CancelClient),
+		clients: make(map[string]*Client),
 	}
 }
 
@@ -53,8 +35,10 @@ func (s *Service) Start(ctx context.Context, users []User) {
 	}
 
 	select {
-	case <-s.ctx.Done():
-		break
+	case <-ctx.Done():
+		for _, cl := range s.clients {
+			cl.Stop()
+		}
 	}
 }
 
@@ -68,24 +52,18 @@ func (s *Service) AddUser(u *User) {
 	cl.notify()
 }
 
-func (s *Service) DropUser(id slack.ID) bool {
-	if cl, ok := s.clients[id.String()]; ok {
-		cl.Cancel()
-
-		return true
-	}
-
-	return false
+func (s *Service) DropUser(id slack.ID) {
+	s.stopClient(id)
 }
 
 func (s *Service) stopClient(id slack.ID) {
-	if ex, ok := s.clients[id.String()]; ok {
-		ex.Cancel()
+	if cl, ok := s.clients[id.String()]; ok {
+		cl.Stop()
 		delete(s.clients, id.String())
 	}
 }
 
-func (s *Service) addClient(cl *CancelClient) error {
+func (s *Service) addClient(cl *Client) error {
 	u := cl.user
 
 	if u.ID == nil {
@@ -107,11 +85,11 @@ func (s *Service) addClient(cl *CancelClient) error {
 	return nil
 }
 
-func (s *Service) createClient(u *User) *CancelClient {
+func (s *Service) createClient(u *User) *Client {
 	return NewClient(ClientConfig{
 		user:   u,
 		loader: s.loader,
-	}).WithCancel(context.WithCancel(s.ctx))
+	})
 }
 
 func (c *Client) notify() {

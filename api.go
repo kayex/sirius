@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"strings"
 
-	"context"
 	"github.com/kayex/sirius/slack"
 	api "github.com/nlopes/slack"
 )
@@ -23,7 +22,8 @@ type MessageBroker interface {
 type Connection interface {
 	API
 	MessageBroker
-	Listen(context.Context)
+	Listen()
+	Close()
 	Auth() <-chan slack.UserID
 	Details() ConnectionDetails
 }
@@ -40,6 +40,7 @@ type RTMConnection struct {
 	auth     chan slack.UserID
 	messages chan Message
 	details  ConnectionDetails
+	done     chan bool
 }
 
 func NewRTMConnection(token string) *RTMConnection {
@@ -51,21 +52,26 @@ func NewRTMConnection(token string) *RTMConnection {
 		client:   client,
 		auth:     make(chan slack.UserID, 1),
 		messages: make(chan Message),
+		done:     make(chan bool),
 	}
 }
 
-func (conn *RTMConnection) Listen(ctx context.Context) {
+func (conn *RTMConnection) Listen() {
 	go conn.rtm.ManageConnection()
 
 	for {
 		select {
-		case <-ctx.Done():
+		case <-conn.done:
 			conn.rtm.Disconnect()
 			return
 		case ev := <-conn.rtm.IncomingEvents:
 			conn.handleIncomingEvent(ev)
 		}
 	}
+}
+
+func (conn *RTMConnection) Close() {
+	conn.done <- true
 }
 
 func (conn *RTMConnection) Auth() <-chan slack.UserID {

@@ -4,8 +4,6 @@ import (
 	"errors"
 	"strings"
 	"time"
-
-	"context"
 )
 
 type Client struct {
@@ -15,6 +13,7 @@ type Client struct {
 	loader  ExtensionLoader
 	runner  ExtensionRunner
 	timeout time.Duration
+	done    chan bool
 }
 
 type ClientConfig struct {
@@ -32,6 +31,7 @@ func NewClient(cfg ClientConfig) *Client {
 		runner:  cfg.runner,
 		timeout: cfg.timeout,
 		Ready:   make(chan bool, 1),
+		done:    make(chan bool),
 	}
 	if cl.runner == nil {
 		cl.runner = NewAsyncRunner()
@@ -42,8 +42,8 @@ func NewClient(cfg ClientConfig) *Client {
 	return cl
 }
 
-func (c *Client) Start(ctx context.Context) {
-	go c.conn.Listen(ctx)
+func (c *Client) Start() {
+	go c.conn.Listen()
 
 	err := c.authenticate()
 	if err != nil {
@@ -54,12 +54,18 @@ func (c *Client) Start(ctx context.Context) {
 
 	for {
 		select {
-		case <-ctx.Done():
-			return
 		case msg := <-c.conn.Messages():
 			c.handle(&msg)
+			continue
+		case <-c.done:
+			c.conn.Close()
+			return
 		}
 	}
+}
+
+func (c *Client) Stop() {
+	c.done <- true
 }
 
 func (c *Client) authenticate() error {
