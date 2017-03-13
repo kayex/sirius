@@ -23,6 +23,8 @@ type ClientConfig struct {
 	timeout time.Duration
 }
 
+const CLIENT_DEFAULT_TIMEOUT = time.Second * 2
+
 func NewClient(cfg ClientConfig) *Client {
 	cl := &Client{
 		ExtensionLoader: cfg.loader,
@@ -37,7 +39,7 @@ func NewClient(cfg ClientConfig) *Client {
 		cl.ExtensionRunner = NewAsyncRunner()
 	}
 	if cl.timeout == 0 {
-		cl.timeout = time.Second * 2
+		cl.timeout = CLIENT_DEFAULT_TIMEOUT
 	}
 	return cl
 }
