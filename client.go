@@ -47,7 +47,7 @@ func NewClient(cfg ClientConfig) *Client {
 func (c *Client) Start() {
 	go c.conn.Listen()
 
-	err := c.authenticate()
+	err := c.authenticate(c.conn)
 	if err != nil {
 		panic(err)
 	}
@@ -77,9 +77,8 @@ func (c *Client) Stop() {
 	c.done <- true
 }
 
-func (c *Client) authenticate() error {
-	auth := c.conn.Auth()
-
+func (c *Client) authenticate(conn Connection) error {
+	auth := conn.Auth()
 	for {
 		select {
 		case id := <-auth:
