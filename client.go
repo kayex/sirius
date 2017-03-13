@@ -106,7 +106,11 @@ func (c *Client) handle(msg *Message) {
 }
 
 func (c *Client) run(m *Message) {
-	exe := c.loadExecutions(m)
+	var exe []Execution
+	for _, cfg := range c.user.Configurations {
+		exe = append(exe, *c.createExecution(m, &cfg))
+	}
+
 	act := c.runExecutions(exe)
 
 	if performActions(act, m) {
@@ -135,27 +139,23 @@ func (c *Client) runExecutions(exe []Execution) []MessageAction {
 	return act
 }
 
-func (c *Client) loadExecutions(m *Message) []Execution {
-	var exe []Execution
-	for _, cfg := range c.user.Configurations {
-		var x Extension
+func (c *Client) createExecution(m *Message, cfg *Configuration) *Execution {
+	var x Extension
 
-		// Check for HTTP extensions
-		if cfg.URL != "" {
-			x = NewHttpExtension(cfg.URL, nil)
-		} else {
-			var err error
-			x, err = c.loader.Load(cfg.EID)
+	// Check for HTTP extensions
+	if cfg.URL != "" {
+		x = NewHttpExtension(cfg.URL, nil)
+	} else {
+		ex, err := c.loader.Load(cfg.EID)
 
-			if err != nil {
-				panic(err)
-			}
+		if err != nil {
+			panic(err)
 		}
 
-		exe = append(exe, *NewExecution(x, *m, cfg.Cfg))
+		x = ex
 	}
 
-	return exe
+	return NewExecution(x, *m, cfg.Cfg)
 }
 
 func (m *Message) sentBy(u *User) bool {
