@@ -61,6 +61,7 @@ func (c *Client) Start() {
 		case <-c.conn.Dead():
 			c.done <- true
 			return
+		default:
 		}
 
 		select {
