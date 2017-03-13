@@ -9,6 +9,84 @@
 	"ignore": "",
 	"package": [
 		{
+			"path": "bufio",
+			"revision": ""
+		},
+		{
+			"path": "bytes",
+			"revision": ""
+		},
+		{
+			"path": "context",
+			"revision": ""
+		},
+		{
+			"path": "crypto/hmac",
+			"revision": ""
+		},
+		{
+			"path": "crypto/rand",
+			"revision": ""
+		},
+		{
+			"path": "crypto/sha1",
+			"revision": ""
+		},
+		{
+			"path": "crypto/sha256",
+			"revision": ""
+		},
+		{
+			"path": "crypto/tls",
+			"revision": ""
+		},
+		{
+			"path": "encoding/base64",
+			"revision": ""
+		},
+		{
+			"path": "encoding/binary",
+			"revision": ""
+		},
+		{
+			"path": "encoding/hex",
+			"revision": ""
+		},
+		{
+			"path": "encoding/json",
+			"revision": ""
+		},
+		{
+			"path": "errors",
+			"revision": ""
+		},
+		{
+			"path": "flag",
+			"revision": ""
+		},
+		{
+			"path": "fmt",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "WRu+mhZ2PfQu27qRr69HVGjtN4Q=",
+			"path": "github.com/davecgh/go-spew/spew",
+			"revision": "346938d642f2ec3594ed81d874461961cd0faa76",
+			"revisionTime": "2016-10-29T20:57:26Z"
+		},
+		{
+			"checksumSHA1": "a2yC46a1qsJomgY6rb+FkTFiqmE=",
+			"path": "github.com/davecgh/go-spew/spew/testdata",
+			"revision": "346938d642f2ec3594ed81d874461961cd0faa76",
+			"revisionTime": "2016-10-29T20:57:26Z"
+		},
+		{
+			"checksumSHA1": "yUc84k7cfnRi9AlPFuRo77Y18Og=",
+			"path": "github.com/golang/glog",
+			"revision": "23def4e6c14b4da8ac2ed8007337bc5eb5007998",
+			"revisionTime": "2016-01-25T20:49:56Z"
+		},
+		{
 			"checksumSHA1": "1fRXowiFWTHcHcJR/EoH50VxW94=",
 			"path": "github.com/huin/gobinarytest",
 			"revision": "de322f729af68c9e5ecde2bff780d105f0fbe745",
@@ -25,6 +103,54 @@
 			"path": "github.com/jeffallen/mqtt",
 			"revision": "36aebe6d2ee4168d176bc3ef22c875b387cb0b19",
 			"revisionTime": "2016-02-12T11:29:54Z"
+		},
+		{
+			"checksumSHA1": "uaRfmestqhIS8I0SdqRWfQYDcFo=",
+			"path": "github.com/kayex/sirius",
+			"revision": "61cb733731c38ee64e8f73127a417b4794f2462c",
+			"revisionTime": "2017-03-13T12:05:49Z"
+		},
+		{
+			"checksumSHA1": "4tONNW8Feq/6eMGvpK3718h+dFw=",
+			"path": "github.com/kayex/sirius/cmd/sirius-cloud",
+			"revision": "61cb733731c38ee64e8f73127a417b4794f2462c",
+			"revisionTime": "2017-03-13T12:05:49Z"
+		},
+		{
+			"checksumSHA1": "dI4fEvkjjfMtWc6UNFWL5ZpUejc=",
+			"path": "github.com/kayex/sirius/cmd/sirius-local",
+			"revision": "61cb733731c38ee64e8f73127a417b4794f2462c",
+			"revisionTime": "2017-03-13T12:05:49Z"
+		},
+		{
+			"checksumSHA1": "KiJsehY68Pb0KLy4CqmDIANJWJY=",
+			"path": "github.com/kayex/sirius/config",
+			"revision": "61cb733731c38ee64e8f73127a417b4794f2462c",
+			"revisionTime": "2017-03-13T12:05:49Z"
+		},
+		{
+			"checksumSHA1": "L1slydJwUsfCNTAVzIyZ5ZvvMoU=",
+			"path": "github.com/kayex/sirius/extension",
+			"revision": "61cb733731c38ee64e8f73127a417b4794f2462c",
+			"revisionTime": "2017-03-13T12:05:49Z"
+		},
+		{
+			"checksumSHA1": "QSLPSbQpTT5UnuPJOyWjll6eEaI=",
+			"path": "github.com/kayex/sirius/mqtt",
+			"revision": "61cb733731c38ee64e8f73127a417b4794f2462c",
+			"revisionTime": "2017-03-13T12:05:49Z"
+		},
+		{
+			"checksumSHA1": "EWWM6J+8/AFqTX81ci6iCYKDyz4=",
+			"path": "github.com/kayex/sirius/slack",
+			"revision": "61cb733731c38ee64e8f73127a417b4794f2462c",
+			"revisionTime": "2017-03-13T12:05:49Z"
+		},
+		{
+			"checksumSHA1": "GcDcj4hzMuxNiJ8qhudCDvIIePc=",
+			"path": "github.com/kayex/sirius/text",
+			"revision": "61cb733731c38ee64e8f73127a417b4794f2462c",
+			"revisionTime": "2017-03-13T12:05:49Z"
 		},
 		{
 			"checksumSHA1": "oONaja1SA8xsG5eqRKz8UZ9IHVI=",
@@ -45,6 +171,18 @@
 			"revisionTime": "2016-10-30T18:15:39Z"
 		},
 		{
+			"checksumSHA1": "RZOdTSZN/PgcTqko5LzIAzw+UT4=",
+			"path": "github.com/pmezard/go-difflib/difflib",
+			"revision": "792786c7400a136282c1664665ae0a8db921c6c2",
+			"revisionTime": "2016-01-10T10:55:54Z"
+		},
+		{
+			"checksumSHA1": "8rxOh1Vlti1bzoIy6mH5eL0RYsI=",
+			"path": "github.com/stretchr/testify/assert",
+			"revision": "4d4bfba8f1d1027c4fdbe371823030df51419987",
+			"revisionTime": "2017-01-30T11:31:45Z"
+		},
+		{
 			"checksumSHA1": "ujkdYz/AOSZ4dVskaUGW9g/V/dM=",
 			"path": "golang.org/x/net/context",
 			"revision": "61557ac0112b576429a0df080e1c2cef5dfbb642",
@@ -57,22 +195,134 @@
 			"revisionTime": "2017-01-26T11:54:58Z"
 		},
 		{
-			"checksumSHA1": "r5XsDTZuQRg+Qj1PR6NOxy/MEQM=",
+			"checksumSHA1": "f2c9iL80A0QRAN9FUVA9Aq1i914=",
 			"path": "golang.org/x/net/websocket",
-			"revision": "4cfeeeb61ae8daa2a4b06572024786e56f23504c",
-			"revisionTime": "2016-10-30T07:22:20Z"
+			"revision": "61557ac0112b576429a0df080e1c2cef5dfbb642",
+			"revisionTime": "2017-01-26T11:54:58Z"
 		},
 		{
-			"checksumSHA1": "FN06Yhfmhz9g2oF6Tzvky1H7Kr4=",
+			"checksumSHA1": "9ghdRh1Sv8ux0hNagbh9VUg7NFE=",
 			"path": "googlemaps.github.io/maps",
-			"revision": "61ce2cef47693eb7afabab2ae77fd218f928a0c4",
-			"revisionTime": "2017-01-30T05:32:17Z"
+			"revision": "8e7244f1c0afccfa76f92afff890cdb0ae64f9ee",
+			"revisionTime": "2017-02-22T05:27:45Z"
 		},
 		{
 			"checksumSHA1": "WBCHNVoBohhp9RwXCZeHsBn0/t8=",
 			"path": "googlemaps.github.io/maps/internal",
-			"revision": "61ce2cef47693eb7afabab2ae77fd218f928a0c4",
-			"revisionTime": "2017-01-30T05:32:17Z"
+			"revision": "8e7244f1c0afccfa76f92afff890cdb0ae64f9ee",
+			"revisionTime": "2017-02-22T05:27:45Z"
+		},
+		{
+			"path": "image",
+			"revision": ""
+		},
+		{
+			"path": "image/jpeg",
+			"revision": ""
+		},
+		{
+			"path": "io",
+			"revision": ""
+		},
+		{
+			"path": "io/ioutil",
+			"revision": ""
+		},
+		{
+			"path": "log",
+			"revision": ""
+		},
+		{
+			"path": "math",
+			"revision": ""
+		},
+		{
+			"path": "math/rand",
+			"revision": ""
+		},
+		{
+			"path": "mime/multipart",
+			"revision": ""
+		},
+		{
+			"path": "net",
+			"revision": ""
+		},
+		{
+			"path": "net/http",
+			"revision": ""
+		},
+		{
+			"path": "net/http/httptest",
+			"revision": ""
+		},
+		{
+			"path": "net/http/httputil",
+			"revision": ""
+		},
+		{
+			"path": "net/url",
+			"revision": ""
+		},
+		{
+			"path": "os",
+			"revision": ""
+		},
+		{
+			"path": "os/user",
+			"revision": ""
+		},
+		{
+			"path": "path/filepath",
+			"revision": ""
+		},
+		{
+			"path": "reflect",
+			"revision": ""
+		},
+		{
+			"path": "runtime",
+			"revision": ""
+		},
+		{
+			"path": "strconv",
+			"revision": ""
+		},
+		{
+			"path": "strings",
+			"revision": ""
+		},
+		{
+			"path": "sync",
+			"revision": ""
+		},
+		{
+			"path": "sync/atomic",
+			"revision": ""
+		},
+		{
+			"path": "testing",
+			"revision": ""
+		},
+		{
+			"path": "text/tabwriter",
+			"revision": ""
+		},
+		{
+			"path": "time",
+			"revision": ""
+		},
+		{
+			"path": "unicode",
+			"revision": ""
+		},
+		{
+			"path": "unicode/utf8",
+			"revision": ""
+		},
+		{
+			"path": "unsafe",
+			"revision": ""
 		}
 	],
 	"rootPath": "github.com/kayex/sirius"
