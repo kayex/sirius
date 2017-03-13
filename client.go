@@ -7,11 +7,11 @@ import (
 )
 
 type Client struct {
+	ExtensionLoader
+	ExtensionRunner
 	Ready   chan bool
 	user    *User
 	conn    Connection
-	loader  ExtensionLoader
-	runner  ExtensionRunner
 	timeout time.Duration
 	done    chan bool
 }
@@ -25,16 +25,16 @@ type ClientConfig struct {
 
 func NewClient(cfg ClientConfig) *Client {
 	cl := &Client{
-		conn:    NewRTMConnection(cfg.user.Token),
-		user:    cfg.user,
-		loader:  cfg.loader,
-		runner:  cfg.runner,
-		timeout: cfg.timeout,
-		Ready:   make(chan bool, 1),
-		done:    make(chan bool),
+		ExtensionLoader: cfg.loader,
+		ExtensionRunner: cfg.runner,
+		conn:            NewRTMConnection(cfg.user.Token),
+		user:            cfg.user,
+		timeout:         cfg.timeout,
+		Ready:           make(chan bool, 1),
+		done:            make(chan bool),
 	}
-	if cl.runner == nil {
-		cl.runner = NewAsyncRunner()
+	if cl.ExtensionRunner == nil {
+		cl.ExtensionRunner = NewAsyncRunner()
 	}
 	if cl.timeout == 0 {
 		cl.timeout = time.Second * 2
@@ -122,7 +122,7 @@ func (c *Client) runExecutions(exe []Execution) []MessageAction {
 	var act []MessageAction
 	res := make(chan ExecutionResult, len(c.user.Configurations))
 
-	c.runner.Run(exe, res, c.timeout)
+	c.Run(exe, res, c.timeout)
 
 	for r := range res {
 		if r.Err != nil {
@@ -146,7 +146,7 @@ func (c *Client) createExecution(m *Message, cfg *Configuration) *Execution {
 	if cfg.URL != "" {
 		x = NewHttpExtension(cfg.URL, nil)
 	} else {
-		ex, err := c.loader.Load(cfg.EID)
+		ex, err := c.Load(cfg.EID)
 
 		if err != nil {
 			panic(err)
