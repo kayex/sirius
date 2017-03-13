@@ -95,6 +95,7 @@ func (c *Client) notify(st time.Time) {
 	et := time.Now()
 	tt := et.Sub(st)
 
+	// Display load time in seconds, with three decimals.
 	conf := EMOJI + " " + text.Bold(fmt.Sprintf("Extensions loaded in %.3f seconds.", float64(tt.Nanoseconds())/float64(1e9)))
 
 	if len(c.user.Configurations) == 0 {
