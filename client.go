@@ -54,12 +54,16 @@ func (c *Client) Start() {
 
 	for {
 		select {
-		case msg := <-c.conn.Messages():
-			c.handle(&msg)
-			continue
-		case <-c.done:
+		// Make sure we always check for termination signal first
+		case <-c.conn.Dead():
 			c.conn.Close()
 			return
+		default:
+		}
+
+		select {
+		case msg := <-c.conn.Messages():
+			c.handle(&msg)
 		}
 	}
 }

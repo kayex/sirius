@@ -24,6 +24,7 @@ type Connection interface {
 	MessageBroker
 	Listen()
 	Close()
+	Dead() <-chan bool
 	Auth() <-chan slack.UserID
 	Details() ConnectionDetails
 }
@@ -40,7 +41,8 @@ type RTMConnection struct {
 	auth     chan slack.UserID
 	messages chan Message
 	details  ConnectionDetails
-	done     chan bool
+	done     chan bool // done is the internal termination signaling channel
+	dead     chan bool // dead is the one used by RTMConnection consumers
 }
 
 func NewRTMConnection(token string) *RTMConnection {
@@ -53,6 +55,7 @@ func NewRTMConnection(token string) *RTMConnection {
 		auth:     make(chan slack.UserID, 1),
 		messages: make(chan Message),
 		done:     make(chan bool),
+		dead:     make(chan bool, 1),
 	}
 }
 
@@ -63,6 +66,7 @@ func (conn *RTMConnection) Listen() {
 		select {
 		case <-conn.done:
 			conn.rtm.Disconnect()
+			conn.dead <- true
 			return
 		case ev := <-conn.rtm.IncomingEvents:
 			conn.handleIncomingEvent(ev)
@@ -72,6 +76,10 @@ func (conn *RTMConnection) Listen() {
 
 func (conn *RTMConnection) Close() {
 	conn.done <- true
+}
+
+func (conn *RTMConnection) Dead() <-chan bool {
+	return conn.dead
 }
 
 func (conn *RTMConnection) Auth() <-chan slack.UserID {
@@ -144,6 +152,8 @@ func (conn *RTMConnection) handleIncomingEvent(ev api.RTMEvent) {
 	case *api.MessageEvent:
 		conn.handleIncomingMessage(msg)
 
+	case *api.DisconnectedEvent:
+		conn.Close()
 	case *api.RTMError:
 		panic(msg)
 	}
