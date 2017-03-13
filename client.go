@@ -13,7 +13,7 @@ type Client struct {
 	user    *User
 	conn    Connection
 	timeout time.Duration
-	done    chan bool
+	stop    chan bool
 }
 
 type ClientConfig struct {
@@ -33,7 +33,7 @@ func NewClient(cfg ClientConfig) *Client {
 		user:            cfg.user,
 		timeout:         cfg.timeout,
 		Ready:           make(chan bool, 1),
-		done:            make(chan bool),
+		stop:            make(chan bool),
 	}
 	if cl.ExtensionRunner == nil {
 		cl.ExtensionRunner = NewAsyncRunner()
@@ -57,11 +57,10 @@ func (c *Client) Start() {
 	for {
 		select {
 		// Make sure we always check for termination signal first
-		case <-c.done:
+		case <-c.stop:
 			c.conn.Close()
 			return
-		case <-c.conn.Dead():
-			c.done <- true
+		case <-c.conn.Finished():
 			return
 		default:
 		}
@@ -74,7 +73,7 @@ func (c *Client) Start() {
 }
 
 func (c *Client) Stop() {
-	c.done <- true
+	c.stop <- true
 }
 
 func (c *Client) authenticate(conn Connection) error {
