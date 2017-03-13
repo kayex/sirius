@@ -55,10 +55,12 @@ func (c *Client) Start() {
 	for {
 		select {
 		// Make sure we always check for termination signal first
-		case <-c.conn.Dead():
+		case <-c.done:
 			c.conn.Close()
 			return
-		default:
+		case <-c.conn.Dead():
+			c.done <- true
+			return
 		}
 
 		select {
