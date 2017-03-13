@@ -10,10 +10,9 @@ type Query interface {
 	Match(string) int
 }
 
-// Token represents a tokenized node in a search text. This includes "words" and
-// "characters".
+// Token represents any type of text token in a search text.
 type Token interface {
-	// Length should return the size of the token in runes.
+	// Length returns the length of the token in runes.
 	Length() int
 }
 
@@ -79,8 +78,8 @@ func isWordDelimiter(r rune) bool {
 	return false
 }
 
-// previous returns a pointer to the previous rune in the search text s, or nil
-// if i is at the beginning of the search text.
+// previous returns a pointer to the rune immediately preceding index i
+// in the search text s, or nil if it does not exist.
 func previous(s []rune, i int) *rune {
 	prev := i - 1
 	if prev < 0 {
@@ -91,8 +90,8 @@ func previous(s []rune, i int) *rune {
 	return &r
 }
 
-// next returns a pointer to the next rune in the search text s, given a token
-// t, or nil if t is at the end of the search text.
+// next returns a pointer to the rune immediately following the token t in the
+// search string s, or nil if it doesn't exist.
 func next(s []rune, i int, t Token) *rune {
 	next := i + t.Length()
 	if next > len(s)-1 {
