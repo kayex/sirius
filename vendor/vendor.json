@@ -105,54 +105,6 @@
 			"revisionTime": "2016-02-12T11:29:54Z"
 		},
 		{
-			"checksumSHA1": "uaRfmestqhIS8I0SdqRWfQYDcFo=",
-			"path": "github.com/kayex/sirius",
-			"revision": "61cb733731c38ee64e8f73127a417b4794f2462c",
-			"revisionTime": "2017-03-13T12:05:49Z"
-		},
-		{
-			"checksumSHA1": "4tONNW8Feq/6eMGvpK3718h+dFw=",
-			"path": "github.com/kayex/sirius/cmd/sirius-cloud",
-			"revision": "61cb733731c38ee64e8f73127a417b4794f2462c",
-			"revisionTime": "2017-03-13T12:05:49Z"
-		},
-		{
-			"checksumSHA1": "dI4fEvkjjfMtWc6UNFWL5ZpUejc=",
-			"path": "github.com/kayex/sirius/cmd/sirius-local",
-			"revision": "61cb733731c38ee64e8f73127a417b4794f2462c",
-			"revisionTime": "2017-03-13T12:05:49Z"
-		},
-		{
-			"checksumSHA1": "KiJsehY68Pb0KLy4CqmDIANJWJY=",
-			"path": "github.com/kayex/sirius/config",
-			"revision": "61cb733731c38ee64e8f73127a417b4794f2462c",
-			"revisionTime": "2017-03-13T12:05:49Z"
-		},
-		{
-			"checksumSHA1": "L1slydJwUsfCNTAVzIyZ5ZvvMoU=",
-			"path": "github.com/kayex/sirius/extension",
-			"revision": "61cb733731c38ee64e8f73127a417b4794f2462c",
-			"revisionTime": "2017-03-13T12:05:49Z"
-		},
-		{
-			"checksumSHA1": "QSLPSbQpTT5UnuPJOyWjll6eEaI=",
-			"path": "github.com/kayex/sirius/mqtt",
-			"revision": "61cb733731c38ee64e8f73127a417b4794f2462c",
-			"revisionTime": "2017-03-13T12:05:49Z"
-		},
-		{
-			"checksumSHA1": "EWWM6J+8/AFqTX81ci6iCYKDyz4=",
-			"path": "github.com/kayex/sirius/slack",
-			"revision": "61cb733731c38ee64e8f73127a417b4794f2462c",
-			"revisionTime": "2017-03-13T12:05:49Z"
-		},
-		{
-			"checksumSHA1": "GcDcj4hzMuxNiJ8qhudCDvIIePc=",
-			"path": "github.com/kayex/sirius/text",
-			"revision": "61cb733731c38ee64e8f73127a417b4794f2462c",
-			"revisionTime": "2017-03-13T12:05:49Z"
-		},
-		{
 			"checksumSHA1": "oONaja1SA8xsG5eqRKz8UZ9IHVI=",
 			"path": "github.com/kr/pretty",
 			"revision": "cfb55aafdaf3ec08f0db22699ab822c50091b1c4",
