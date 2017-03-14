@@ -38,9 +38,9 @@ type RTMConnection struct {
 	token    string
 	rtm      *api.RTM
 	client   *api.Client
+	details  ConnectionDetails
 	auth     chan slack.UserID
 	messages chan Message
-	details  ConnectionDetails
 	stop     chan bool
 	finished chan bool
 }
