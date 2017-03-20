@@ -11,7 +11,7 @@ import (
 
 type IPLookup struct{}
 
-func (ipl *IPLookup) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.MessageAction, error) {
+func (*IPLookup) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.MessageAction, error) {
 	cmd, match := m.Command("ip")
 
 	if !match {
