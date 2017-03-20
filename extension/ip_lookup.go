@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/kayex/sirius"
+	"github.com/kayex/sirius/text"
 	"net/http"
 )
 
@@ -34,15 +35,15 @@ func (ipl *IPLookup) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.M
 	// Output format:
 	//
 	// `IP`
-	// City, Country (CODE)
+	// City, Country (COUNTRY CODE)
 	// ISP
-	output := fmt.Sprintf("`%v`\n"+
-		"%v, %v (`%v`)\n"+
+	output := fmt.Sprintf("%v\n"+
+		"%v, %v (%v)\n"+
 		"%v",
-		ip,
+		text.Code(ip),
 		lookup["city"],
 		lookup["country"],
-		lookup["countryCode"],
+		text.Code(string(lookup["countryCode"])),
 		lookup["isp"])
 	edit := m.EditText().Set(output)
 
