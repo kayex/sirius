@@ -96,7 +96,10 @@ func (c *Client) notify(st time.Time) {
 	tt := et.Sub(st)
 
 	// Display load time in seconds, with three decimals.
-	conf := EMOJI + " " + text.Bold(fmt.Sprintf("Extensions loaded in %.3f seconds.", float64(tt.Nanoseconds())/float64(1e9)))
+	conf := EMOJI + " " + text.Bold(fmt.Sprintf(
+		"%d extensions loaded in %.3f seconds.",
+		len(c.user.Configurations),
+		float64(tt.Nanoseconds())/float64(1e9)))
 
 	if len(c.user.Configurations) == 0 {
 		conf += "\n" + text.Quote(text.Italic("No extensions activated."))
