@@ -30,6 +30,10 @@ func (*IPLookup) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.Messa
 		return nil, errors.New(fmt.Sprintf("IP Lookup error: %v", err))
 	}
 
+	if !info.complete() {
+		return sirius.NoAction(), nil
+	}
+
 	// Output format:
 	//
 	// `IP`
@@ -70,4 +74,9 @@ type iPInfo struct {
 	Country     string `json:"country"`
 	CountryCode string `json:"countryCode"`
 	ISP         string `json:"isp"`
+}
+
+// complete indicates whether i has all data fields filled.
+func (i *iPInfo) complete() bool {
+	return !(i.City == "" || i.Country == "" || i.CountryCode == "" || i.ISP == "")
 }
