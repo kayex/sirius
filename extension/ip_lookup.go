@@ -59,10 +59,10 @@ func ipLookup(ip string) (error, *iPInfo) {
 	}
 	defer r.Body.Close()
 
-	var info *iPInfo
-	err = json.NewDecoder(r.Body).Decode(info)
+	var info iPInfo
+	err = json.NewDecoder(r.Body).Decode(&info)
 
-	return nil, info
+	return nil, &info
 }
 
 type iPInfo struct {
