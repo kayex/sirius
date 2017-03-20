@@ -24,33 +24,33 @@ func (ipl *IPLookup) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.M
 		return sirius.NoAction(), nil
 	}
 
-	var lookup map[string]interface{}
-
-	err, lookup := ipLookup(ip)
+	err, info := ipLookup(ip)
 
 	if err != nil {
 		return nil, errors.New(fmt.Sprintf("IP Lookup error: %v", err))
 	}
 
+	ip = text.Code(ip)
+
 	// Output format:
 	//
 	// `IP`
-	// City, Country (COUNTRY CODE)
+	// City, Country (`COUNTRY CODE`)
 	// ISP
 	output := fmt.Sprintf("%v\n"+
 		"%v, %v (%v)\n"+
 		"%v",
 		text.Code(ip),
-		lookup["city"],
-		lookup["country"],
-		text.Code(string(lookup["countryCode"])),
-		lookup["isp"])
+		info.City,
+		info.Country,
+		text.Code(info.CountryCode),
+		info.ISP)
 	edit := m.EditText().Set(output)
 
 	return edit, nil
 }
 
-func ipLookup(ip string) (error, map[string]interface{}) {
+func ipLookup(ip string) (error, *iPInfo) {
 	url := "http://ip-api.com/json/" + ip
 
 	c := &http.Client{}
@@ -61,8 +61,15 @@ func ipLookup(ip string) (error, map[string]interface{}) {
 	}
 	defer r.Body.Close()
 
-	var lookup map[string]interface{}
-	json.NewDecoder(r.Body).Decode(&lookup)
+	var info *iPInfo
+	err = json.NewDecoder(r.Body).Decode(info)
 
-	return nil, lookup
+	return nil, info
+}
+
+type iPInfo struct {
+	City        string `json:"city"`
+	Country     string `json:"country"`
+	CountryCode string `json:"countryCode"`
+	ISP         string `json:"isp"`
 }
