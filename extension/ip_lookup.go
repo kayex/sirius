@@ -30,8 +30,6 @@ func (ipl *IPLookup) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.M
 		return nil, errors.New(fmt.Sprintf("IP Lookup error: %v", err))
 	}
 
-	ip = text.Code(ip)
-
 	// Output format:
 	//
 	// `IP`
