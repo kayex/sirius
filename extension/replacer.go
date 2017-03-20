@@ -16,7 +16,7 @@ func (*Replacer) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.Messa
 	edit := m.EditText()
 
 	for search, replace := range phrases {
-		edit.Substitute(strings.ToLower(search), replace)
+		edit.SubstituteWord(strings.ToLower(search), replace)
 	}
 
 	return edit, nil
