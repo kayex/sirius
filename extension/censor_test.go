@@ -46,6 +46,15 @@ func TestCensor_Run(t *testing.T) {
 			},
 			exp: &sirius.TextEditAction{},
 		},
+		{
+			msg: sirius.NewMessage(slack.UserID{"123", "abc"}, "Voldemort", "#channel", "0"),
+			cfg: sirius.ExtensionConfig{
+				"phrases": []string{"Voldemort"},
+				"strict":  false,
+				"strike":  true,
+			},
+			exp: (&sirius.TextEditAction{}).SubstituteWord("Voldemort", "~Voldemort~"),
+		},
 	}
 
 	for _, c := range cases {

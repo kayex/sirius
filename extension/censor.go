@@ -23,7 +23,11 @@ func (*Censor) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.Message
 			break
 		}
 
-		edit.SubstituteWord(p, text.Code("CENSORED"))
+		if cfg.Boolean("strike") {
+			edit.SubstituteWord(p, text.Strike(p))
+		} else {
+			edit.SubstituteWord(p, text.Code("CENSORED"))
+		}
 	}
 
 	return edit, nil
