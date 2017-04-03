@@ -17,12 +17,12 @@ type UserID struct {
 	TeamID string
 }
 
-// SecureID is an opaque, deterministic representation of a Slack user identity
-// that can be used in place of UserID to reduce the risk of compromising
-// a user's real identity.
+// SecureID represents an irreversible obfuscation of a Slack user identity
+// that can be used in place of UserID to minimize the security implications of
+// handling and storing user IDs.
 //
 // A SecureID can be constructed from a UserID
-// by calling UserID.Secure()
+// by calling (UserID).Secure()
 type SecureID struct {
 	HashSum string
 }
