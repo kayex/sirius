@@ -1,7 +1,6 @@
 package sirius
 
 import (
-	"errors"
 	"fmt"
 	"strings"
 
@@ -142,7 +141,7 @@ func (conn *RTMConnection) getSelfChan(id slack.UserID, e *api.ConnectedEvent) (
 		}
 	}
 
-	return "", errors.New(fmt.Sprintf("Could not find self-channel for User(%v)", id.String()))
+	return "", fmt.Errorf("Could not find self-channel for User(%v)", id.String())
 }
 
 func (conn *RTMConnection) handleIncomingEvent(ev api.RTMEvent) {

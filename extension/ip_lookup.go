@@ -2,7 +2,6 @@ package extension
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"github.com/kayex/sirius"
 	"github.com/kayex/sirius/text"
@@ -27,7 +26,7 @@ func (*IPLookup) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.Messa
 	err, info := ipLookup(ip)
 
 	if err != nil {
-		return nil, errors.New(fmt.Sprintf("IP Lookup error: %v", err))
+		return nil, fmt.Errorf("IP Lookup error: %v", err)
 	}
 
 	if !info.complete() {
