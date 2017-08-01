@@ -112,7 +112,7 @@ func BenchmarkWord_MatchNotExist6_587(b *testing.B) {
 func BenchmarkWord_MatchPartials5_587(b *testing.B) {
 	w := Word("foobar")
 
-	txt := `fooba fooba fooba fooba fooba fooba fooba fooba fooba fooba
+	txt := `fooab fooba fooba fooba fooba fooba fooba fooba fooba fooba
 		fooba fooba fooba fooba fooba fooba fooba fooba fooba fooba
 		fooba fooba fooba fooba fooba fooba fooba fooba fooba fooba
 		fooba fooba fooba fooba fooba fooba fooba fooba fooba fooba
