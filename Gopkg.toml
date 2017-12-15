@@ -23,7 +23,7 @@
 # Heroku
 [metadata.heroku]
     root-package = "github.com/kayex/sirius"
-    install = ["./..."]
+    install = ["./cmd/sirius-cloud"]
 
 [[constraint]]
   branch = "master"
