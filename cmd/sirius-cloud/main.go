@@ -20,9 +20,7 @@ func main() {
 	}
 
 	ld := extension.NewStaticLoader(cfg)
-	sync := sirius.NewMQTTSync(rmt, cfg.MQTT.Config, cfg.MQTT.Topic)
-
-	s := sirius.NewService(ld).WithSync(sync)
+	s := sirius.NewService(ld)
 
 	printRunInfo(users, cfg)
 
@@ -31,7 +29,6 @@ func main() {
 
 func printRunInfo(users []sirius.User, cfg config.AppConfig) {
 	fmt.Println("Connecting to remote: " + cfg.Remote.Host)
-	fmt.Printf("Establishing MQTT sync: %v@%v:%v [%v]\n", cfg.MQTT.CID, cfg.MQTT.Host, cfg.MQTT.Port, cfg.MQTT.Topic)
 
 	for _, u := range users {
 		tks := ""
