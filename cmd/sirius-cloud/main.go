@@ -35,12 +35,12 @@ func printRunInfo(users []sirius.User, cfg config.AppConfig) {
 
 	for _, u := range users {
 		tks := ""
-		for i, c := range u.Configurations {
+		for i, c := range u.Settings {
 			if i != 0 {
 				tks += ", "
 			}
 			tks += string(c.EID)
 		}
-		fmt.Printf("[%v] %v (%v)\n", u.ID.String(), len(u.Configurations), tks)
+		fmt.Printf("[%v] %v (%v)\n", u.ID.String(), len(u.Settings), tks)
 	}
 }

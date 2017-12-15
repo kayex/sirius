@@ -32,13 +32,13 @@ func TestAsyncRunner_Run_RespectsTimeout(t *testing.T) {
 
 	msg := NewMessage(slack.UserID{TeamID: "abc", UserID: "123"}, "Test message.", "#1337", "0")
 	exe := []Execution{
-		*NewExecution(fast, msg, nil),
-		*NewExecution(slow, msg, nil),
+		*NewExecution(fast, nil),
+		*NewExecution(slow, nil),
 	}
 	r := NewAsyncRunner()
 	res := make(chan ExecutionResult, 1)
 
-	r.Run(exe, res, time.Millisecond*1)
+	r.Run(msg, exe, res, time.Millisecond*1)
 
 	count := 0
 

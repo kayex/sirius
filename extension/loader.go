@@ -40,5 +40,5 @@ func (l *StaticLoader) Load(eid sirius.EID) (sirius.Extension, error) {
 		}, nil
 	}
 
-	return nil, fmt.Errorf("Invalid eid: %v", eid)
+	return nil, fmt.Errorf("invalid eid: %v", eid)
 }

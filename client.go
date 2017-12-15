@@ -1,19 +1,31 @@
 package sirius
 
 import (
-	"errors"
 	"strings"
 	"time"
+	"context"
+	"github.com/kayex/sirius/sync"
+	"fmt"
+	"log"
 )
 
 type Client struct {
-	ExtensionLoader
-	ExtensionRunner
-	Ready   chan bool
 	user    *User
+	api     *SlackAPI
 	conn    Connection
+	exe *Executor
 	timeout time.Duration
-	stop    chan bool
+	ctrl    *sync.Control
+}
+
+type CancelClient struct {
+	*Client
+	ctx context.Context
+	cancel context.CancelFunc
+}
+
+func (c *CancelClient) Start() error {
+	return c.Client.Start(c.ctx)
 }
 
 type ClientConfig struct {
@@ -23,110 +35,96 @@ type ClientConfig struct {
 	timeout time.Duration
 }
 
-const CLIENT_DEFAULT_TIMEOUT = time.Second * 2
-
 func NewClient(cfg ClientConfig) *Client {
+	api := NewSlackAPI(cfg.user.Token)
+	conn := api.NewRTMConnection()
+
+	exe := &Executor{
+		runner: cfg.runner,
+		loader: cfg.loader,
+	}
+
 	cl := &Client{
-		ExtensionLoader: cfg.loader,
-		ExtensionRunner: cfg.runner,
-		conn:            NewRTMConnection(cfg.user.Token),
-		user:            cfg.user,
-		timeout:         cfg.timeout,
-		Ready:           make(chan bool, 1),
-		stop:            make(chan bool),
-	}
-	if cl.ExtensionRunner == nil {
-		cl.ExtensionRunner = NewAsyncRunner()
-	}
-	if cl.timeout == 0 {
-		cl.timeout = CLIENT_DEFAULT_TIMEOUT
+		api:  api,
+		conn: conn,
+		user: cfg.user,
+		exe:  exe,
+		ctrl: sync.NewControl(),
 	}
 	return cl
 }
 
-func (c *Client) Start() {
-	go c.conn.Listen()
-
-	err := c.authenticate(c.conn)
+func (c *Client) Start(ctx context.Context) error {
+	err := c.conn.Start(ctx)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
-	c.Ready <- true
+	err = c.exe.LoadFromSettings(c.user.Settings)
+	if err != nil {
+		return fmt.Errorf("error loading user extensions: %v", err)
+	}
+
+	go c.run(ctx)
+
+	return nil
+}
+
+func (c *Client) run(ctx context.Context) {
+	defer c.ctrl.Finish(nil)
 
 	for {
-		select {
-		// Make sure we always check for termination signal first
-		case <-c.stop:
-			c.conn.Close()
-			return
-		case <-c.conn.Finished():
-			return
-		default:
-		}
-
 		select {
 		case msg := <-c.conn.Messages():
-			c.handle(&msg)
+			err := c.handle(&msg)
+			if err != nil {
+				c.ctrl.Finish(err)
+			}
+		case <-ctx.Done():
+			return
+		case err := <-c.conn.Closed():
+			if err != nil {
+				c.ctrl.Finish(err)
+			}
+			return
 		}
 	}
 }
 
-func (c *Client) Stop() {
-	c.stop <- true
-}
-
-func (c *Client) authenticate(conn Connection) error {
-	auth := conn.Auth()
-	for {
-		select {
-		case id := <-auth:
-			c.user.ID = id
-			return nil
-		case <-time.After(time.Second * 3):
-			return errors.New("Client authentication timed out (<-c.conn.Auth())")
-		}
-	}
-}
-
-func (c *Client) handle(msg *Message) {
+func (c *Client) handle(msg *Message) error {
 	if !msg.sentBy(c.user) {
-		return
+		return nil
 	}
 
 	if msg.escaped() {
 		edit := msg.EditText().Set(trimEscape(msg.Text))
 		msg.perform(edit)
 
-		c.conn.Update(msg)
-		return
+		return c.conn.Update(msg)
 	}
 
-	c.run(msg)
+	m, mod := c.execute(*msg)
+
+	if mod {
+		err := c.conn.Update(&m)
+		if err != nil {
+			panic(err)
+		}
+		return nil
+	}
+
+	return nil
 }
 
-func (c *Client) run(m *Message) {
-	var exe []Execution
-	for _, cfg := range c.user.Configurations {
-		exe = append(exe, *c.createExecution(m, &cfg))
-	}
-
-	act := c.runExecutions(exe)
-
-	if performActions(act, m) {
-		c.conn.Update(m)
-	}
-}
-
-func (c *Client) runExecutions(exe []Execution) []MessageAction {
+// execute runs the executions in exe on msg. Returns the new message, and a
+// bool indicating if any changes were made to the message text.
+func (c *Client) execute(msg Message) (Message, bool) {
 	var act []MessageAction
-	res := make(chan ExecutionResult, len(c.user.Configurations))
 
-	c.Run(exe, res, c.timeout)
-
+	res := c.exe.Run(msg)
 	for r := range res {
 		if r.Err != nil {
-			panic(r.Err)
+			log.Println(r.Err)
 		}
 
 		if _, ok := r.Action.(*EmptyAction); ok {
@@ -136,34 +134,9 @@ func (c *Client) runExecutions(exe []Execution) []MessageAction {
 		act = append(act, r.Action)
 	}
 
-	return act
-}
+	modified := performActions(act, &msg)
 
-func (c *Client) createExecution(m *Message, cfg *Configuration) *Execution {
-	var x Extension
-
-	// Check for HTTP extensions
-	if cfg.URL != "" {
-		x = NewHttpExtension(cfg.URL, nil)
-	} else {
-		ex, err := c.Load(cfg.EID)
-
-		if err != nil {
-			panic(err)
-		}
-
-		x = ex
-	}
-
-	return NewExecution(x, *m, cfg.Cfg)
-}
-
-func (m *Message) sentBy(u *User) bool {
-	return u.ID.Equals(m.UserID)
-}
-
-func (m *Message) escaped() bool {
-	return strings.HasPrefix(m.Text, `\`)
+	return msg, modified
 }
 
 func trimEscape(text string) string {

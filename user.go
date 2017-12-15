@@ -9,8 +9,10 @@ import (
 type User struct {
 	ID             slack.ID
 	Token          string
-	Configurations []Configuration
+	Settings Settings
 }
+
+type Settings []Configuration
 
 type Configuration struct {
 	URL string

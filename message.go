@@ -3,6 +3,7 @@ package sirius
 import (
 	"github.com/kayex/sirius/slack"
 	"github.com/kayex/sirius/text"
+	"strings"
 )
 
 type Message struct {
@@ -24,3 +25,12 @@ func NewMessage(userID slack.UserID, text, channel, timestamp string) Message {
 func (m *Message) Query(q text.Query) bool {
 	return q.Match(m.Text) >= 0
 }
+
+func (m *Message) sentBy(u *User) bool {
+	return u.ID.Equals(m.UserID)
+}
+
+func (m *Message) escaped() bool {
+	return strings.HasPrefix(m.Text, `\`)
+}
+

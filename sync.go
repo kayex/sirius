@@ -94,7 +94,7 @@ func (m *MQTTSync) start(ctx context.Context) {
 					break
 				}
 
-				m.service.AddUser(u)
+				m.service.AddUser(u, true)
 			case DELETE:
 				m.service.DropUser(msg.ID)
 			}
@@ -107,7 +107,7 @@ func parseSyncMessage(msg string) (*SyncMessage, error) {
 	split := strings.Split(msg, ":")
 
 	if len(split) != 2 {
-		return nil, fmt.Errorf("Invalid sync message %q", msg)
+		return nil, fmt.Errorf("invalid sync message %q", msg)
 	}
 
 	msgType := SyncAction(split[0])
@@ -120,6 +120,6 @@ func parseSyncMessage(msg string) (*SyncMessage, error) {
 			ID:   id,
 		}, nil
 	default:
-		return nil, fmt.Errorf("Unknown sync message type %q", msgType)
+		return nil, fmt.Errorf("unknown sync message type %q", msgType)
 	}
 }

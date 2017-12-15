@@ -3,14 +3,13 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"github.com/kayex/sirius"
 	"github.com/kayex/sirius/config"
 	"github.com/kayex/sirius/extension"
 	"io/ioutil"
 )
 
-var extensions []string = []string{
+var extensions = []string{
 	"geocode",
 	"ip_lookup",
 	"quotes",
@@ -26,7 +25,7 @@ func main() {
 	l := extension.NewStaticLoader(cfg)
 	s := sirius.NewService(l)
 
-	s.Start(context.TODO(), users)
+	s.Start(context.Background(), users)
 }
 
 func createUsers(tokens []string) []sirius.User {
@@ -49,13 +48,13 @@ func configure(u *sirius.User) {
 		m[eid] = nil
 	}
 
-	u.Configurations = append(u.Configurations, sirius.FromConfigurationMap(m)...)
+	u.Settings = append(u.Settings, sirius.FromConfigurationMap(m)...)
 }
 
 func getTokensFromJSON() []string {
 	file, err := ioutil.ReadFile("./users.json")
 	if err != nil {
-		fmt.Println(err.Error())
+		panic(err)
 	}
 
 	var tokens []string
