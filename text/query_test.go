@@ -84,17 +84,17 @@ func TestWordQuery_Match(t *testing.T) {
 func TestIgnoreCase_Match(t *testing.T) {
 	cases := []struct {
 		s   string
-		q   IgnoreCaseQuery
+		q   LowerQuery
 		exp int
 	}{
 		{
 			s:   "foo",
-			q:   IgnoreCase(Word("foo")),
+			q:   Lower(Word("foo")),
 			exp: 0,
 		},
 		{
 			s:   "FOO",
-			q:   IgnoreCase(Word("foo")),
+			q:   Lower(Word("foo")),
 			exp: 0,
 		},
 	}
@@ -103,7 +103,7 @@ func TestIgnoreCase_Match(t *testing.T) {
 		act := c.q.Match(c.s)
 
 		if act != c.exp {
-			t.Errorf("Expected IgnoreCase(%#v).Match(%q) to return %v, got %v", c.q, c.s, c.exp, act)
+			t.Errorf("Expected Lower(%#v).Match(%q) to return %v, got %v", c.q, c.s, c.exp, act)
 		}
 	}
 }

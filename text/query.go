@@ -62,20 +62,20 @@ func (q WordQuery) Length() int {
 	return utf8.RuneCountInString(q.W)
 }
 
-// IgnoreCaseQuery provides case-insensitive matching by folding the search string
-// before passing it to the wrapped query.
-type IgnoreCaseQuery struct {
+// LowerQuery provides case-insensitive matching by folding the search string
+// to lowercase before passing it to the wrapped query.
+type LowerQuery struct {
 	Query
 }
 
-func (q IgnoreCaseQuery) Match(s string) int {
+func (q LowerQuery) Match(s string) int {
 	sl := strings.ToLower(s)
 
 	return q.Query.Match(sl)
 }
 
-func IgnoreCase(q Query) IgnoreCaseQuery {
-	return IgnoreCaseQuery{q}
+func Lower(q Query) LowerQuery {
+	return LowerQuery{q}
 }
 
 // isWordDelimiter indicates if r is a word delimiter.
