@@ -81,20 +81,20 @@ func TestWordQuery_Match(t *testing.T) {
 	}
 }
 
-func TestIgnoreCase_Match(t *testing.T) {
+func TestCaseInsensitiveWordQuery_Match(t *testing.T) {
 	cases := []struct {
 		s   string
-		q   LowerQuery
+		q   CaseInsensitiveWordQuery
 		exp int
 	}{
 		{
 			s:   "foo",
-			q:   Lower(Word("foo")),
+			q:   IWord("foo"),
 			exp: 0,
 		},
 		{
 			s:   "FOO",
-			q:   Lower(Word("foo")),
+			q:   IWord("foo"),
 			exp: 0,
 		},
 	}

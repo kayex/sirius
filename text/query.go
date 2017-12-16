@@ -10,12 +10,6 @@ type Query interface {
 	Match(string) int
 }
 
-// Token represents any type of text token in a search text.
-type Token interface {
-	// Length returns the length of the token in runes.
-	Length() int
-}
-
 // WordQuery matches the first occurrence of w in a search text where w is
 // surrounded by word delimiters (as defined by isWordDelimiter).
 type WordQuery struct {
@@ -68,14 +62,19 @@ type LowerQuery struct {
 	Query
 }
 
-func (q LowerQuery) Match(s string) int {
-	sl := strings.ToLower(s)
-
-	return q.Query.Match(sl)
+type CaseInsensitiveWordQuery struct {
+	WordQuery
 }
 
-func Lower(q Query) LowerQuery {
-	return LowerQuery{q}
+func (q CaseInsensitiveWordQuery) Match(s string) int {
+	sl := strings.ToLower(s)
+	q.WordQuery.W = strings.ToLower(q.WordQuery.W)
+
+	return q.WordQuery.Match(sl)
+}
+
+func IWord(w string) CaseInsensitiveWordQuery {
+	return CaseInsensitiveWordQuery{WordQuery{w}}
 }
 
 // isWordDelimiter indicates if r is a word delimiter.
