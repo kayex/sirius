@@ -1,7 +1,6 @@
 package sirius
 
 type EID string
-type ExtensionConfig map[string]interface{}
 
 type Extension interface {
 	Run(Message, ExtensionConfig) (MessageAction, error)
@@ -11,88 +10,49 @@ type ExtensionLoader interface {
 	Load(EID) (Extension, error)
 }
 
-// Read fetches a value of any type for key.
-// Returns def if key is not set.
-func (cfg ExtensionConfig) Read(key string, def interface{}) interface{} {
-	if val, ok := cfg[key]; ok {
-		return val
-	}
-	return def
+// ConfigExtension represents an extension with an associated configuration.
+type ConfigExtension struct {
+	Extension
+	Cfg ExtensionConfig
 }
 
-// String fetches a string value for key.
-// Returns def if key is not set.
-func (cfg ExtensionConfig) String(key string, def string) string {
-	if val, ok := cfg[key]; ok {
-		if s, ok := val.(string); ok {
-			return s
-		}
+func NewConfigExtension(ex Extension, cfg ExtensionConfig) *ConfigExtension {
+	return &ConfigExtension{
+		Extension: ex,
+		Cfg: cfg,
 	}
-	return def
 }
 
-// Integer fetches an integer value for key.
-// Returns def if key is not set.
-func (cfg ExtensionConfig) Integer(key string, def int) int {
-	if val, ok := cfg[key]; ok {
-		if i, ok := val.(int); ok {
-			return i
+func FromConfiguration(l ExtensionLoader, cfg *Configuration) (*ConfigExtension, error) {
+	// Check for HTTP extensions
+	if cfg.URL != "" {
+		ex := NewHttpExtension(cfg.URL, nil)
+		return NewConfigExtension(ex, cfg.Cfg), nil
+	} else {
+		ex, err := l.Load(cfg.EID)
+		if err != nil {
+			return nil, err
 		}
+
+		return NewConfigExtension(ex, cfg.Cfg), nil
 	}
-	return def
 }
 
-// Boolean fetches a boolean value for key.
-// Returns false if key is not set.
-func (cfg ExtensionConfig) Boolean(key string) bool {
-	if val, ok := cfg[key]; ok {
-		switch b := val.(type) {
-		case bool:
-			return b
-		case int:
-			// Require explicit 0 or 1
-			switch b {
-			case 0:
-				return false
-			case 1:
-				return true
-			}
-		}
-	}
-	return false
+func (ex *ConfigExtension) Run(msg Message) (MessageAction, error) {
+	return ex.Extension.Run(msg, ex.Cfg)
 }
 
-// Float fetches a float value for key.
-// Returns def if key is not set.
-func (cfg ExtensionConfig) Float(key string, def float64) float64 {
-	if val, ok := cfg[key]; ok {
-		switch f := val.(type) {
-		case float32:
-			return float64(f)
-		case float64:
-			return f
-		}
-	}
-	return def
-}
+func LoadFromSettings(l ExtensionLoader, s Settings) ([]ConfigExtension, error) {
+	var exe []ConfigExtension
 
-// List fetches a list value for key.
-// Returns an empty list if key is not set.
-func (cfg ExtensionConfig) List(key string) []string {
-	var list []string
-
-	if val, ok := cfg[key]; ok {
-		switch l := val.(type) {
-		case []interface{}:
-			for _, lv := range l {
-				if s, ok := lv.(string); ok {
-					list = append(list, s)
-				}
-			}
-			return list
-		case []string:
-			return l
+	for _, cfg := range s {
+		x, err := FromConfiguration(l, &cfg)
+		if err != nil {
+			return nil, err
 		}
+
+		exe = append(exe, *x)
 	}
-	return []string{}
+
+	return exe, nil
 }

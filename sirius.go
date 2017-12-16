@@ -93,7 +93,6 @@ func (s *Service) createClient(u *User) *CancelClient {
 		Client: NewClient(ClientConfig{
 			user: u,
 			loader: s.loader,
-			runner: &AsyncRunner{},
 		}),
 		ctx: ctx,
 		cancel: cancel,

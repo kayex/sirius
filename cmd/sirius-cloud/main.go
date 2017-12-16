@@ -12,16 +12,13 @@ import (
 func main() {
 	cfg := config.FromEnv()
 	rmt := sirius.NewRemote(cfg.Remote.Host, cfg.Remote.Token)
-
 	users, err := rmt.GetUsers()
-
 	if err != nil {
 		panic(err)
 	}
 
 	ld := extension.NewStaticLoader(cfg)
 	s := sirius.NewService(ld)
-
 	printRunInfo(users, cfg)
 
 	s.Start(context.Background(), users)

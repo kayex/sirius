@@ -17,12 +17,31 @@ func (*EmptyAction) Perform(*Message) error {
 	return nil
 }
 
-//perform applies a to m
-//Returns a bool indicating whether m was actually modified
-func (m *Message) perform(a MessageAction) (err error, mod bool) {
+// alter modifies a message by applying a MessageAction on it.
+// Returns a bool indicating whether the message text property was modified
+// by the action.
+func (m *Message) alter(a MessageAction) (bool, error) {
 	oldText := m.Text
-	err = a.Perform(m)
-	mod = m.Text != oldText
+	err := a.Perform(m)
+	mod := m.Text != oldText
 
-	return
+	return mod, err
+}
+
+// alterAll modifies a message by applying a series of MessageActions on it.
+// Returns a bool indicating whether the message text property was modified
+// by the action.
+func (m *Message) alterAll(act []MessageAction) (bool, error) {
+	var modified bool
+	for _, a := range act {
+		mod, err := m.alter(a)
+
+		if err != nil {
+			return modified, err
+		}
+
+		modified = modified || mod
+	}
+
+	return modified, nil
 }

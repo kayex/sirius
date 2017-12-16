@@ -8,7 +8,7 @@ import (
 )
 
 type TestExtension struct {
-	duration time.Duration // How long the extension should execute for
+	duration time.Duration // How long the extension should process for
 }
 
 func (x *TestExtension) Run(Message, ExtensionConfig) (MessageAction, error) {
@@ -17,7 +17,7 @@ func (x *TestExtension) Run(Message, ExtensionConfig) (MessageAction, error) {
 	return NoAction(), nil
 }
 
-func TestAsyncRunner_Run_RespectsTimeout(t *testing.T) {
+func TestExecutor_Run_RespectsTimeout(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping AsyncRunner execution timeout test in short mode.")
 	}
@@ -31,14 +31,14 @@ func TestAsyncRunner_Run_RespectsTimeout(t *testing.T) {
 	}
 
 	msg := NewMessage(slack.UserID{TeamID: "abc", UserID: "123"}, "Test message.", "#1337", "0")
-	exe := []Execution{
-		*NewExecution(fast, nil),
-		*NewExecution(slow, nil),
+	exs := []ConfigExtension{
+		*NewConfigExtension(fast, nil),
+		*NewConfigExtension(slow, nil),
 	}
-	r := NewAsyncRunner()
+	exe := NewExecutor(nil, time.Millisecond*1)
 	res := make(chan ExecutionResult, 1)
 
-	r.Run(msg, exe, res, time.Millisecond*1)
+	exe.Run(msg, exs, res)
 
 	count := 0
 

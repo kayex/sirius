@@ -31,7 +31,6 @@ func (c *CancelClient) Start() error {
 type ClientConfig struct {
 	user    *User
 	loader  ExtensionLoader
-	runner  ExtensionRunner
 	timeout time.Duration
 }
 
@@ -40,7 +39,6 @@ func NewClient(cfg ClientConfig) *Client {
 	conn := api.NewRTMConnection()
 
 	exe := &Executor{
-		runner: cfg.runner,
 		loader: cfg.loader,
 	}
 
@@ -60,7 +58,7 @@ func (c *Client) Start(ctx context.Context) error {
 		return err
 	}
 
-	err = c.exe.LoadFromSettings(c.user.Settings)
+	err = c.exe.FromSettings(c.user.Settings)
 	if err != nil {
 		return fmt.Errorf("error loading user extensions: %v", err)
 	}
@@ -96,63 +94,50 @@ func (c *Client) handle(msg *Message) error {
 		return nil
 	}
 
-	if msg.escaped() {
-		edit := msg.EditText().Set(trimEscape(msg.Text))
-		msg.perform(edit)
+	m, mod := c.process(*msg)
 
-		return c.conn.Update(msg)
-	}
-
-	m, mod := c.execute(*msg)
-
-	if mod {
-		err := c.conn.Update(&m)
-		if err != nil {
-			panic(err)
-		}
+	if !mod {
 		return nil
 	}
 
-	return nil
+	return c.conn.Update(&m)
 }
 
-// execute runs the executions in exe on msg. Returns the new message, and a
-// bool indicating if any changes were made to the message text.
-func (c *Client) execute(msg Message) (Message, bool) {
+// process processes a message using the loaded Executor.
+//
+// Returns the processed message, and a bool indicating whether the message
+// text property was modified from its original value. This is useful
+// for determining if a message u
+func (c *Client) process(msg Message) (Message, bool) {
+	// If the message is escaped, we'll strip the escape character(s) and
+	// return the message immediately.
+	if msg.escaped() {
+		edit := msg.EditText().Set(trimEscape(msg.Text))
+		msg.alter(edit)
+
+		return msg, true
+	}
+
 	var act []MessageAction
 
-	res := c.exe.Run(msg)
+	res := c.exe.RunExtensions(msg)
 	for r := range res {
 		if r.Err != nil {
 			log.Println(r.Err)
-		}
-
-		if _, ok := r.Action.(*EmptyAction); ok {
 			continue
 		}
 
 		act = append(act, r.Action)
 	}
 
-	modified := performActions(act, &msg)
+	modified, err := msg.alterAll(act)
+	if err != nil {
+		panic(err)
+	}
 
 	return msg, modified
 }
 
 func trimEscape(text string) string {
 	return strings.TrimPrefix(text, `\`)
-}
-
-func performActions(act []MessageAction, msg *Message) (modified bool) {
-	for _, a := range act {
-		err, mod := msg.perform(a)
-
-		if err != nil {
-			panic(err)
-		}
-
-		modified = modified || mod
-	}
-
-	return
 }
