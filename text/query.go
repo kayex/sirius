@@ -16,22 +16,21 @@ type Token interface {
 	Length() int
 }
 
-type word struct {
+// WordQuery matches the first occurrence of w in a search text where w is
+// surrounded by word delimiters (as defined by isWordDelimiter).
+type WordQuery struct {
 	W string
 }
 
-// Word returns a query that matches the first occurrence of w in a search text
-// where w is not immediately preceded or followed by any characters that do not satisfy
-// isWordDelimiter.
-func Word(w string) word {
+func Word(w string) WordQuery {
 	if len(w) == 0 {
-		panic("Cannot create word of length 0")
+		panic("Cannot create WordQuery of length 0")
 	}
 
-	return word{w}
+	return WordQuery{w}
 }
 
-func (q word) Match(s string) int {
+func (q WordQuery) Match(s string) int {
 	if len(s) == 0 {
 		return -1
 	}
@@ -49,19 +48,34 @@ func (q word) Match(s string) int {
 	ir := utf8.RuneCountInString(s[:i])
 
 	// Make sure that any preceding or following characters are valid
-	// word delimiters.
-	prev := previous(sr, ir)
-	next := next(sr, ir, &q)
-	if prev != nil && !isWordDelimiter(*prev) ||
-		next != nil && !isWordDelimiter(*next) {
+	// WordQuery delimiters.
+	prev, p := at(sr, ir-1)
+	next, n := at(sr, ir+q.Length())
+	if p && !isWordDelimiter(prev) || n && !isWordDelimiter(next) {
 		return -1
 	}
 
 	return ir
 }
 
-func (q word) Length() int {
+func (q WordQuery) Length() int {
 	return utf8.RuneCountInString(q.W)
+}
+
+// IgnoreCaseQuery provides case-insensitive matching by folding the search string
+// before passing it to the wrapped query.
+type IgnoreCaseQuery struct {
+	Query
+}
+
+func (q IgnoreCaseQuery) Match(s string) int {
+	sl := strings.ToLower(s)
+
+	return q.Query.Match(sl)
+}
+
+func IgnoreCase(q Query) IgnoreCaseQuery {
+	return IgnoreCaseQuery{q}
 }
 
 // isWordDelimiter indicates if r is a word delimiter.
@@ -78,26 +92,12 @@ func isWordDelimiter(r rune) bool {
 	return false
 }
 
-// previous returns a pointer to the rune immediately preceding index i
-// in the search text s, or nil if it does not exist.
-func previous(s []rune, i int) *rune {
-	prev := i - 1
-	if prev < 0 {
-		return nil
+// at returns the rune at index i, and a bool indicating if i exists in s.
+func at(s []rune, i int) (rune, bool) {
+	if i < 0 || i > len(s)-1 {
+		return 0, false
 	}
 
-	r := s[prev]
-	return &r
-}
-
-// next returns a pointer to the rune immediately following the token t in the
-// search string s, or nil if it doesn't exist.
-func next(s []rune, i int, t Token) *rune {
-	next := i + t.Length()
-	if next > len(s)-1 {
-		return nil
-	}
-
-	r := s[next]
-	return &r
+	r := s[i]
+	return r, true
 }

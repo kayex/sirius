@@ -4,10 +4,10 @@ import (
 	"testing"
 )
 
-func TestWord_Match(t *testing.T) {
+func TestWordQuery_Match(t *testing.T) {
 	cases := []struct {
 		s   string
-		q   word
+		q   WordQuery
 		exp int
 	}{
 		{
@@ -77,6 +77,33 @@ func TestWord_Match(t *testing.T) {
 
 		if act != c.exp {
 			t.Errorf("Expected Word(%q).Match(%q) to return %v, got %v", c.q.W, c.s, c.exp, act)
+		}
+	}
+}
+
+func TestIgnoreCase_Match(t *testing.T) {
+	cases := []struct {
+		s   string
+		q   IgnoreCaseQuery
+		exp int
+	}{
+		{
+			s:   "foo",
+			q:   IgnoreCase(Word("foo")),
+			exp: 0,
+		},
+		{
+			s:   "FOO",
+			q:   IgnoreCase(Word("foo")),
+			exp: 0,
+		},
+	}
+
+	for _, c := range cases {
+		act := c.q.Match(c.s)
+
+		if act != c.exp {
+			t.Errorf("Expected IgnoreCase(%#v).Match(%q) to return %v, got %v", c.q, c.s, c.exp, act)
 		}
 	}
 }

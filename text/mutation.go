@@ -19,7 +19,7 @@ type Sub struct {
 }
 
 type SubWord struct {
-	Search word
+	Search WordQuery
 	Sub    string
 }
 
