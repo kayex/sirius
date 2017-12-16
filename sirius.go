@@ -7,7 +7,6 @@ import (
 
 	"github.com/kayex/sirius/slack"
 	"github.com/kayex/sirius/text"
-	"log"
 )
 
 const EMOJI = "⚡" // The high voltage/lightning bolt emoji (:zap: in Slack)
@@ -32,7 +31,7 @@ func (s *Service) Start(ctx context.Context, users []User) {
 		u := u
 		err := s.AddUser(&u, false)
 		if err != nil {
-			log.Printf("error starting client: %v", err)
+			fmt.Printf("error starting client: %v\n", err)
 		}
 	}
 

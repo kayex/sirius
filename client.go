@@ -6,7 +6,6 @@ import (
 	"context"
 	"github.com/kayex/sirius/sync"
 	"fmt"
-	"log"
 )
 
 type Client struct {
@@ -58,7 +57,7 @@ func (c *Client) Start(ctx context.Context) error {
 		return err
 	}
 
-	err = c.exe.FromSettings(c.user.Settings)
+	err = c.exe.Load(c.user.Settings)
 	if err != nil {
 		return fmt.Errorf("error loading user extensions: %v", err)
 	}
@@ -123,7 +122,7 @@ func (c *Client) process(msg Message) (Message, bool) {
 	res := c.exe.RunExtensions(msg)
 	for r := range res {
 		if r.Err != nil {
-			log.Println(r.Err)
+			fmt.Println(r.Err)
 			continue
 		}
 

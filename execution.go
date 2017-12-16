@@ -1,8 +1,6 @@
 package sirius
 
-import (
-	"time"
-)
+import "time"
 
 type ExecutionResult struct {
 	Err    error
@@ -28,7 +26,8 @@ func NewExecutor(loader ExtensionLoader, timeout time.Duration) *Executor {
 	return e
 }
 
-func (e *Executor) FromSettings(s Settings) error {
+// Load sets up the executor by loading configurations from s.
+func (e *Executor) Load(s Settings) error {
 	exs, err := LoadFromSettings(e.loader, s)
 	if err != nil {
 		return err
@@ -47,11 +46,11 @@ func (e *Executor) RunExtensions(msg Message) <-chan ExecutionResult {
 
 // Run executes all extensions in exs and returns all ExecutionResults that
 // are received before timeout has elapsed.
-func (e *Executor) Run(msg Message, exe []ConfigExtension, res chan<- ExecutionResult) {
+func (e *Executor) Run(msg Message, exs []ConfigExtension, res chan<- ExecutionResult) {
 	defer close(res)
-	er := make(chan ExecutionResult, len(exe))
+	er := make(chan ExecutionResult, len(exs))
 
-	for i := range exe {
+	for i := range exs {
 		go func(msg Message, ex *ConfigExtension) {
 			a, err := ex.Run(msg)
 
@@ -59,11 +58,11 @@ func (e *Executor) Run(msg Message, exe []ConfigExtension, res chan<- ExecutionR
 				Err:    err,
 				Action: a,
 			}
-		}(msg, &exe[i])
+		}(msg, &exs[i])
 	}
 
 Execution:
-	for range exe {
+	for range exs {
 		select {
 		case <-time.After(e.timeout):
 			break Execution

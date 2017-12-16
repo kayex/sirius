@@ -7,7 +7,6 @@ import (
 	"github.com/kayex/sirius"
 	"github.com/kayex/sirius/config"
 	"github.com/kayex/sirius/extension"
-	"log"
 )
 
 func main() {
@@ -26,7 +25,7 @@ func main() {
 }
 
 func printRunInfo(users []sirius.User, cfg config.AppConfig) {
-	log.Println("Connecting to remote: " + cfg.Remote.Host)
+	fmt.Println("Connecting to remote: " + cfg.Remote.Host)
 
 	for _, u := range users {
 		tks := ""
