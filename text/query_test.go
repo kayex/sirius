@@ -108,13 +108,13 @@ func TestCaseInsensitiveWordQuery_Match(t *testing.T) {
 	}
 }
 
-// BenchmarkWord_MatchNotExist6_587 benchmarks a single Word query of length
+// BenchmarkWord_MatchNotExist_6_587 benchmarks a single Word query of length
 // 6 against a search text of length 587, where the sought string does not
 // exist in the search text.
 //
 // This benchmark gives a good indication of the average performance of an
 // unsuccessful search.
-func BenchmarkWord_MatchNotExist6_587(b *testing.B) {
+func BenchmarkWord_MatchNotExist_6_587(b *testing.B) {
 	w := Word("foobar")
 
 	txt := `Lorem ipsum dolor sit amet, an cum vero soleat concludaturque, te purto vero reprimique vis.
@@ -131,12 +131,12 @@ func BenchmarkWord_MatchNotExist6_587(b *testing.B) {
 	}
 }
 
-// BenchmarkWord_MatchPartials5_587 benchmarks a single Word query of length
+// BenchmarkWord_MatchPartials_5_587 benchmarks a single Word query of length
 // 6 against a search text of length 587 with partials of length 5.
 //
 // This benchmark gives a good indication of the worst case performance
 // of an unsuccessful search.
-func BenchmarkWord_MatchPartials5_587(b *testing.B) {
+func BenchmarkWord_MatchPartials_6_587(b *testing.B) {
 	w := Word("foobar")
 
 	txt := `fooba fooba fooba fooba fooba fooba fooba fooba fooba fooba
@@ -157,10 +157,10 @@ func BenchmarkWord_MatchPartials5_587(b *testing.B) {
 	}
 }
 
-// BenchmarkWord_MatchExist6_587 benchmarks a single Word query of length
+// BenchmarkWord_MatchExist_6_587 benchmarks a single Word query of length
 // 6 against a search text of length 587, where the sought string is at the
 // very end of the search text.
-func BenchmarkWord_MatchExist6_587(b *testing.B) {
+func BenchmarkWord_MatchExist_6_587(b *testing.B) {
 	w := Word("foobar")
 
 	txt := `Lorem ipsum dolor sit amet, an cum vero soleat concludaturque, te purto vero reprimique vis.
