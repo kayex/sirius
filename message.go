@@ -23,7 +23,8 @@ func NewMessage(userID slack.UserID, text, channel, timestamp string) Message {
 }
 
 func (m *Message) Query(q text.Query) bool {
-	return q.Match(m.Text) >= 0
+	i, _ := q.Match(m.Text)
+	return i >= 0
 }
 
 func (m *Message) sentBy(u *User) bool {
@@ -33,4 +34,3 @@ func (m *Message) sentBy(u *User) bool {
 func (m *Message) escaped() bool {
 	return strings.HasPrefix(m.Text, `\`)
 }
-

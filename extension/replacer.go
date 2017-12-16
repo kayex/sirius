@@ -2,7 +2,7 @@ package extension
 
 import (
 	"github.com/kayex/sirius"
-	"strings"
+	"github.com/kayex/sirius/text"
 )
 
 type Replacer struct{}
@@ -16,7 +16,7 @@ func (*Replacer) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.Messa
 	edit := m.EditText()
 
 	for search, replace := range phrases {
-		edit.SubstituteWord(strings.ToLower(search), replace)
+		edit.SubstituteQuery(text.IWord(search), replace)
 	}
 
 	return edit, nil

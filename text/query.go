@@ -7,7 +7,7 @@ import (
 )
 
 type Query interface {
-	Match(string) int
+	Match(string) (i int, l int)
 }
 
 // WordQuery matches the first occurrence of w in a search text where w is
@@ -24,18 +24,18 @@ func Word(w string) WordQuery {
 	return WordQuery{w}
 }
 
-func (q WordQuery) Match(s string) int {
+func (q WordQuery) Match(s string) (int, int) {
 	if len(s) == 0 {
-		return -1
+		return -1, 0
 	}
 
 	if s == q.W {
-		return 0
+		return 0, q.Length()
 	}
 
 	i := strings.Index(s, q.W)
 	if i < 0 {
-		return -1
+		return -1, 0
 	}
 
 	sr := []rune(s)
@@ -46,35 +46,29 @@ func (q WordQuery) Match(s string) int {
 	prev, p := at(sr, ir-1)
 	next, n := at(sr, ir+q.Length())
 	if p && !isWordDelimiter(prev) || n && !isWordDelimiter(next) {
-		return -1
+		return -1, 0
 	}
 
-	return ir
+	return ir, q.Length()
 }
 
 func (q WordQuery) Length() int {
 	return utf8.RuneCountInString(q.W)
 }
 
-// LowerQuery provides case-insensitive matching by folding the search string
-// to lowercase before passing it to the wrapped query.
-type LowerQuery struct {
-	Query
-}
-
 type CaseInsensitiveWordQuery struct {
 	WordQuery
 }
 
-func (q CaseInsensitiveWordQuery) Match(s string) int {
-	sl := strings.ToLower(s)
-	q.WordQuery.W = strings.ToLower(q.WordQuery.W)
-
-	return q.WordQuery.Match(sl)
+func IWord(w string) CaseInsensitiveWordQuery {
+	return CaseInsensitiveWordQuery{Word(w)}
 }
 
-func IWord(w string) CaseInsensitiveWordQuery {
-	return CaseInsensitiveWordQuery{WordQuery{w}}
+func (q CaseInsensitiveWordQuery) Match(text string) (int, int) {
+	sl := strings.ToLower(text)
+	q.W = strings.ToLower(q.W)
+
+	return q.WordQuery.Match(sl)
 }
 
 // isWordDelimiter indicates if r is a word delimiter.

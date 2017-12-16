@@ -6,104 +6,120 @@ import (
 
 func TestWordQuery_Match(t *testing.T) {
 	cases := []struct {
-		s   string
-		q   WordQuery
-		exp int
+		s  string
+		q  WordQuery
+		i  int
+		ln int
 	}{
 		{
-			s:   "foo",
-			q:   Word("foo"),
-			exp: 0,
+			s:  "foo",
+			q:  Word("foo"),
+			i:  0,
+			ln: 3,
 		},
 		{
-			s:   "foo bar",
-			q:   Word("bar"),
-			exp: 4,
+			s:  "foo bar",
+			q:  Word("bar"),
+			i:  4,
+			ln: 3,
 		},
 		{
-			s:   "foo barbaz",
-			q:   Word("bar"),
-			exp: -1,
+			s:  "foo barbaz",
+			q:  Word("bar"),
+			i:  -1,
+			ln: 0,
 		},
 		{
-			s:   "foobar baz",
-			q:   Word("bar"),
-			exp: -1,
+			s:  "foobar baz",
+			q:  Word("bar"),
+			i:  -1,
+			ln: 0,
 		},
 		{
-			s:   "foo bar",
-			q:   Word("FOO"),
-			exp: -1,
+			s:  "foo bar",
+			q:  Word("FOO"),
+			i:  -1,
+			ln: 0,
 		},
 		{
-			s:   "FOO BAR",
-			q:   Word("foo"),
-			exp: -1,
+			s:  "FOO BAR",
+			q:  Word("foo"),
+			i:  -1,
+			ln: 0,
 		},
 		{
-			s:   "foo\tbar",
-			q:   Word("bar"),
-			exp: 4,
+			s:  "foo\tbar",
+			q:  Word("bar"),
+			i:  4,
+			ln: 3,
 		},
 		{
-			s:   "foo\nbar",
-			q:   Word("bar"),
-			exp: 4,
+			s:  "foo\nbar",
+			q:  Word("bar"),
+			i:  4,
+			ln: 3,
 		},
 		{
-			s:   "foo\vbar",
-			q:   Word("bar"),
-			exp: 4,
+			s:  "foo\vbar",
+			q:  Word("bar"),
+			i:  4,
+			ln: 3,
 		},
 		{
-			s:   "foo\fbar",
-			q:   Word("bar"),
-			exp: 4,
+			s:  "foo\fbar",
+			q:  Word("bar"),
+			i:  4,
+			ln: 3,
 		},
 		{
-			s:   "foo\rbar",
-			q:   Word("bar"),
-			exp: 4,
+			s:  "foo\rbar",
+			q:  Word("bar"),
+			i:  4,
+			ln: 3,
 		},
 		{
-			s:   "åäö bar",
-			q:   Word("bar"),
-			exp: 4,
+			s:  "åäö bar",
+			q:  Word("bar"),
+			i:  4,
+			ln: 3,
 		},
 	}
 
 	for _, c := range cases {
-		act := c.q.Match(c.s)
+		i, ln := c.q.Match(c.s)
 
-		if act != c.exp {
-			t.Errorf("Expected Word(%q).Match(%q) to return %v, got %v", c.q.W, c.s, c.exp, act)
+		if i != c.i || ln != c.ln {
+			t.Errorf("Expected Word(%q).Match(%q) to return (%v, %v) got (%v, %v)", c.q.W, c.s, c.i, c.ln, i, ln)
 		}
 	}
 }
 
 func TestCaseInsensitiveWordQuery_Match(t *testing.T) {
 	cases := []struct {
-		s   string
-		q   CaseInsensitiveWordQuery
-		exp int
+		s  string
+		q  CaseInsensitiveWordQuery
+		i  int
+		ln int
 	}{
 		{
-			s:   "foo",
-			q:   IWord("foo"),
-			exp: 0,
+			s:  "foo",
+			q:  IWord("foo"),
+			i:  0,
+			ln: 3,
 		},
 		{
-			s:   "FOO",
-			q:   IWord("foo"),
-			exp: 0,
+			s:  "FOO",
+			q:  IWord("foo"),
+			i:  0,
+			ln: 3,
 		},
 	}
 
 	for _, c := range cases {
-		act := c.q.Match(c.s)
+		i, ln := c.q.Match(c.s)
 
-		if act != c.exp {
-			t.Errorf("Expected Lower(%#v).Match(%q) to return %v, got %v", c.q, c.s, c.exp, act)
+		if i != c.i || ln != c.ln {
+			t.Errorf("Expected IWord(%#v).Match(%q) to return (%v, %v), got (%v, %v)", c.q, c.s, c.i, c.ln, i, ln)
 		}
 	}
 }

@@ -14,7 +14,9 @@ func (*Censor) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.Message
 	edit := m.EditText()
 
 	for _, p := range phrases {
-		if !m.Query(text.IWord(p)) {
+		q := text.IWord(p)
+
+		if !m.Query(q) {
 			continue
 		}
 
@@ -24,9 +26,9 @@ func (*Censor) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.Message
 		}
 
 		if cfg.Boolean("strike") {
-			edit.SubstituteWord(p, text.Strike(p))
+			edit.SubstituteQuery(q, text.Strike(p))
 		} else {
-			edit.SubstituteWord(p, text.Code("CENSORED"))
+			edit.SubstituteQuery(q, text.Code("CENSORED"))
 		}
 	}
 
