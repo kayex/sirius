@@ -35,7 +35,6 @@ func (m *Message) alterAll(act []MessageAction) (bool, error) {
 	var modified bool
 	for _, a := range act {
 		mod, err := m.alter(a)
-
 		if err != nil {
 			return modified, err
 		}

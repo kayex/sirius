@@ -61,11 +61,10 @@ func (e *Executor) Run(msg Message, exs []ConfigExtension, res chan<- ExecutionR
 		}(msg, &exs[i])
 	}
 
-Execution:
 	for range exs {
 		select {
 		case <-time.After(e.timeout):
-			break Execution
+			return
 		case res<- <-er:
 		}
 	}

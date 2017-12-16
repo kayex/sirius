@@ -1,25 +1,25 @@
 package sirius
 
 import (
+	"context"
+	"fmt"
+	"github.com/kayex/sirius/sync"
 	"strings"
 	"time"
-	"context"
-	"github.com/kayex/sirius/sync"
-	"fmt"
 )
 
 type Client struct {
 	user    *User
 	api     *SlackAPI
 	conn    Connection
-	exe *Executor
+	exe     *Executor
 	timeout time.Duration
 	ctrl    *sync.Control
 }
 
 type CancelClient struct {
 	*Client
-	ctx context.Context
+	ctx    context.Context
 	cancel context.CancelFunc
 }
 
@@ -37,9 +37,7 @@ func NewClient(cfg ClientConfig) *Client {
 	api := NewSlackAPI(cfg.user.Token)
 	conn := api.NewRTMConnection()
 
-	exe := &Executor{
-		loader: cfg.loader,
-	}
+	exe := NewExecutor(cfg.loader, cfg.timeout)
 
 	cl := &Client{
 		api:  api,

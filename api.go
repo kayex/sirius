@@ -86,7 +86,7 @@ func (api *SlackAPI) NewRTMConnection() *RTMConnection {
 
 func (conn *RTMConnection) Start(ctx context.Context) error {
 	auth := make(chan ConnectionDetails)
-	go conn.connect(ctx, auth)
+	go conn.listen(ctx, auth)
 
 	select {
 		case d := <-auth:
@@ -98,11 +98,11 @@ func (conn *RTMConnection) Start(ctx context.Context) error {
 	return nil
 }
 
-// connect opens the RTM connection and listens for incoming events until
+// listen opens the RTM connection and listens for incoming events until
 // ctx expires or an error occurs.
 // Sends the connection details discerned from the initial authentication
 // process on the auth channel.
-func (conn *RTMConnection) connect(ctx context.Context, auth chan ConnectionDetails) {
+func (conn *RTMConnection) listen(ctx context.Context, auth chan ConnectionDetails) {
 	go conn.rtm.ManageConnection()
 	defer conn.rtm.Disconnect()
 	defer conn.ctrl.Finish(nil)
