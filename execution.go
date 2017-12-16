@@ -16,14 +16,16 @@ type Executor struct {
 }
 
 func NewExecutor(loader ExtensionLoader, timeout time.Duration) *Executor {
-	if timeout == 0 {
-		timeout = time.Second * 2
-	}
-
-	return &Executor{
+	e := &Executor{
 		loader: loader,
 		timeout: timeout,
 	}
+
+	if e.timeout == 0 {
+		e.timeout = time.Second * 2
+	}
+
+	return e
 }
 
 func (e *Executor) FromSettings(s Settings) error {
