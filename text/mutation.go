@@ -42,7 +42,6 @@ func (s *Sub) Apply(text string) string {
 
 func (s *SubQuery) Apply(text string) string {
 	for i, ln := s.Search.Match(text); i >= 0; i, ln = s.Search.Match(text) {
-		fmt.Printf("applying SubQuery(%v) on %q, ln is %v\n", s.Sub, text, ln)
 		tr := []rune(text)
 
 		beginning := tr[:i]
