@@ -2,7 +2,6 @@ package text
 
 import (
 	"bytes"
-	"fmt"
 	"strings"
 )
 
