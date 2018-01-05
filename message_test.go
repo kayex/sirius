@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestFullWordQuery_Query(t *testing.T) {
+func TestMessage_Query(t *testing.T) {
 	cases := []struct {
 		msg Message
 		q   text.Query
@@ -14,22 +14,22 @@ func TestFullWordQuery_Query(t *testing.T) {
 	}{
 		{
 			msg: NewMessage(slack.UserID{"123", "abc"}, "Alligators eat mattresses", "#channel", "0"),
-			q:   text.Word{"Alligators"},
+			q:   text.Word("Alligators"),
 			exp: true,
 		},
 		{
 			msg: NewMessage(slack.UserID{"123", "abc"}, "Alligators eat mattresses", "#channel", "0"),
-			q:   text.Word{"mattresses"},
+			q:   text.Word("mattresses"),
 			exp: true,
 		},
 		{
 			msg: NewMessage(slack.UserID{"123", "abc"}, "Alligators eat mattresses", "#channel", "0"),
-			q:   text.Word{"gators"},
+			q:   text.Word("gators"),
 			exp: false,
 		},
 		{
 			msg: NewMessage(slack.UserID{"123", "abc"}, "Alligators eat meat", "#channel", "0"),
-			q:   text.Word{"eat"},
+			q:   text.Word("eat"),
 			exp: true,
 		},
 	}
@@ -38,7 +38,7 @@ func TestFullWordQuery_Query(t *testing.T) {
 		act := c.msg.Query(c.q)
 
 		if act != c.exp {
-			t.Errorf("Expected FullWordQuery(%q) for message %q to return %v, got %v", c.q, c.msg.Text, c.exp, act)
+			t.Errorf("Expected Message.Query(%#v) for message %q to return %v, got %v", c.q, c.msg.Text, c.exp, act)
 		}
 	}
 }

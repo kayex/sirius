@@ -1,9 +1,10 @@
 package sirius
 
 import (
-	"errors"
-
 	"context"
+	"fmt"
+	"time"
+
 	"github.com/kayex/sirius/slack"
 	"github.com/kayex/sirius/text"
 )
@@ -14,24 +15,6 @@ type Service struct {
 	loader  ExtensionLoader
 	clients map[string]*CancelClient
 	ctx     context.Context
-}
-
-type CancelClient struct {
-	Client
-	Cancel context.CancelFunc
-	ctx    context.Context
-}
-
-func (c *Client) WithCancel(ctx context.Context, cancel context.CancelFunc) *CancelClient {
-	return &CancelClient{
-		Client: *c,
-		Cancel: cancel,
-		ctx:    ctx,
-	}
-}
-
-func (c *CancelClient) Start() {
-	c.Client.Start(c.ctx)
 }
 
 func NewService(l ExtensionLoader) *Service {
@@ -46,41 +29,37 @@ func (s *Service) Start(ctx context.Context, users []User) {
 
 	for _, u := range users {
 		u := u
-		cl := s.createClient(&u)
-		s.addClient(cl)
-
-		go cl.Start()
+		err := s.AddUser(&u, false)
+		if err != nil {
+			fmt.Printf("error starting client: %v\n", err)
+		}
 	}
 
 	select {
-	case <-s.ctx.Done():
-		break
+		case <-s.ctx.Done():
 	}
 }
 
-func (s *Service) AddUser(u *User) {
+func (s *Service) AddUser(u *User, notify bool) error {
+	stt := time.Now()
+
 	cl := s.createClient(u)
 	s.addClient(cl)
-
-	go cl.Start()
-
-	<-cl.Ready
-	cl.notify()
-}
-
-func (s *Service) DropUser(id slack.ID) bool {
-	if cl, ok := s.clients[id.String()]; ok {
-		cl.Cancel()
-
-		return true
+	err := cl.Start()
+	if err != nil {
+		return err
 	}
 
-	return false
+	if notify {
+		cl.notify(stt)
+	}
+
+	return nil
 }
 
-func (s *Service) stopClient(id slack.ID) {
-	if ex, ok := s.clients[id.String()]; ok {
-		ex.Cancel()
+func (s *Service) DropUser(id slack.ID) {
+	if cl, ok := s.clients[id.String()]; ok {
+		cl.cancel()
 		delete(s.clients, id.String())
 	}
 }
@@ -89,7 +68,7 @@ func (s *Service) addClient(cl *CancelClient) error {
 	u := cl.user
 
 	if u.ID == nil {
-		id, err := cl.conn.GetUserID(cl.user.Token)
+		id, err := cl.api.GetUserID(cl.user.Token)
 
 		if err != nil {
 			panic(err)
@@ -98,8 +77,8 @@ func (s *Service) addClient(cl *CancelClient) error {
 		u.ID = id
 	}
 
-	if _, exists := s.clients[cl.user.ID.String()]; exists {
-		return errors.New("Client with ID %v is already registered with service.")
+	if _, exists := s.clients[u.ID.String()]; exists {
+		return fmt.Errorf("client with ID %v is already registered with service", u.ID)
 	}
 
 	s.clients[cl.user.ID.String()] = cl
@@ -108,20 +87,32 @@ func (s *Service) addClient(cl *CancelClient) error {
 }
 
 func (s *Service) createClient(u *User) *CancelClient {
-	return NewClient(ClientConfig{
-		user:   u,
-		loader: s.loader,
-	}).WithCancel(context.WithCancel(s.ctx))
+	ctx, cancel := context.WithCancel(s.ctx)
+	return &CancelClient{
+		Client: NewClient(ClientConfig{
+			user: u,
+			loader: s.loader,
+		}),
+		ctx: ctx,
+		cancel: cancel,
+	}
 }
 
-func (c *Client) notify() {
-	conf := EMOJI + " Configuration loaded successfully."
+func (c *Client) notify(st time.Time) {
+	et := time.Now()
+	tt := et.Sub(st)
 
-	if len(c.user.Configurations) == 0 {
+	// Display load time in seconds, with three decimals.
+	conf := EMOJI + " " + text.Bold(fmt.Sprintf(
+		"%d extensions loaded in %.3f seconds.",
+		len(c.user.Settings),
+		float64(tt.Nanoseconds())/float64(1e9)))
+
+	if len(c.user.Settings) == 0 {
 		conf += "\n" + text.Quote(text.Italic("No extensions activated."))
 	} else {
-		for _, cfg := range c.user.Configurations {
-			conf += "\n" + text.Quote(text.Bold(string(cfg.EID)))
+		for _, cfg := range c.user.Settings {
+			conf += "\n" + text.Quote(string(cfg.EID))
 		}
 	}
 

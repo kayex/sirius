@@ -1,62 +1,71 @@
 package sirius
 
-import (
-	"time"
-)
-
-type Execution struct {
-	Ext Extension
-	Msg Message
-	Cfg ExtensionConfig
-}
+import "time"
 
 type ExecutionResult struct {
 	Err    error
 	Action MessageAction
 }
 
-type ExtensionRunner interface {
-	Run(exe []Execution, res chan<- ExecutionResult, timeout time.Duration)
+type Executor struct {
+	exs     []ConfigExtension
+	timeout time.Duration
+	loader  ExtensionLoader
 }
 
-type AsyncRunner struct{}
-
-func NewExecution(x Extension, m Message, cfg ExtensionConfig) *Execution {
-	return &Execution{
-		Ext: x,
-		Msg: m,
-		Cfg: cfg,
+func NewExecutor(loader ExtensionLoader, timeout time.Duration) *Executor {
+	e := &Executor{
+		loader: loader,
+		timeout: timeout,
 	}
+
+	if e.timeout == 0 {
+		e.timeout = time.Second * 2
+	}
+
+	return e
 }
 
-func NewAsyncRunner() *AsyncRunner {
-	return &AsyncRunner{}
+// Load sets up the executor by loading configurations from s.
+func (e *Executor) Load(s Settings) error {
+	exs, err := LoadFromSettings(e.loader, s)
+	if err != nil {
+		return err
+	}
+	e.exs = exs
+
+	return nil
 }
 
-// Run executes all extensions in exe and returns all ExecutionResults that
+func (e *Executor) RunExtensions(msg Message) <-chan ExecutionResult {
+	res := make(chan ExecutionResult, len(e.exs))
+	e.Run(msg, e.exs, res)
+
+	return res
+}
+
+// Run executes all extensions in exs and returns all ExecutionResults that
 // are received before timeout has elapsed.
-func (r *AsyncRunner) Run(exe []Execution, res chan<- ExecutionResult, timeout time.Duration) {
-	er := make(chan ExecutionResult, len(exe))
+func (e *Executor) Run(msg Message, exs []ConfigExtension, res chan<- ExecutionResult) {
+	defer close(res)
+	er := make(chan ExecutionResult, len(exs))
 
-	for _, e := range exe {
-		go func(ex Execution, r chan<- ExecutionResult) {
-			a, err := ex.Ext.Run(ex.Msg, ex.Cfg)
+	for i := range exs {
+		go func(msg Message, ex *ConfigExtension) {
+			a, err := ex.Run(msg)
 
-			r <- ExecutionResult{
+			er <- ExecutionResult{
 				Err:    err,
 				Action: a,
 			}
-		}(e, er)
+		}(msg, &exs[i])
 	}
 
-Execution:
-	for range exe {
+	for range exs {
 		select {
-		case <-time.After(timeout):
-			break Execution
-		case res <- <-er:
+		case <-time.After(e.timeout):
+			return
+		case res<- <-er:
 		}
 	}
-
-	close(res)
 }

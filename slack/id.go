@@ -1,14 +1,15 @@
 package slack
 
 import (
+	"bytes"
 	"crypto/sha256"
 	"encoding/hex"
 )
 
 type ID interface {
-	String() string
 	Equals(ID) bool
 	Valid() bool
+	String() string
 }
 
 type UserID struct {
@@ -16,17 +17,17 @@ type UserID struct {
 	TeamID string
 }
 
-// SecureID is an opaque, deterministic representation of a Slack user identity
-// which can be used in place of UserID to minimize the consequences
-// of accidentally logging or otherwise compromising a user's ID.
+// SecureID represents an irreversible obfuscation of a Slack user identity
+// that can be used in place of UserID to minimize the security implications of
+// handling and storing user IDs.
 //
 // A SecureID can be constructed from a UserID
-// by calling UserID.Secure()
+// by calling (UserID).Secure()
 type SecureID struct {
 	HashSum string
 }
 
-// Equals indicates if id and o represents the same user identity.
+// Equals indicates if id and o represent the same user identity.
 func (id UserID) Equals(o ID) bool {
 	switch o := o.(type) {
 	case UserID:
@@ -34,8 +35,8 @@ func (id UserID) Equals(o ID) bool {
 			return false
 		}
 
-		// Notice that user IDs are not guaranteed to be globally unique across all Slack users.
-		// The combination of user ID and team ID, on the other hand, is guaranteed to be globally unique.
+		// > Notice that user IDs are not guaranteed to be globally unique across all Slack users.
+		// > The combination of user ID and team ID, on the other hand, is guaranteed to be globally unique.
 		//
 		// - Slack API documentation
 		return id.UserID == o.UserID && id.TeamID == o.TeamID
@@ -60,9 +61,13 @@ func (id UserID) Secure() SecureID {
 		return SecureID{}
 	}
 
-	concat := id.TeamID + "." + id.UserID
+	var buf bytes.Buffer
+	buf.WriteString(id.TeamID)
+	buf.WriteRune('.')
+	buf.WriteString(id.UserID)
+
 	h := sha256.New()
-	h.Write([]byte(concat))
+	h.Write(buf.Bytes())
 	s := hex.EncodeToString(h.Sum(nil))
 
 	return SecureID{
@@ -70,7 +75,7 @@ func (id UserID) Secure() SecureID {
 	}
 }
 
-// Equals indicates if id and o represents the same user identity.
+// Equals indicates if id and o represent the same user identity.
 func (id SecureID) Equals(o ID) bool {
 	switch o := o.(type) {
 	case SecureID:

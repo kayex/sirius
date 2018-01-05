@@ -39,9 +39,9 @@ func (edit *TextEditAction) Substitute(search string, sub string) *TextEditActio
 	return edit
 }
 
-func (edit *TextEditAction) SubstituteWord(search string, sub string) *TextEditAction {
-	edit.add(&text.SubWord{
-		Search: text.Word{search},
+func (edit *TextEditAction) SubstituteQuery(q text.Query, sub string) *TextEditAction {
+	edit.add(&text.SubQuery{
+		Search: q,
 		Sub:    sub,
 	})
 

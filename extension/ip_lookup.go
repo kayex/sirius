@@ -2,15 +2,15 @@ package extension
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"github.com/kayex/sirius"
+	"github.com/kayex/sirius/text"
 	"net/http"
 )
 
 type IPLookup struct{}
 
-func (ipl *IPLookup) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.MessageAction, error) {
+func (*IPLookup) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.MessageAction, error) {
 	cmd, match := m.Command("ip")
 
 	if !match {
@@ -23,33 +23,35 @@ func (ipl *IPLookup) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.M
 		return sirius.NoAction(), nil
 	}
 
-	var lookup map[string]interface{}
-
-	err, lookup := ipLookup(ip)
+	err, info := ipLookup(ip)
 
 	if err != nil {
-		return nil, errors.New(fmt.Sprintf("IP Lookup error: %v", err))
+		return nil, fmt.Errorf("IP Lookup error: %v", err)
+	}
+
+	if !info.complete() {
+		return sirius.NoAction(), nil
 	}
 
 	// Output format:
 	//
 	// `IP`
-	// City, Country (CODE)
+	// City, Country (`COUNTRY CODE`)
 	// ISP
-	output := fmt.Sprintf("`%v`\n"+
-		"%v, %v (`%v`)\n"+
+	output := fmt.Sprintf("%v\n"+
+		"%v, %v (%v)\n"+
 		"%v",
-		ip,
-		lookup["city"],
-		lookup["country"],
-		lookup["countryCode"],
-		lookup["isp"])
+		text.Code(ip),
+		info.City,
+		info.Country,
+		text.Code(info.CountryCode),
+		info.ISP)
 	edit := m.EditText().Set(output)
 
 	return edit, nil
 }
 
-func ipLookup(ip string) (error, map[string]interface{}) {
+func ipLookup(ip string) (error, *iPInfo) {
 	url := "http://ip-api.com/json/" + ip
 
 	c := &http.Client{}
@@ -60,8 +62,20 @@ func ipLookup(ip string) (error, map[string]interface{}) {
 	}
 	defer r.Body.Close()
 
-	var lookup map[string]interface{}
-	json.NewDecoder(r.Body).Decode(&lookup)
+	var info iPInfo
+	err = json.NewDecoder(r.Body).Decode(&info)
 
-	return nil, lookup
+	return nil, &info
+}
+
+type iPInfo struct {
+	City        string `json:"city"`
+	Country     string `json:"country"`
+	CountryCode string `json:"countryCode"`
+	ISP         string `json:"isp"`
+}
+
+// complete indicates whether i has all data fields filled.
+func (i *iPInfo) complete() bool {
+	return !(i.City == "" || i.Country == "" || i.CountryCode == "" || i.ISP == "")
 }

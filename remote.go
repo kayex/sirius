@@ -32,8 +32,8 @@ func (ru *RemoteUser) ToUser() *User {
 	u := NewUser(ru.Token)
 	u.ID = slack.SecureID{ru.IDHash}
 
-	u.Configurations = append(u.Configurations, ru.parseExtensionList(ru.Extensions)...)
-	u.Configurations = append(u.Configurations, ru.parseExtensionList(ru.HttpExtensions)...)
+	u.Settings = append(u.Settings, ru.parseExtensionList(ru.Extensions)...)
+	u.Settings = append(u.Settings, ru.parseExtensionList(ru.HttpExtensions)...)
 
 	return u
 }

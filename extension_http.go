@@ -80,10 +80,13 @@ func runHttpExecution(exe *HttpExecution) (er *HttpExecutionResult, err error) {
 	req, err := http.NewRequest("POST", exe.ext.Host, pl)
 	req.Header.Set("Content-Type", "application/json")
 	res, err := exe.ext.client.Do(req)
+	if res != nil {
+		defer res.Body.Close()
+	}
+
 	if err != nil {
 		return
 	}
-	defer res.Body.Close()
 
 	return er, json.NewDecoder(res.Body).Decode(&er)
 }

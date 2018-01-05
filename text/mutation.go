@@ -18,8 +18,8 @@ type Sub struct {
 	Sub    string
 }
 
-type SubWord struct {
-	Search Word
+type SubQuery struct {
+	Search Query
 	Sub    string
 }
 
@@ -39,16 +39,12 @@ func (s *Sub) Apply(text string) string {
 	return strings.Replace(text, s.Search, s.Sub, -1)
 }
 
-func (s *SubWord) Apply(text string) string {
-	if text == s.Search.W {
-		return s.Sub
-	}
-
-	for i := s.Search.Match(text); i >= 0; i = s.Search.Match(text) {
+func (s *SubQuery) Apply(text string) string {
+	for i, ln := s.Search.Match(text); i >= 0; i, ln = s.Search.Match(text) {
 		tr := []rune(text)
 
 		beginning := tr[:i]
-		end := tr[i+s.Search.Length():]
+		end := tr[i+ln:]
 
 		var buf bytes.Buffer
 

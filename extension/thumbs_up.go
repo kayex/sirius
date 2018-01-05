@@ -1,15 +1,14 @@
 package extension
 
-import "github.com/kayex/sirius"
+import (
+	"github.com/kayex/sirius"
+	"github.com/kayex/sirius/text"
+)
 
-const slackThumb string = ":+1:"
+const slackThumb = ":+1:"
 
 type ThumbsUp struct{}
 
 func (*ThumbsUp) Run(m sirius.Message, cfg sirius.ExtensionConfig) (sirius.MessageAction, error) {
-	edit := m.EditText()
-	edit.Substitute("(y)", slackThumb)
-	edit.Substitute("(Y)", slackThumb)
-
-	return edit, nil
+	return m.EditText().SubstituteQuery(text.IWord("(y)"), slackThumb), nil
 }

@@ -6,6 +6,7 @@ import (
 
 	"github.com/kayex/sirius"
 	"github.com/kayex/sirius/slack"
+	"github.com/kayex/sirius/text"
 )
 
 func TestCensor_Run(t *testing.T) {
@@ -20,7 +21,7 @@ func TestCensor_Run(t *testing.T) {
 				"phrases": []string{"Voldemort"},
 				"strict":  false,
 			},
-			exp: (&sirius.TextEditAction{}).SubstituteWord("Voldemort", "`CENSORED`"),
+			exp: (&sirius.TextEditAction{}).SubstituteQuery(text.IWord("Voldemort"), "`CENSORED`"),
 		},
 		{
 			msg: sirius.NewMessage(slack.UserID{"123", "abc"}, "Voldemort", "#channel", "0"),
@@ -45,6 +46,31 @@ func TestCensor_Run(t *testing.T) {
 				"strict":  true,
 			},
 			exp: &sirius.TextEditAction{},
+		},
+		{
+			msg: sirius.NewMessage(slack.UserID{"123", "abc"}, "Voldemort", "#channel", "0"),
+			cfg: sirius.ExtensionConfig{
+				"phrases": []string{"Voldemort"},
+				"strict":  false,
+				"strike":  true,
+			},
+			exp: (&sirius.TextEditAction{}).SubstituteQuery(text.IWord("Voldemort"), "~Voldemort~"),
+		},
+		{
+			msg: sirius.NewMessage(slack.UserID{"123", "abc"}, "VOLDEMORT", "#channel", "0"),
+			cfg: sirius.ExtensionConfig{
+				"phrases": []string{"voldemort"},
+				"strict":  true,
+			},
+			exp: (&sirius.TextEditAction{}).Set("`CENSORED`"),
+		},
+		{
+			msg: sirius.NewMessage(slack.UserID{"123", "abc"}, "Fan", "#channel", "0"),
+			cfg: sirius.ExtensionConfig{
+				"phrases": []string{"fan"},
+				"strict":  false,
+			},
+			exp: (&sirius.TextEditAction{}).SubstituteQuery(text.IWord("fan"), "`CENSORED`"),
 		},
 	}
 

@@ -1,7 +1,6 @@
 package extension
 
 import (
-	"errors"
 	"fmt"
 	"github.com/kayex/sirius"
 	"github.com/kayex/sirius/config"
@@ -31,11 +30,15 @@ func (l *StaticLoader) Load(eid sirius.EID) (sirius.Extension, error) {
 		return &IPLookup{}, nil
 	case "censor":
 		return &Censor{}, nil
+	case "google":
+		return &Google{}, nil
+	case "sin":
+		return &Sin{}, nil
 	case "geocode":
 		return &Geocode{
 			APIKey: l.cfg.Maps.APIKey,
 		}, nil
 	}
 
-	return nil, errors.New(fmt.Sprintf("Invalid eid: %v", eid))
+	return nil, fmt.Errorf("invalid eid: %v", eid)
 }

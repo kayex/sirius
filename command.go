@@ -19,6 +19,10 @@ func (c *Command) Arg(a int) string {
 	return ""
 }
 
+func (c *Command) CollapseArgs() string {
+	return strings.Join(c.Args, " ")
+}
+
 func (m *Message) Command(name string) (*Command, bool) {
 	cmd := prefix + name
 
