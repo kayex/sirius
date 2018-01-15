@@ -3,13 +3,13 @@
 
 A transparent extension framework for Slack.
 
-Extensions are small pieces of code that extend or enhance the functionality of Slack. For example, the `thumbs_up` extension converts `(y)` to `👍` in all outgoing messages. Sirius is an extension server that allows you to run these extensions as a service, and use them without having to install them locally on the devices you use Slack from.
+Extensions are small pieces of code that extend or enhance the functionality of Slack. For example, the `thumbs_up` extension converts `(y)` to `👍` in all outgoing messages. Sirius is an extension server that allows you to run these extensions as a service, and use them without having to install anything on the devices you use Slack from.
 
 ## How does it work?
-Sirius runs as a service and connects to the [Slack Real Time Messaging API](https://api.slack.com/rtm) using your Slack OAuth token. Once logged in, it runs the extensions you have enabled on the messages it receives. Any modifications that the extensions wish to make to messages you send will be done with regular message edits immediately after they have been sent, which is what we mean when we say _transparent extension framework_.
+Sirius runs as a service and connects to the [Slack Real Time Messaging API](https://api.slack.com/rtm) using your Slack OAuth token. Once logged in, it runs the extensions you have enabled on every message you send (never on messages you receive). Any alterations that the extensions wish to make to your messages will be batched per message and performed with a single message edit immediately after sending. This is what we mean with _transparent extension framework_.
 
 ## Bundled extensions
-These extensions come bundled with sirius by default, and can be enabled immediately.
+These extensions come included with sirius by default, and can be enabled immediately using their EIDs (names).
 
 ### thumbs_up
 Converts `(y)` to `👍` in all outgoing messages.
