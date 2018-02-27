@@ -23,7 +23,7 @@ Converts `(y)` to `👍` in all outgoing messages.
 --
 
 ### geocode
-Type `!address` followed by any sort of geographical location, and the `geocode` extension will fetch the exact address and coordinates for you.
+Type `!address` followed by any sort of geographical location, and the `geocode` extension will show the exact address and coordinates.
 
 >**kayex**: !address Empire State Building
 
@@ -35,7 +35,7 @@ Type `!address` followed by any sort of geographical location, and the `geocode`
 --
 
 ### ip_lookup
-Type `!ip` followed by an IP address to fetch related geolocation information.
+Type `!ip` followed by an IP address to show related geolocation information.
 
 >**kayex**: !ip 8.8.8.8  
 >**kayex**: !ip 2001:4860:4860::8888 // IPv6
