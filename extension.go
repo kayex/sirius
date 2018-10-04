@@ -19,7 +19,7 @@ type ConfigExtension struct {
 func NewConfigExtension(ex Extension, cfg ExtensionConfig) *ConfigExtension {
 	return &ConfigExtension{
 		Extension: ex,
-		Cfg: cfg,
+		Cfg:       cfg,
 	}
 }
 
@@ -42,10 +42,10 @@ func (ex *ConfigExtension) Run(msg Message) (MessageAction, error) {
 	return ex.Extension.Run(msg, ex.Cfg)
 }
 
-func LoadFromSettings(l ExtensionLoader, s Settings) ([]ConfigExtension, error) {
+func LoadFromSettings(l ExtensionLoader, s Profile) ([]ConfigExtension, error) {
 	var exe []ConfigExtension
 
-	for _, cfg := range s {
+	for _, cfg := range s.Configurations {
 		x, err := FromConfiguration(l, &cfg)
 		if err != nil {
 			return nil, err

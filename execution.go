@@ -15,7 +15,7 @@ type Executor struct {
 
 func NewExecutor(loader ExtensionLoader, timeout time.Duration) *Executor {
 	e := &Executor{
-		loader: loader,
+		loader:  loader,
 		timeout: timeout,
 	}
 
@@ -26,8 +26,8 @@ func NewExecutor(loader ExtensionLoader, timeout time.Duration) *Executor {
 	return e
 }
 
-// Load sets up the executor by loading configurations from s.
-func (e *Executor) Load(s Settings) error {
+// Load sets up the executor by reading s and creating the appropriate extensions.
+func (e *Executor) Load(s Profile) error {
 	exs, err := LoadFromSettings(e.loader, s)
 	if err != nil {
 		return err
@@ -65,7 +65,7 @@ func (e *Executor) Run(msg Message, exs []ConfigExtension, res chan<- ExecutionR
 		select {
 		case <-time.After(e.timeout):
 			return
-		case res<- <-er:
+		case res <- <-er:
 		}
 	}
 }

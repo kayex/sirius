@@ -5,9 +5,13 @@ import (
 )
 
 type User struct {
-	ID             slack.ID
-	Token          string
-	Settings Settings
+	Profile
+	ID    slack.ID
+	Token string
+}
+
+type Profile struct {
+	Configurations []Configuration
 }
 
 func NewUser(token string) *User {

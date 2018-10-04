@@ -10,6 +10,10 @@ type TextEditAction struct {
 	mutations []text.Mutation
 }
 
+func TextEdit() *TextEditAction {
+	return &TextEditAction{}
+}
+
 func (*Message) EditText() *TextEditAction {
 	return &TextEditAction{}
 }

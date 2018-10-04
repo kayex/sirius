@@ -2,20 +2,13 @@ package sirius
 
 import "net/url"
 
-// ExtensionConfig is configuration specific to an extension.
 type ExtensionConfig map[string]interface{}
 
-// A configuration is a user configuration that binds an extension (by its
-// EID, or in the case of an HTTP extension, its URL) to an ExtensionConfig.
 type Configuration struct {
 	URL string
 	EID EID
 	Cfg ExtensionConfig
 }
-
-// Settings is a set of configurations, what is commonly referred to as
-// "profile" by the end user.
-type Settings []Configuration
 
 func FromConfigurationMap(cfg map[string]interface{}) []Configuration {
 	var cfgs []Configuration

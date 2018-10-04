@@ -55,7 +55,7 @@ func (c *Client) Start(ctx context.Context) error {
 		return err
 	}
 
-	err = c.exe.Load(c.user.Settings)
+	err = c.exe.Load(c.user.Profile)
 	if err != nil {
 		return fmt.Errorf("error loading user extensions: %v", err)
 	}
@@ -91,6 +91,11 @@ func (c *Client) handle(msg *Message) error {
 		return nil
 	}
 
+	if msg.escaped() {
+		msg.apply(TextEdit().Set(trimEscape(msg.Text)))
+		return c.conn.Update(msg)
+	}
+
 	m, mod := c.process(*msg)
 
 	if !mod {
@@ -100,36 +105,21 @@ func (c *Client) handle(msg *Message) error {
 	return c.conn.Update(&m)
 }
 
-// process processes a message using the loaded Executor.
-//
-// Returns the processed message, and a bool indicating whether the message
-// text property was modified from its original value. This is useful
-// for determining if a message u
 func (c *Client) process(msg Message) (Message, bool) {
-	// If the message is escaped, we'll strip the escape character(s) and
-	// return the message immediately.
-	if msg.escaped() {
-		edit := msg.EditText().Set(trimEscape(msg.Text))
-		msg.alter(edit)
-
-		return msg, true
-	}
-
 	var act []MessageAction
 
 	res := c.exe.RunExtensions(msg)
 	for r := range res {
 		if r.Err != nil {
-			fmt.Println(r.Err)
-			continue
+			fmt.Printf("extension failed: %v\n", r.Err)
 		}
 
 		act = append(act, r.Action)
 	}
 
-	modified, err := msg.alterAll(act)
+	modified, err := msg.applyAll(act)
 	if err != nil {
-		panic(err)
+		fmt.Printf("error applying message action: %v\n", err)
 	}
 
 	return msg, modified
