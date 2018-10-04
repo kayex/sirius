@@ -8,7 +8,7 @@ Extensions are small pieces of user-created functionality that enhance the defau
 Sirius is an extension server that allows you to run these extensions as a standalone service, and use them without having to install anything on the devices you use Slack from.
 
 ## How does it work?
-Sirius connects to the [Slack Real Time Messaging API](https://api.slack.com/rtm) using your Slack OAuth credentials. Once logged in, it monitors your active channels for messages and processes them using the enabled extensions. Only messages sent by you are processed. Modifications to the message text body are instantly propagated using a regular message edit.
+Sirius connects to the [Slack Real Time Messaging API](https://api.slack.com/rtm) using your Slack OAuth credentials. Once logged in, it monitors your active channels for messages you send, and processes them using the enabled extensions. Modifications to the message body are instantly propagated using a regular message edit.
 
 Sirius does not store or forward any message data, including metadata.
 
