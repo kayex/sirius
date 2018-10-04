@@ -37,16 +37,15 @@ func (e *Executor) Load(s Profile) error {
 	return nil
 }
 
-func (e *Executor) RunExtensions(msg Message) <-chan ExecutionResult {
+func (e *Executor) Run(msg Message) <-chan ExecutionResult {
 	res := make(chan ExecutionResult, len(e.exs))
-	e.Run(msg, e.exs, res)
+	e.run(msg, e.exs, res)
 
 	return res
 }
 
-// Run executes all extensions in exs and returns all ExecutionResults that
-// are received before timeout has elapsed.
-func (e *Executor) Run(msg Message, exs []ConfigExtension, res chan<- ExecutionResult) {
+// run executes all extensions in exs and returns all ExecutionResults that are received before timeout has elapsed.
+func (e *Executor) run(msg Message, exs []ConfigExtension, res chan<- ExecutionResult) {
 	defer close(res)
 	er := make(chan ExecutionResult, len(exs))
 

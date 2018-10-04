@@ -48,7 +48,7 @@ func configure(u *sirius.User) {
 		m[eid] = nil
 	}
 
-	u.Profile = append(u.Profile, sirius.FromConfigurationMap(m)...)
+	u.Configurations = append(u.Configurations, sirius.FromConfigurationMap(m)...)
 }
 
 func getTokensFromJSON() []string {

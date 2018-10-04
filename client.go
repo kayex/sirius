@@ -108,7 +108,7 @@ func (c *Client) handle(msg *Message) error {
 func (c *Client) process(msg Message) (Message, bool) {
 	var act []MessageAction
 
-	res := c.exe.RunExtensions(msg)
+	res := c.exe.Run(msg)
 	for r := range res {
 		if r.Err != nil {
 			fmt.Printf("extension failed: %v\n", r.Err)
