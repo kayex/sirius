@@ -1,7 +1,7 @@
 # sirius ⚡
 ![](https://travis-ci.org/kayex/sirius.svg?branch=develop)
 
-An extension framework for Slack.
+An extension server for Slack.
 
 Extensions are small pieces of user-created functionality that enhance the default Slack experience. For example, the `thumbs_up` extension converts `(y)` to `👍` in all outgoing messages.
 
