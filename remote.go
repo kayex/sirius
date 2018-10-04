@@ -32,20 +32,22 @@ func (ru *RemoteUser) ToUser() *User {
 	u := NewUser(ru.Token)
 	u.ID = slack.SecureID{ru.IDHash}
 
-	u.Settings = append(u.Settings, ru.parseExtensionList(ru.Extensions)...)
-	u.Settings = append(u.Settings, ru.parseExtensionList(ru.HttpExtensions)...)
+	var exs []Configuration
+	exs = append(u.Configurations, parseConfigurationList(ru.Extensions)...)
+	exs = append(u.Configurations, parseConfigurationList(ru.HttpExtensions)...)
+	u.Configurations = exs
 
 	return u
 }
 
-func (ru *RemoteUser) parseExtensionList(extl interface{}) []Configuration {
+func parseConfigurationList(l interface{}) []Configuration {
 	var cfgs []Configuration
 
-	switch ext := extl.(type) {
+	switch ext := l.(type) {
 	case map[string]interface{}:
 		cfgs = FromConfigurationMap(ext)
 	case []interface{}:
-		var m map[string]interface{}
+		var m = make(map[string]interface{})
 
 		for _, v := range ext {
 			if k, ok := v.(string); ok {

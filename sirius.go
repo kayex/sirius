@@ -36,7 +36,7 @@ func (s *Service) Start(ctx context.Context, users []User) {
 	}
 
 	select {
-		case <-s.ctx.Done():
+	case <-s.ctx.Done():
 	}
 }
 
@@ -90,10 +90,10 @@ func (s *Service) createClient(u *User) *CancelClient {
 	ctx, cancel := context.WithCancel(s.ctx)
 	return &CancelClient{
 		Client: NewClient(ClientConfig{
-			user: u,
+			user:   u,
 			loader: s.loader,
 		}),
-		ctx: ctx,
+		ctx:    ctx,
 		cancel: cancel,
 	}
 }
@@ -105,13 +105,13 @@ func (c *Client) notify(st time.Time) {
 	// Display load time in seconds, with three decimals.
 	conf := EMOJI + " " + text.Bold(fmt.Sprintf(
 		"%d extensions loaded in %.3f seconds.",
-		len(c.user.Settings),
+		len(c.user.Configurations),
 		float64(tt.Nanoseconds())/float64(1e9)))
 
-	if len(c.user.Settings) == 0 {
+	if len(c.user.Configurations) == 0 {
 		conf += "\n" + text.Quote(text.Italic("No extensions activated."))
 	} else {
-		for _, cfg := range c.user.Settings {
+		for _, cfg := range c.user.Configurations {
 			conf += "\n" + text.Quote(string(cfg.EID))
 		}
 	}

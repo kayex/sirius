@@ -38,7 +38,7 @@ func TestExecutor_Run_RespectsTimeout(t *testing.T) {
 	exe := NewExecutor(nil, time.Millisecond*1)
 	res := make(chan ExecutionResult, 1)
 
-	exe.Run(msg, exs, res)
+	exe.run(msg, exs, res)
 
 	count := 0
 

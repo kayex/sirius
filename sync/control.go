@@ -1,14 +1,10 @@
 package sync
 
 type signal struct{}
-type Worker struct {
-	quit chan signal
-	done chan error
-}
 
 type Control struct {
-	quit chan signal
-	done chan error
+	quit     chan signal
+	done     chan error
 	finished bool
 }
 
@@ -30,7 +26,6 @@ func (c *Control) Finish(err error) {
 	close(c.done)
 	c.finished = true
 }
-
 
 func (c *Control) Finished() <-chan error {
 	return c.done

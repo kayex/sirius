@@ -42,17 +42,17 @@ func TestPerform(t *testing.T) {
 	for _, c := range cases {
 		oText := c.msg.Text
 
-		mod, err := c.msg.alter(c.act)
+		mod, err := c.msg.apply(c.act)
 		if err != nil {
 			panic(err)
 		}
 
 		if mod != c.mod {
-			t.Fatalf("Expected alter(Substitute(\"Foo\", \"Bar\")) to return (<nil>, true) for message %q, got (%#v, %v)", c.msg.Text, err, mod)
+			t.Fatalf("Expected apply(Substitute(\"Foo\", \"Bar\")) to return (<nil>, true) for message %q, got (%#v, %v)", c.msg.Text, err, mod)
 		}
 
 		if c.msg.Text != c.text {
-			t.Fatalf("Expected alter(Substitute(\"Foo\", \"Bar\")) to mutate message %q into %q, got %q", oText, c.text, c.msg.Text)
+			t.Fatalf("Expected apply(Substitute(\"Foo\", \"Bar\")) to mutate message %q into %q, got %q", oText, c.text, c.msg.Text)
 		}
 	}
 }
