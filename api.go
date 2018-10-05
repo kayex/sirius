@@ -1,15 +1,15 @@
 package sirius
 
 import (
+	"context"
+	"errors"
 	"fmt"
 	"strings"
-	"errors"
 	"time"
-	"context"
 
 	"github.com/kayex/sirius/slack"
-	api "github.com/nlopes/slack"
 	"github.com/kayex/sirius/sync"
+	api "github.com/nlopes/slack"
 )
 
 // API is a connection to the Slack API.
@@ -25,10 +25,8 @@ type Connection interface {
 	Messages() <-chan Message
 	Details() ConnectionDetails
 
-	// Closed returns the quit channel of the connection. The connection
-	// will send a value on the quit channel when it terminates, for any reason.
-	// If the termination occurred because of an underlying error condition,
-	// the value will be a non-nil error.
+	// Closed returns a channel that can be used for detecting when the connection closes.
+	// If the connection was closed due to an error, the error is returned. Otherwise, nil is returned.
 	Closed() <-chan error
 }
 
@@ -39,18 +37,16 @@ type ConnectionDetails struct {
 	SelfChan string
 }
 
-type signal struct{}
-
 // RTMConnection is a Connection that utilizes the Slack RTM API.
 type RTMConnection struct {
 	rtm      *api.RTM
 	details  *ConnectionDetails
 	messages chan Message
-	ctrl *sync.Control
+	ctrl     *sync.Control
 }
 
 type SlackAPI struct {
-	client   *api.Client
+	client *api.Client
 }
 
 func NewSlackAPI(token string) *SlackAPI {
@@ -80,7 +76,7 @@ func (api *SlackAPI) NewRTMConnection() *RTMConnection {
 	return &RTMConnection{
 		rtm:      api.client.NewRTM(),
 		messages: make(chan Message),
-		ctrl: sync.NewControl(),
+		ctrl:     sync.NewControl(),
 	}
 }
 
@@ -89,10 +85,10 @@ func (conn *RTMConnection) Start(ctx context.Context) error {
 	go conn.listen(ctx, auth)
 
 	select {
-		case d := <-auth:
-			conn.details = &d
-		case err := <-conn.Closed():
-			return fmt.Errorf("RTM connection failed: %v", err)
+	case d := <-auth:
+		conn.details = &d
+	case err := <-conn.Closed():
+		return fmt.Errorf("RTM connection failed: %v", err)
 	}
 
 	return nil
@@ -120,7 +116,7 @@ func (conn *RTMConnection) listen(ctx context.Context, auth chan ConnectionDetai
 		select {
 		case <-ctx.Done():
 			return
-		case ev := <- conn.rtm.IncomingEvents:
+		case ev := <-conn.rtm.IncomingEvents:
 			err := conn.handleEvent(ev)
 			if err != nil {
 				conn.ctrl.Finish(err)
