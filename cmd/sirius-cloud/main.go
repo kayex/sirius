@@ -37,10 +37,6 @@ func main() {
 		panic(err)
 	}
 
-	for _, u := range users {
-		u.Configurations = defaultProfile.Configurations
-	}
-
 	ld := extension.NewStaticLoader(cfg)
 	s := sirius.NewService(ld)
 	printRunInfo(users, cfg)
