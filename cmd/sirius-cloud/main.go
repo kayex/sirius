@@ -38,7 +38,7 @@ func main() {
 	}
 
 	for _, u := range users {
-		u.Profile = defaultProfile
+		u.Configurations = defaultProfile.Configurations
 	}
 
 	ld := extension.NewStaticLoader(cfg)
